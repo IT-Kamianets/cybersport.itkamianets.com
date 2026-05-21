@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { LanguageService } from '@wawjs/ngx-translate';
 
@@ -34,6 +34,28 @@ import ua from './i18n/ua.json';
 								<a routerLink="/arc-raiders/maps" routerLinkActive="text-[var(--c-arc-cyan)] border-b-2 border-[var(--c-arc-cyan)]" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-[var(--c-text-strong)] hover:text-[var(--c-arc-cyan)]">
 									<span>{{ t()['Maps'] }}</span>
 								</a>
+								
+								<!-- Gear & Mods Dropdown -->
+								<div class="relative flex items-center">
+									<button (click)="isGearMenuOpen.set(!isGearMenuOpen())" class="inline-flex items-center gap-1 px-1 pt-1 text-sm font-medium text-[var(--c-text-strong)] hover:text-[var(--c-arc-cyan)] transition-colors">
+										<span>Gear & Mods</span>
+										<svg class="h-4 w-4 transition-transform" [class.rotate-180]="isGearMenuOpen()" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+									</button>
+									
+									@if (isGearMenuOpen()) {
+										<!-- Overlay to close menu when clicking outside -->
+										<div class="fixed inset-0 z-40" (click)="isGearMenuOpen.set(false)"></div>
+										
+										<div class="absolute right-0 top-full mt-2 w-48 rounded-md bg-[var(--c-bg-secondary)] shadow-[var(--shadow-md)] z-50 border border-[var(--c-border)] overflow-hidden">
+											<div class="py-1" role="menu" aria-orientation="vertical" (click)="isGearMenuOpen.set(false)">
+												<a routerLink="/arc-raiders/gadgets" routerLinkActive="bg-[var(--c-bg-primary)] text-[var(--c-arc-cyan)]" class="block px-4 py-3 text-sm text-[var(--c-text-strong)] hover:bg-[var(--c-bg-primary)] hover:text-[var(--c-arc-cyan)] transition-colors">Gadgets</a>
+												<a routerLink="/arc-raiders/consumables" routerLinkActive="bg-[var(--c-bg-primary)] text-[var(--c-arc-cyan)]" class="block px-4 py-3 text-sm text-[var(--c-text-strong)] hover:bg-[var(--c-bg-primary)] hover:text-[var(--c-arc-cyan)] transition-colors border-t border-[var(--c-border)]">Consumables</a>
+												<a routerLink="/arc-raiders/mods" routerLinkActive="bg-[var(--c-bg-primary)] text-[var(--c-arc-cyan)]" class="block px-4 py-3 text-sm text-[var(--c-text-strong)] hover:bg-[var(--c-bg-primary)] hover:text-[var(--c-arc-cyan)] transition-colors border-t border-[var(--c-border)]">Weapon Mods</a>
+											</div>
+										</div>
+									}
+								</div>
+
 								<a routerLink="/arc-raiders/guides" routerLinkActive="text-[var(--c-arc-cyan)] border-b-2 border-[var(--c-arc-cyan)]" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-[var(--c-text-strong)] hover:text-[var(--c-arc-cyan)]">
 									<span>{{ t()['Guides'] }}</span>
 								</a>
@@ -62,6 +84,7 @@ import ua from './i18n/ua.json';
 })
 export class ArcRaidersComponent {
 	private readonly languageService = inject(LanguageService);
+	protected readonly isGearMenuOpen = signal(false);
 
 	protected readonly t = computed(() => {
 		return this.languageService.language() === 'ua' ? (ua as Record<string, string>) : (en as Record<string, string>);

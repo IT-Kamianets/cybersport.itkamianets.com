@@ -57,6 +57,21 @@ export const arcRaidersRoutes: Routes = [
 				]
 			},
 			{
+				path: 'gadgets',
+				children: [
+					{
+						path: '',
+						loadComponent: () =>
+							import('./gadgets/gadgets-hub.component').then((m) => m.ArcRaidersGadgetsComponent),
+					},
+					{
+						path: ':id',
+						loadComponent: () =>
+							import('./gadgets/gadget-detail.component').then((m) => m.ArcRaidersGadgetDetailComponent),
+					}
+				]
+			},
+			{
 				path: 'guides',
 				loadComponent: () =>
 					import('./guides.component').then((m) => m.ArcRaidersGuidesComponent),
