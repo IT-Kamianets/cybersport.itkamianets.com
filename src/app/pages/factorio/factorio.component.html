@@ -1,0 +1,286 @@
+<section class="min-h-screen bg-[#0b0b0c] text-[#e6e6e6]">
+  <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+
+    <!-- HERO -->
+    <div class="mb-8 relative overflow-hidden rounded-3xl border border-[#3d3f45] bg-[#141619]/90 p-8 shadow-[0_0_45px_rgba(255,140,0,0.08)]">
+      <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-orange-950/60 via-[#0f1114]/80 to-[#141619]/95"></div>
+      <div class="relative space-y-3">
+        <p class="text-xs uppercase tracking-[0.35em] text-orange-400/80">Wube Software • Base 2020 • Space Age 2024</p>
+        <h1 class="text-4xl font-black uppercase tracking-[0.06em] text-white sm:text-5xl lg:text-6xl">
+          Factorio<br /><span class="text-orange-300">Space Age</span>
+        </h1>
+        <p class="max-w-3xl text-sm leading-7 text-slate-300 sm:text-base">
+          Промисловий інженерний майданчик: екстремальна логістика, кооперативний мультиплеєр та глибокі дерева досліджень на 4 унікальних планетах.
+        </p>
+      </div>
+    </div>
+
+    <!-- TABS NAV -->
+    <nav class="mb-8 grid gap-3 rounded-3xl border border-[#3b3d44] bg-[#15181f] p-4 shadow-inner shadow-black/20 sm:grid-cols-2 lg:grid-cols-4">
+      <button type="button" class="factorio-tab" [class.active]="currentTab === 'overview'" (click)="selectTab('overview')">
+        Огляд
+      </button>
+      <button type="button" class="factorio-tab" [class.active]="currentTab === 'planets'" (click)="selectTab('planets')">
+        Планети і Моби
+      </button>
+      <button type="button" class="factorio-tab" [class.active]="currentTab === 'guides'" (click)="selectTab('guides')">
+        Гайди і Механіки
+      </button>
+      <button type="button" class="factorio-tab" [class.active]="currentTab === 'achievements'" (click)="selectTab('achievements')">
+        Досягнення і Статистика
+      </button>
+    </nav>
+
+    <!-- ===== OVERVIEW ===== -->
+    <article *ngIf="currentTab === 'overview'" class="space-y-8">
+
+      <!-- About card -->
+      <div class="factorio-card p-8 space-y-4">
+        <h2 class="text-2xl font-extrabold text-white sm:text-3xl">
+          Що таке Factorio: Space Age?
+        </h2>
+        <p class="text-slate-300 leading-7">
+          Factorio — гра про будівництво фабрик від Wube Software — невеликої чеської інді-студії. Базова гра вийшла в Steam у 2020 році після 8 років раннього доступу. Space Age, випущений у жовтні 2024 року, — великий платний додаток що додає 4 нові планети, космічні платформи, нових ворогів, легендарну якість предметів і сотні нових технологій.
+        </p>
+        <p class="text-slate-300 leading-7">
+          Гра відома своєю неймовірною глибиною: гравці регулярно витрачають 500–1000+ годин. Вона має один з найвищих рейтингів Steam в історії — понад 98% позитивних відгуків від 200 000+ гравців.
+        </p>
+      </div>
+
+      <!-- Stats row -->
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="factorio-card p-5 text-center">
+          <p class="text-xs uppercase tracking-widest text-orange-400/80 mb-2">Середній час</p>
+          <p class="text-4xl font-black text-white">300+</p>
+          <p class="text-sm text-slate-400 mt-1">годин</p>
+        </div>
+        <div class="factorio-card p-5 text-center">
+          <p class="text-xs uppercase tracking-widest text-orange-400/80 mb-2">Рейтинг Steam</p>
+          <p class="text-4xl font-black text-white">98%</p>
+          <p class="text-sm text-slate-400 mt-1">позитивних</p>
+        </div>
+        <div class="factorio-card p-5 text-center">
+          <p class="text-xs uppercase tracking-widest text-orange-400/80 mb-2">Ціна (базова)</p>
+          <p class="text-4xl font-black text-white">$35</p>
+          <p class="text-sm text-slate-400 mt-1">+ $35 Space Age</p>
+        </div>
+        <div class="factorio-card p-5 text-center">
+          <p class="text-xs uppercase tracking-widest text-orange-400/80 mb-2">Відгуки</p>
+          <p class="text-4xl font-black text-white">200K+</p>
+          <p class="text-sm text-slate-400 mt-1">у Steam</p>
+        </div>
+      </div>
+
+      <!-- Why play -->
+      <div class="factorio-card p-8 space-y-6">
+        <h2 class="text-2xl font-extrabold text-orange-300">Навіщо грати у Factorio?</h2>
+        <div class="grid gap-4 md:grid-cols-2">
+          <div class="bg-[#1a1e24] rounded-2xl p-5 border border-orange-500/10">
+            <h3 class="text-orange-300 font-bold mb-2">🧠 Розвиває справжні інженерні навички</h3>
+            <p class="text-sm text-slate-300 leading-6">Factorio змушує мислити системами: входи, виходи, пропускна здатність, вузькі місця. Це ті самі концепції що вивчаються на алгоритмах, дослідженні операцій та промисловому інжинірингу.</p>
+          </div>
+          <div class="bg-[#1a1e24] rounded-2xl p-5 border border-orange-500/10">
+            <h3 class="text-orange-300 font-bold mb-2">📐 Прикладна математика</h3>
+            <p class="text-sm text-slate-300 leading-6">Розрахунки виробничих пропорцій, аналіз пропускної здатності стрічок та логіка схемних мереж — це прикладна математика. Студенти фізмату знаходять знайомі шаблони зі своїх занять у кожному аспекті гри.</p>
+          </div>
+          <div class="bg-[#1a1e24] rounded-2xl p-5 border border-orange-500/10">
+            <h3 class="text-orange-300 font-bold mb-2">🤝 Мультиплеєр для сотень</h3>
+            <p class="text-sm text-slate-300 leading-6">Factorio підтримує кооперативний мультиплеєр де сотні гравців можуть будувати одну фабрику разом. Координація логістики в команді — як управління реальним інженерним проектом.</p>
+          </div>
+          <div class="bg-[#1a1e24] rounded-2xl p-5 border border-orange-500/10">
+            <h3 class="text-orange-300 font-bold mb-2">🔧 Безкінечні моди</h3>
+            <p class="text-sm text-slate-300 leading-6">Modding API (на Lua) дозволяє створювати абсолютно нові ігрові системи. Багато гравців вчать програмування через моддинг Factorio. Портал модів має 10 000+ модів від покращення зручності до повного перероблення.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mechanics overview -->
+      <div class="factorio-card p-8 space-y-4">
+        <h2 class="text-2xl font-extrabold text-white">Основні Механіки Гри</h2>
+        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <ng-container *ngFor="let mech of [
+            {icon:'🏭', ua:'Будівництво Фабрики', desc_ua:'Ставиш машини, з\'єднуєш їх стрічками і маніпуляторами, автоматизуєш все.'},
+            {icon:'🚂', ua:'Залізнична Логістика', desc_ua:'Будуєш залізничні мережі для перевезення ресурсів на великі відстані.'},
+            {icon:'🤖', ua:'Мережі Роботів', desc_ua:'Розгортаєш логістичних і будівельних роботів для управління предметами.'},
+            {icon:'⚡', ua:'Схемні Мережі', desc_ua:'З\'єднуєш машини комбінаторами для створення складних програмованих систем.'},
+            {icon:'🛸', ua:'Космічні Платформи', desc_ua:'Будуєш фабрики в космосі, видобуваєш астероїди і подорожуєш між планетами.'},
+            {icon:'🔬', ua:'Дерева Досліджень', desc_ua:'Досліджуєш сотні технологій на всіх планетах для розблокування нових машин.'}
+          ]">
+            <div class="bg-[#1a1e24] rounded-2xl p-4 border border-[#2f3239]">
+              <p class="text-2xl mb-2">{{mech.icon}}</p>
+              <h3 class="text-orange-200 font-bold text-sm mb-1">{{ mech.ua }}</h3>
+              <p class="text-xs text-slate-400 leading-5">{{ mech.desc_ua }}</p>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+    </article>
+
+    <!-- ===== PLANETS & MOBS ===== -->
+    <article *ngIf="currentTab === 'planets'" class="space-y-8">
+      <div class="factorio-card p-8">
+        <h2 class="text-2xl font-extrabold text-white mb-2">Планети Space Age</h2>
+        <p class="text-slate-300 text-sm leading-6">Кожна планета в Space Age має унікальну екосистему, ресурси, ворогів і інженерні задачі що вимагають абсолютно різних стратегій фабрики.</p>
+      </div>
+
+      <div class="space-y-6">
+        <div *ngFor="let planet of planets" class="factorio-card overflow-hidden">
+          <div class="relative h-48 bg-gradient-to-b {{planet.color}} to-transparent flex items-center justify-center">
+            <img [src]="planet.image" [alt]="planet.name.ua"
+                 class="h-full w-full object-cover opacity-60 mix-blend-luminosity"
+                 onerror="this.style.display='none'" />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#15181f] via-transparent to-transparent"></div>
+            <h3 class="absolute bottom-4 left-6 text-3xl font-black text-orange-300 uppercase tracking-widest">
+              {{ planet.name.ua }}
+            </h3>
+          </div>
+          <div class="p-6 grid md:grid-cols-2 gap-6">
+            <div>
+              <p class="text-xs uppercase tracking-widest text-orange-400/70 mb-2">Опис</p>
+              <p class="text-sm text-slate-300 leading-6">{{ planet.desc.ua }}</p>
+            </div>
+            <div class="bg-red-950/20 rounded-2xl p-4 border border-red-500/20">
+              <p class="text-xs uppercase tracking-widest text-red-400/70 mb-2">⚠️ Вороги і Загрози</p>
+              <p class="text-sm text-slate-300 leading-6">{{ planet.mobs.ua }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ===== GUIDES & MECHANICS ===== -->
+    <article *ngIf="currentTab === 'guides'" class="space-y-8">
+
+      <div class="factorio-card p-8">
+        <h2 class="text-2xl font-extrabold text-white mb-2">Гайди і Механіки</h2>
+        <p class="text-slate-300 text-sm">Від першої стрічки до оптимізації мегабази — гайди для кожного рівня.</p>
+      </div>
+
+      <!-- Guide level tabs -->
+      <div class="flex gap-3">
+        <button type="button" class="factorio-tab" style="width:auto;padding:0.5rem 1.5rem;"
+                [class.active]="activeGuideTab === 'beginner'" (click)="setGuideTab('beginner')">
+          🟢 Новачок
+        </button>
+        <button type="button" class="factorio-tab" style="width:auto;padding:0.5rem 1.5rem;"
+                [class.active]="activeGuideTab === 'intermediate'" (click)="setGuideTab('intermediate')">
+          🟡 Середній
+        </button>
+        <button type="button" class="factorio-tab" style="width:auto;padding:0.5rem 1.5rem;"
+                [class.active]="activeGuideTab === 'pro'" (click)="setGuideTab('pro')">
+          🔴 Про
+        </button>
+      </div>
+
+      <div class="factorio-card p-6 space-y-4">
+        <ng-container *ngIf="activeGuideTab === 'beginner'">
+          <h3 class="text-xl font-bold text-green-300">Гайд для Новачків: Перша Фабрика</h3>
+          <ol class="space-y-3">
+            <li *ngFor="let step of guides.beginner; let i = index" class="flex gap-4 bg-[#1a1e24] rounded-xl p-4 border border-[#2a2e35]">
+              <span class="text-green-400 font-black text-lg min-w-[1.5rem]">{{i+1}}.</span>
+              <p class="text-sm text-slate-300 leading-6">{{ step.ua }}</p>
+            </li>
+          </ol>
+        </ng-container>
+
+        <ng-container *ngIf="activeGuideTab === 'intermediate'">
+          <h3 class="text-xl font-bold text-yellow-300">Гайд для Середніх: Масштабування</h3>
+          <ol class="space-y-3">
+            <li *ngFor="let step of guides.intermediate; let i = index" class="flex gap-4 bg-[#1a1e24] rounded-xl p-4 border border-[#2a2e35]">
+              <span class="text-yellow-400 font-black text-lg min-w-[1.5rem]">{{i+1}}.</span>
+              <p class="text-sm text-slate-300 leading-6">{{ step.ua }}</p>
+            </li>
+          </ol>
+        </ng-container>
+
+        <ng-container *ngIf="activeGuideTab === 'pro'">
+          <h3 class="text-xl font-bold text-red-300">Про Гайд: Мегабаза і Легендарне</h3>
+          <ol class="space-y-3">
+            <li *ngFor="let step of guides.pro; let i = index" class="flex gap-4 bg-[#1a1e24] rounded-xl p-4 border border-[#2a2e35]">
+              <span class="text-red-400 font-black text-lg min-w-[1.5rem]">{{i+1}}.</span>
+              <p class="text-sm text-slate-300 leading-6">{{ step.ua }}</p>
+            </li>
+          </ol>
+        </ng-container>
+      </div>
+
+      <!-- Mods section -->
+      <div class="factorio-card p-8 space-y-4">
+        <h2 class="text-2xl font-extrabold text-white">Моддинг</h2>
+        <p class="text-slate-300 text-sm leading-6">Factorio має одну з найактивніших спільнот моддингу в іграх. Офіційний портал модів містить понад 10 000 модів написаних на Lua.</p>
+        <div class="grid gap-3 sm:grid-cols-3">
+          <div class="bg-[#1a1e24] rounded-2xl p-4 border border-[#2f3239]">
+            <h3 class="text-orange-200 font-bold mb-1">Bob's Mods</h3>
+            <p class="text-xs text-slate-400">Масштабне розширення обробки руди і рівнів машин.</p>
+          </div>
+          <div class="bg-[#1a1e24] rounded-2xl p-4 border border-[#2f3239]">
+            <h3 class="text-orange-200 font-bold mb-1">Krastorio 2</h3>
+            <p class="text-xs text-slate-400">Мод повного перероблення з новими технологіями і задачами.</p>
+          </div>
+          <div class="bg-[#1a1e24] rounded-2xl p-4 border border-[#2f3239]">
+            <h3 class="text-orange-200 font-bold mb-1">Space Exploration</h3>
+            <p class="text-xs text-slate-400">Оригінальний мод космічної ери що надихнув офіційний додаток.</p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ===== ACHIEVEMENTS & STATS ===== -->
+    <article *ngIf="currentTab === 'achievements'" class="space-y-8">
+
+      <div class="factorio-card p-8">
+        <h2 class="text-2xl font-extrabold text-white mb-2">Досягнення і Спідрани</h2>
+        <p class="text-slate-300 text-sm leading-6">Factorio має 310 досягнень Steam. Space Age додає ще більше. Деякі практично неможливі без десятків годин цілеспрямованого тренування.</p>
+      </div>
+
+      <!-- Achievements list -->
+      <div class="grid gap-4 md:grid-cols-2">
+        <div *ngFor="let ach of achievements"
+             class="factorio-card p-5 border-l-4"
+             [class.border-l-red-500]="ach.hard"
+             [class.border-l-orange-500]="!ach.hard">
+          <div class="flex items-start gap-3">
+            <span class="text-xl">{{ ach.hard ? '💀' : '🏆' }}</span>
+            <div>
+              <h3 class="font-bold text-white">{{ ach.name }}</h3>
+              <p class="text-xs text-slate-400 mt-1 leading-5">{{ ach.desc.ua }}</p>
+              <span *ngIf="ach.hard" class="inline-block mt-2 text-xs bg-red-900/40 text-red-300 px-2 py-0.5 rounded-full border border-red-500/30">
+                Надзвичайно Складно
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Speedrun section -->
+      <div class="factorio-card p-8 space-y-4">
+        <h2 class="text-2xl font-extrabold text-orange-300">Спідран Спільнота</h2>
+        <p class="text-slate-300 text-sm leading-6">
+          Factorio має процвітаючу спідран-сцену на speedrun.com. Світовий рекорд запуску ракети "Any%" — менше 1 години 30 хвилин — досягнутий оптимізацією кожної дії з першої секунди гри.
+        </p>
+        <div class="grid gap-4 sm:grid-cols-3">
+          <div class="bg-[#1a1e24] rounded-2xl p-4 text-center border border-[#2f3239]">
+            <p class="text-3xl font-black text-orange-300">~1h 30m</p>
+            <p class="text-xs text-slate-400 mt-1">РС Any% Ракета</p>
+          </div>
+          <div class="bg-[#1a1e24] rounded-2xl p-4 text-center border border-[#2f3239]">
+            <p class="text-3xl font-black text-orange-300">310+</p>
+            <p class="text-xs text-slate-400 mt-1">Всього Досягнень</p>
+          </div>
+          <div class="bg-[#1a1e24] rounded-2xl p-4 text-center border border-[#2f3239]">
+            <p class="text-3xl font-black text-orange-300">98%</p>
+            <p class="text-xs text-slate-400 mt-1">Рейтинг Steam</p>
+          </div>
+        </div>
+      </div>
+
+    </article>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-[#232529] bg-[#0f1114] py-6 text-center text-xs text-slate-500">
+    Всі права належать грі Factorio.
+  </footer>
+</section>

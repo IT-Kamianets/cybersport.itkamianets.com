@@ -1,48 +1,92 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
-	template: `
-		<section class="bg-[var(--c-bg-primary)]">
-			<div class="mx-auto max-w-[var(--container)] px-4 py-12 sm:px-6 lg:py-16">
-				<div class="max-w-3xl">
-					<p class="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--c-primary)]">
-						Automation strategy
-					</p>
-					<h1 class="mt-4 text-4xl font-semibold text-[var(--c-text-strong)] sm:text-5xl">
-						Factorio
-					</h1>
-					<p class="mt-5 text-lg leading-8 text-[var(--c-text)]">
-						Build, optimize, and defend a growing factory with teammates who enjoy clean
-						logistics, practical planning, and a little controlled chaos.
-					</p>
-				</div>
-
-				<div class="mt-10 grid gap-4 md:grid-cols-3">
-					@for (item of highlights; track item.title) {
-						<article class="rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-5">
-							<h2 class="text-lg font-semibold text-[var(--c-text-strong)]">{{ item.title }}</h2>
-							<p class="mt-3 text-sm leading-6 text-[var(--c-text)]">{{ item.text }}</p>
-						</article>
-					}
-				</div>
-			</div>
-		</section>
-	`,
-	changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-factorio',
+    standalone: true,
+    imports: [CommonModule],
+    templateUrl: './factorio.component.html',
+    styleUrls: ['./factorio.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FactorioComponent {
-	protected readonly highlights = [
-		{
-			title: 'Factory planning',
-			text: 'Shared blueprints, resource lanes, and expansion goals keep every player useful.',
-		},
-		{
-			title: 'Automation races',
-			text: 'Compete on throughput, launch timing, or the cleanest production chain.',
-		},
-		{
-			title: 'Co-op defense',
-			text: 'Coordinate walls, power, ammo, and repairs while the factory keeps growing.',
-		},
-	];
+    public currentTab: 'overview' | 'planets' | 'guides' | 'achievements' = 'overview';
+
+    public selectTab(tab: 'overview' | 'planets' | 'guides' | 'achievements'): void {
+        this.currentTab = tab;
+    }
+
+    // Images
+    public readonly heroImage = 'https://upload.wikimedia.org/wikipedia/en/2/25/Factorio_Space_Age_cover.jpg';
+
+    public planets = [
+        {
+            name: { ua: 'Вулканус' },
+            image: 'https://wiki.factorio.com/images/thumb/Vulcanus.png/400px-Vulcanus.png',
+            desc: { ua: 'Вулканічна промислова планета з річками розплавленої лави та екстремальними температурами. Багата на вольфрам і кальцит. Тут живуть жахливі черви-Деструктори — масивні броньовані істоти, що патрулюють поверхню і можуть знищити твою фабрику.' },
+            mobs: { ua: 'Черв\'як-Деструктор — гігантський бронеований черв, надзвичайно витривалий. Атакує все на своєму шляху. Вбити непросто — потрібна артилерія або великі вежі.' },
+            color: 'from-orange-900/40'
+        },
+        {
+            name: { ua: 'Фулгора' },
+            image: 'https://wiki.factorio.com/images/thumb/Fulgora.png/400px-Fulgora.png',
+            desc: { ua: 'Безплідна планета з постійними грозами, де сонячна енергія ненадійна. Багата на гольмій і металобрухт із давніх руїн. Управління енергосіткою тут буквально питання виживання.' },
+            mobs: { ua: 'Немає традиційних ворогів — блискавки самі по собі є головною загрозою, а також відключення електрики, що вимикає захист.' },
+            color: 'from-yellow-900/40'
+        },
+        {
+            name: { ua: 'Глеба' },
+            image: 'https://wiki.factorio.com/images/thumb/Gleba.png/400px-Gleba.png',
+            desc: { ua: 'Болотиста біологічна планета де ресурси — живі організми. Пентаподи — павукоподібні прибульці — будують гнізда і атакують фабрику. Ресурси тут вирощують, а не добувають: агронаука — ключ до успіху.' },
+            mobs: { ua: 'Пентаподи — швидкі павукоподібні істоти що атакують зграями. Псування біопродуктів на фабриці також породжує ворогів якщо не стежити.' },
+            color: 'from-green-900/40'
+        },
+        {
+            name: { ua: 'Акіло' },
+            image: 'https://wiki.factorio.com/images/thumb/Aquilo.png/400px-Aquilo.png',
+            desc: { ua: 'Замерзла планета з аміачним океаном — фінальний рубіж. Надхолодне середовище вимагає обігрівальних труб і будівель. Виробляє найрідкісніші ресурси для легендарних предметів. Ворогів немає, але середовище знищить непідготовлену фабрику.' },
+            mobs: { ua: 'Немає традиційних ворогів. Холод сам по собі смертельний — труби замерзають, будівлі зупиняються, гравець гине від переохолодження без термокостюму.' },
+            color: 'from-blue-900/40'
+        }
+    ];
+
+    public guides = {
+        beginner: [
+            { ua: 'Починай з ручного видобутку заліза і міді, потім одразу будуй кам\'яну піч для автоматичної плавки.' },
+            { ua: 'Постав бурильну установку на залізну руду — вона працює на вугіллі і видобуває автоматично.' },
+            { ua: 'Будуй маніпулятори для переміщення предметів між машинами і скринями — вони основа автоматизації.' },
+            { ua: 'Досліджуй базові технології в лабораторії: спочатку автоматизація, логістика, електроніка.' },
+            { ua: 'Побудуй маленьку шину: 4 стрічки залізних пластин, мідних пластин, сталі і зелених мікросхем — це живить усі збірники.' },
+        ],
+        intermediate: [
+            { ua: 'Налаштуй залізничну мережу: використовуй залізничні сигнали щоб кілька поїздів їхали без зіткнень.' },
+            { ua: 'Використовуй схемні мережі: з\'єднай ємності і насоси з комбінаторами для автоматизації рідин.' },
+            { ua: 'Будуй нафтопереробку: розщеплюй важку нафту на легку, потім на нафтовий газ для просунутого виробництва.' },
+            { ua: 'Використовуй робопорти і будівельних роботів для автоматичного будівництва за кресленнями — це різко прискорює розширення.' },
+            { ua: 'Створи нормальний захисний периметр зі стінами, вежами і лазерними вежами. Жуки стають сильнішими з часом!' },
+        ],
+        pro: [
+            { ua: 'Розрахуй точні виробничі пропорції: 1 електрична бурильна установка видобуває 0.5/с руди, 1 кам\'яна піч плавить 0.3125/с — плануй фабрику математично.' },
+            { ua: 'Використовуй модулі продуктивності в збірниках і модулі швидкості в маяках — це найефективніша комбінація в пізній грі.' },
+            { ua: 'Побудуй мегабазу що виробляє 1000+ наукових пакетів за хвилину — потрібна оптимізована шина, окремі виробничі острівці і масове використання роботів.' },
+            { ua: 'На космічних платформах: ретельно керуй логістикою видобутку астероїдів — неправильне розташування стрічок призведе до нестачі матеріалів під час польоту.' },
+            { ua: 'Для легендарної якості: використовуй модулі якості на переробниках Фулгори щоб підвищувати предмети до легендарного рівня. Це потребує специфічних циклів виробництва.' },
+        ]
+    };
+
+    public achievements = [
+        { name: 'There is no spoon', desc: { ua: 'Запусти ракету менш ніж за 8 годин. Вимагає ідеальної гри з першої хвилини.' }, hard: true },
+        { name: 'Lazy Bastard', desc: { ua: 'Перемогти видобувши менше 111 предметів вручну. Вимагає повного опанування автоматизації.' }, hard: true },
+        { name: 'Steam All the Way', desc: { ua: 'Запусти ракету використовуючи лише парові двигуни — без сонячних панелей і акумуляторів.' }, hard: true },
+        { name: 'Raining Bullets', desc: { ua: 'Убий 10,000 ворогів з гарматних веж.' }, hard: false },
+        { name: 'It Stinks and They are Blind', desc: { ua: 'Убий бегемота-кусаку лише капсулами з отрутою.' }, hard: false },
+        { name: 'Boldly Going', desc: { ua: 'Відвідай усі планети Space Age: Вулканус, Фулгора, Глеба і Акіло.' }, hard: true },
+        { name: 'The Pinnacle of Science', desc: { ua: 'Дослідж усі технології в грі. Вимагає будівництва на всіх планетах.' }, hard: true },
+    ];
+
+    public activeGuideTab: 'beginner' | 'intermediate' | 'pro' = 'beginner';
+
+    public setGuideTab(tab: 'beginner' | 'intermediate' | 'pro'): void {
+        this.activeGuideTab = tab;
+    }
 }

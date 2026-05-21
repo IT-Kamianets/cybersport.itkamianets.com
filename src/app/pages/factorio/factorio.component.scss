@@ -1,0 +1,40 @@
+.factorio-tab {
+  align-items: center;
+  background: #1d2127;
+  border-radius: 1rem;
+  border: 1px solid transparent;
+  color: #cbd5e1;
+  display: inline-flex;
+  font-size: 0.875rem;
+  font-weight: 600;
+  height: 3.5rem;
+  justify-content: center;
+  padding: 0 1rem;
+  transition: all 200ms ease;
+  width: 100%;
+}
+
+.factorio-tab:hover {
+  background: #23282f;
+  border-color: rgba(255, 140, 0, 0.3);
+}
+
+.factorio-tab.active {
+  background: rgba(251, 146, 60, 0.16);
+  border-color: rgba(251, 146, 60, 0.9);
+  color: #fbbf24;
+  box-shadow: 0 0 0 1px rgba(251, 146, 60, 0.25);
+}
+
+.factorio-card {
+  background: #15181f;
+  border: 1px solid #2f3239;
+  border-radius: 1.5rem;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+}
+
+@media (min-width: 1024px) {
+  .factorio-card {
+    min-height: 260px;
+  }
+}
