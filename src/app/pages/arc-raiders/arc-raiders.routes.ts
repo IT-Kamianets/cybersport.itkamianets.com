@@ -102,6 +102,21 @@ export const arcRaidersRoutes: Routes = [
 				]
 			},
 			{
+				path: 'loot',
+				children: [
+					{
+						path: '',
+						loadComponent: () =>
+							import('./loot/loot-hub.component').then((m) => m.ArcRaidersLootHubComponent),
+					},
+					{
+						path: ':id',
+						loadComponent: () =>
+							import('./loot/loot-detail.component').then((m) => m.ArcRaidersLootDetailComponent),
+					}
+				]
+			},
+			{
 				path: 'guides',
 				loadComponent: () =>
 					import('./guides.component').then((m) => m.ArcRaidersGuidesComponent),

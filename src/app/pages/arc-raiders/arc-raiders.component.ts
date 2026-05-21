@@ -34,6 +34,10 @@ import ua from './i18n/ua.json';
 								<a routerLink="/arc-raiders/maps" routerLinkActive="text-[var(--c-arc-cyan)] border-b-2 border-[var(--c-arc-cyan)]" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-[var(--c-text-strong)] hover:text-[var(--c-arc-cyan)]">
 									<span>{{ t()['Maps'] }}</span>
 								</a>
+
+								<a routerLink="/arc-raiders/loot" routerLinkActive="text-[var(--c-arc-cyan)] border-b-2 border-[var(--c-arc-cyan)]" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-[var(--c-text-strong)] hover:text-[var(--c-arc-cyan)]">
+									<span>Loot & Materials</span>
+								</a>
 								
 								<!-- Gear & Mods Dropdown -->
 								<div class="relative flex items-center">
