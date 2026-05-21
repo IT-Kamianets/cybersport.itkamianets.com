@@ -72,6 +72,36 @@ export const arcRaidersRoutes: Routes = [
 				]
 			},
 			{
+				path: 'consumables',
+				children: [
+					{
+						path: '',
+						loadComponent: () =>
+							import('./consumables/consumables-hub.component').then((m) => m.ArcRaidersConsumablesComponent),
+					},
+					{
+						path: ':id',
+						loadComponent: () =>
+							import('./consumables/consumable-detail.component').then((m) => m.ArcRaidersConsumableDetailComponent),
+					}
+				]
+			},
+			{
+				path: 'mods',
+				children: [
+					{
+						path: '',
+						loadComponent: () =>
+							import('./mods/mods-hub.component').then((m) => m.ArcRaidersModsComponent),
+					},
+					{
+						path: ':id',
+						loadComponent: () =>
+							import('./mods/mod-detail.component').then((m) => m.ArcRaidersModDetailComponent),
+					}
+				]
+			},
+			{
 				path: 'guides',
 				loadComponent: () =>
 					import('./guides.component').then((m) => m.ArcRaidersGuidesComponent),
