@@ -44,8 +44,8 @@ export interface AdvancedWeaponStats {
 export interface Weapon {
 	id: string;
 	name: string;
-	class: 'SMG' | 'Battle Rifle' | 'Assault Rifle' | 'Hand Cannon' | 'LMG' | 'Sniper Rifle' | 'Shotgun' | 'Heavy' | 'Pistol' | 'Melee';
-	rarity: 'Common' | 'Uncommon' | 'Rare' | 'Epic' | 'Legendary' | 'Standard';
+	class: 'SMG' | 'Battle Rifle' | 'Assault Rifle' | 'Hand Cannon' | 'LMG' | 'Sniper Rifle' | 'Shotgun' | 'Heavy' | 'Pistol';
+	rarity: 'Common' | 'Uncommon' | 'Rare' | 'Epic' | 'Legendary';
 	ammoType: 'Light Ammo' | 'Medium Ammo' | 'Heavy Ammo' | 'Shotgun Ammo' | 'Energy' | 'Special';
 	magSize: string | number;
 	firingMode: string;

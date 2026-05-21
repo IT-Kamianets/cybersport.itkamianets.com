@@ -167,6 +167,6 @@ export const renegade: Weapon = {
 	patchHistory: [
 		{ version: '1.0', notes: 'Initial Release.' }
 	],
-	image: 'https://placehold.co/800x400/1a1a1a/DAA520?text=Renegade+Battle+Rifle',
+	image: 'https://arcraiders.wiki/w/images/b/b5/Renegade-Level1.png',
 	icon: '🔫'
 };

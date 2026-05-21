@@ -166,6 +166,6 @@ export const vulcano: Weapon = {
 	patchHistory: [
 		{ version: '1.0', notes: 'Initial Release.' }
 	],
-	image: 'https://placehold.co/800x400/1a1a1a/800080?text=Vulcano+Shotgun',
+	image: 'https://arcraiders.wiki/w/images/d/da/Vulcano-Level1.png',
 	icon: '🔫'
 };

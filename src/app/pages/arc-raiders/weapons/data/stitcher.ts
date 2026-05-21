@@ -170,6 +170,6 @@ export const stitcher: Weapon = {
 			notes: 'Reduced Headshot Multiplier from 2.5 to 1.75. Reduced Base Damage from 7 to 6.5. Increased Per Shot Dispersion by around 50%.' 
 		}
 	],
-	image: 'https://placehold.co/800x400/1a1a1a/FF4500?text=Stitcher+SMG',
+	image: 'https://arcraiders.wiki/w/images/3/3a/Stitcher-Level1.png',
 	icon: '🔫'
 };

@@ -166,6 +166,6 @@ export const torrente: Weapon = {
 	patchHistory: [
 		{ version: '1.0', notes: 'Initial Release.' }
 	],
-	image: 'https://placehold.co/800x400/1a1a1a/DAA520?text=Torrente+LMG',
+	image: 'https://arcraiders.wiki/w/images/1/1e/Torrente-Level1.png',
 	icon: '🔫'
 };

@@ -104,8 +104,8 @@ import { CommonModule } from '@angular/common';
 						<a [routerLink]="['/arc-raiders/weapons', weapon.id]" class="group relative overflow-hidden rounded-xl border border-[var(--c-border)] bg-[var(--c-bg-secondary)] shadow-[var(--shadow-sm)] transition-all hover:-translate-y-1 hover:border-[var(--c-arc-yellow)] hover:shadow-[var(--shadow-md)]">
 							
 							<!-- Image & Badge -->
-							<div class="relative h-48 w-full overflow-hidden bg-black/50">
-								<img [src]="weapon.image" [alt]="weapon.name" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100" />
+							<div class="relative h-48 w-full overflow-hidden bg-black/50 p-6 flex items-center justify-center">
+								<img [src]="weapon.image" [alt]="weapon.name" class="max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100 drop-shadow-2xl" />
 								
 								<!-- Top Left Badge -->
 								<div class="absolute left-3 top-3 flex items-center gap-1.5 rounded-full bg-black/70 px-2.5 py-1 text-xs font-bold text-white backdrop-blur-sm border border-white/10">
@@ -164,7 +164,9 @@ import { CommonModule } from '@angular/common';
 									<tr class="hover:bg-[var(--c-bg-primary)]/50 transition-colors">
 										<td class="px-6 py-4">
 											<a [routerLink]="['/arc-raiders/weapons', weapon.id]" class="font-bold text-[var(--c-text-strong)] hover:text-[var(--c-arc-yellow)] flex items-center gap-3">
-												<img [src]="weapon.image" class="h-8 w-12 object-cover rounded border border-[var(--c-border)]" alt="">
+												<div class="flex h-10 w-16 items-center justify-center rounded border border-[var(--c-border)] bg-black/50 p-1">
+													<img [src]="weapon.image" class="max-h-full max-w-full object-contain" alt="">
+												</div>
 												{{ weapon.name }}
 											</a>
 										</td>
@@ -197,8 +199,8 @@ export class ArcRaidersWeaponsComponent {
 	protected readonly viewMode = signal<'grid' | 'table'>('grid');
 
 	// Filter Options
-	protected readonly classes = ['All', 'Pistol', 'SMG', 'Assault Rifle', 'Shotgun', 'Sniper Rifle', 'Heavy'];
-	protected readonly rarities = ['All', 'Common', 'Uncommon', 'Rare', 'Epic', 'Legendary', 'Standard', 'Melee'];
+	protected readonly classes = ['All', 'Pistol', 'Hand Cannon', 'SMG', 'Assault Rifle', 'Battle Rifle', 'LMG', 'Shotgun', 'Sniper Rifle', 'Heavy'];
+	protected readonly rarities = ['All', 'Common', 'Uncommon', 'Rare', 'Epic', 'Legendary'];
 	protected readonly ammoTypes = ['All', 'Light Ammo', 'Medium Ammo', 'Heavy Ammo', 'Energy', 'Special'];
 
 	// Selected Filters

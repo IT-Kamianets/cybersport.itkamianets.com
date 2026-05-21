@@ -166,6 +166,6 @@ export const anvil: Weapon = {
 	patchHistory: [
 		{ version: '1.0', notes: 'Initial Release.' }
 	],
-	image: 'https://placehold.co/800x400/1a1a1a/DAA520?text=Anvil+Hand+Cannon',
+	image: 'https://arcraiders.wiki/w/images/0/00/Anvil-Level1.png',
 	icon: '🔫'
 };

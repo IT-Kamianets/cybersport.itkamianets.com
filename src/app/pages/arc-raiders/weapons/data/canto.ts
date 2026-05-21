@@ -138,6 +138,6 @@ export const canto: Weapon = {
 	patchHistory: [
 		{ version: '1.22.0', notes: 'Added to the game.' }
 	],
-	image: 'https://placehold.co/800x400/1a1a1a/DAA520?text=Canto+SMG',
+	image: 'https://arcraiders.wiki/w/images/8/83/Canto-Level1.png',
 	icon: '🔫'
 };

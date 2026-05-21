@@ -161,6 +161,6 @@ export const rattler: Weapon = {
 	patchHistory: [
 		{ version: '1.7.0', notes: 'Base Magazine Size: 10 -> 12' }
 	],
-	image: 'https://placehold.co/800x400/1a1a1a/FF4500?text=Rattler+Assault+Rifle',
+	image: 'https://arcraiders.wiki/w/images/b/be/Rattler-Level1.png',
 	icon: '🔫'
 };

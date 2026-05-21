@@ -169,6 +169,6 @@ export const bobcat: Weapon = {
 	patchHistory: [
 		{ version: '1.0', notes: 'Initial Release.' }
 	],
-	image: 'https://placehold.co/800x400/1a1a1a/800080?text=Bobcat+SMG',
+	image: 'https://arcraiders.wiki/w/images/3/36/Bobcat-Level1.png',
 	icon: '🔫'
 };

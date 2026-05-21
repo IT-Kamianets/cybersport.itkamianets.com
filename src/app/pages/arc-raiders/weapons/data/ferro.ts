@@ -163,6 +163,6 @@ export const ferro: Weapon = {
 	patchHistory: [
 		{ version: '1.0', notes: 'Initial Release.' }
 	],
-	image: 'https://placehold.co/800x400/1a1a1a/A52A2A?text=Ferro+Battle+Rifle',
+	image: 'https://arcraiders.wiki/w/images/b/b0/Ferro-Level1.png',
 	icon: '🔫'
 };

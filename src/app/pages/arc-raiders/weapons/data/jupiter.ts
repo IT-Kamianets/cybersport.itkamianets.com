@@ -69,6 +69,6 @@ export const jupiter: Weapon = {
 			notes: 'Improved ADS Magnification from ~1.9x to ~2.2x. Improved Equip Time from 1.2s to 1.05s. Improved Unequip Time from 0.9s to 0.75s.' 
 		}
 	],
-	image: 'https://placehold.co/800x400/1a1a1a/FFFF00?text=Jupiter+Sniper+Rifle',
+	image: 'https://arcraiders.wiki/w/images/6/68/Jupiter.png',
 	icon: '⚡'
 };

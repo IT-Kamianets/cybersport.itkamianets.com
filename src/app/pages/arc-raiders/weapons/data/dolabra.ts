@@ -65,6 +65,6 @@ export const dolabra: Weapon = {
 	patchHistory: [
 		{ version: '1.22.0', notes: 'Added to the game.' }
 	],
-	image: 'https://placehold.co/800x400/1a1a1a/FFFF00?text=Dolabra+Shotgun',
+	image: 'https://arcraiders.wiki/w/images/0/07/Dolabra-Level1.png',
 	icon: '⚡'
 };

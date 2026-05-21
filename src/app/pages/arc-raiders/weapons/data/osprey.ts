@@ -166,6 +166,6 @@ export const osprey: Weapon = {
 	patchHistory: [
 		{ version: '1.0', notes: 'Initial Release.' }
 	],
-	image: 'https://placehold.co/800x400/1a1a1a/DAA520?text=Osprey+Sniper+Rifle',
+	image: 'https://arcraiders.wiki/w/images/a/ae/Osprey-Level1.png',
 	icon: '🔫'
 };

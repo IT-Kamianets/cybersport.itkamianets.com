@@ -165,6 +165,6 @@ export const hairpin: Weapon = {
 	patchHistory: [
 		{ version: '1.0', notes: 'Initial Release.' }
 	],
-	image: 'https://placehold.co/800x400/1a1a1a/808080?text=Hairpin+Pistol',
+	image: 'https://arcraiders.wiki/w/images/thumb/6/65/Hairpin-Level1.png/348px-Hairpin-Level1.png.webp',
 	icon: '🔫'
 };

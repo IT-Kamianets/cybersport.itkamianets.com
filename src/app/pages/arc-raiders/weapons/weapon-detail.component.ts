@@ -259,8 +259,8 @@ import { CommonModule } from '@angular/common';
 								<h2 class="text-xl font-black tracking-wider text-[var(--c-text-strong)]">{{ w.name }}</h2>
 							</div>
 							
-							<div class="bg-black/80">
-								<img [src]="w.image" [alt]="w.name" class="w-full h-48 object-cover" />
+							<div class="bg-black/80 flex items-center justify-center p-4 h-48">
+								<img [src]="w.image" [alt]="w.name" class="max-w-full max-h-full object-contain drop-shadow-2xl" />
 							</div>
 
 							<div class="p-5 text-sm">

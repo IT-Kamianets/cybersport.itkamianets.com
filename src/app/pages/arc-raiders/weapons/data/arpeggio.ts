@@ -165,6 +165,6 @@ export const arpeggio: Weapon = {
 	patchHistory: [
 		{ version: '1.0', notes: 'Initial Release.' }
 	],
-	image: 'https://placehold.co/800x400/1a1a1a/FF4500?text=Arpeggio+Assault+Rifle',
+	image: 'https://arcraiders.wiki/w/images/6/6c/Arpeggio-Level1.png',
 	icon: '🔫'
 };

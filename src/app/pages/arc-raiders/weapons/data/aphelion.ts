@@ -78,6 +78,6 @@ export const aphelion: Weapon = {
 			notes: 'Added to the game.' 
 		}
 	],
-	image: 'https://placehold.co/800x400/1a1a1a/FFFF00?text=Aphelion+Battle+Rifle',
+	image: 'https://arcraiders.wiki/w/images/8/88/Aphelion.png',
 	icon: '⚡'
 };

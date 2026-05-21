@@ -163,6 +163,6 @@ export const burletta: Weapon = {
 	patchHistory: [
 		{ version: '1.0', notes: 'Initial Release.' }
 	],
-	image: 'https://placehold.co/800x400/1a1a1a/008080?text=Burletta+Pistol',
+	image: 'https://arcraiders.wiki/w/images/d/d4/Burletta-Level1.png',
 	icon: '🔫'
 };

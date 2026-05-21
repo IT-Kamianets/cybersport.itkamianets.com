@@ -163,6 +163,6 @@ export const rascal: Weapon = {
 	patchHistory: [
 		{ version: '1.29.0', notes: 'Added to the game.' }
 	],
-	image: 'https://placehold.co/800x400/1a1a1a/DAA520?text=Rascal+Grenade+Launcher',
+	image: 'https://arcraiders.wiki/w/images/4/4b/Rascal_II.png',
 	icon: '🔫'
 };

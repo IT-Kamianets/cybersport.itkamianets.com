@@ -166,6 +166,6 @@ export const tempest: Weapon = {
 	patchHistory: [
 		{ version: '1.0', notes: 'Initial Release.' }
 	],
-	image: 'https://placehold.co/800x400/1a1a1a/800080?text=Tempest+Assault+Rifle',
+	image: 'https://arcraiders.wiki/w/images/c/c9/Tempest-Level1.png',
 	icon: '🔫'
 };

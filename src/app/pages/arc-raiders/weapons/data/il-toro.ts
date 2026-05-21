@@ -166,6 +166,6 @@ export const ilToro: Weapon = {
 	patchHistory: [
 		{ version: '1.0', notes: 'Initial Release.' }
 	],
-	image: 'https://placehold.co/800x400/1a1a1a/008080?text=Il+Toro+Shotgun',
+	image: 'https://arcraiders.wiki/w/images/5/50/Il_Toro-Level1.png',
 	icon: '🔫'
 };

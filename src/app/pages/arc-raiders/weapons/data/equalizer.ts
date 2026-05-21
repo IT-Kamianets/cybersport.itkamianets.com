@@ -66,6 +66,6 @@ export const equalizer: Weapon = {
 	patchHistory: [
 		{ version: '1.0', notes: 'Initial Release.' }
 	],
-	image: 'https://placehold.co/800x400/1a1a1a/FFFF00?text=Equalizer+Beam+Rifle',
+	image: 'https://arcraiders.wiki/w/images/9/96/Equalizer.png',
 	icon: '⚡'
 };

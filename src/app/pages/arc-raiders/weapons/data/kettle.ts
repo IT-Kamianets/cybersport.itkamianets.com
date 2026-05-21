@@ -167,6 +167,6 @@ export const kettle: Weapon = {
 	patchHistory: [
 		{ version: '1.17.0', notes: 'Reduced Base Damage from 10 to 8.5' }
 	],
-	image: 'https://placehold.co/800x400/1a1a1a/FF4500?text=Kettle+Assault+Rifle',
+	image: 'https://arcraiders.wiki/w/images/c/c1/Kettle-Level1.png',
 	icon: '🔫'
 };

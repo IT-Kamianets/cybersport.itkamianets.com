@@ -167,6 +167,6 @@ export const venator: Weapon = {
 		{ version: '1.17.0', notes: 'Reduced Headshot Multiplier from 2.5 to 2. Reduced Base Damage from 9 to 8.' },
 		{ version: '1.3.0', notes: 'Reduced Fire-rate gained from upgrades: 22/44/66% -> 13/26/40%. Increased Weight: 2 -> 5.' }
 	],
-	image: 'https://placehold.co/800x400/1a1a1a/DAA520?text=Venator+Pistol',
+	image: 'https://arcraiders.wiki/w/images/b/b4/Venator-Level1.png',
 	icon: '🔫'
 };

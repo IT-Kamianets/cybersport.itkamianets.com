@@ -177,6 +177,6 @@ export const bettina: Weapon = {
 			notes: 'Durability Burn Rate: ~0.43% -> ~0.17% per shot. Base Magazine Size: 20 -> 22. Base Reload Time: 5 -> 4.5.' 
 		}
 	],
-	image: 'https://placehold.co/800x400/1a1a1a/800080?text=Bettina+Assault+Rifle',
+	image: 'https://arcraiders.wiki/w/images/a/ac/Bettina.png',
 	icon: '🔫'
 };
