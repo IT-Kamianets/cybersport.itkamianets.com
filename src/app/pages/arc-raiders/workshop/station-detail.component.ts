@@ -4,8 +4,6 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { WORKSHOP_STATIONS } from './workshop.data';
 import { LOOT, resolveLootItem } from '../loot/loot.data';
 import { WEAPONS } from '../weapons/weapons.data';
-import { GADGETS } from '../gadgets/gadgets.data';
-import { CONSUMABLES } from '../consumables/consumables.data';
 import { EQUIPMENT } from '../equipment/equipment.data';
 import { map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
@@ -77,7 +75,7 @@ import { CommonModule } from '@angular/common';
 								</div>
 
 								<!-- Unlocked Recipes -->
-								@if (tier.unlockedWeapons.length > 0 || tier.unlockedGadgets.length > 0 || tier.unlockedConsumables.length > 0 || tier.unlockedEquipment.length > 0) {
+								@if (tier.unlockedWeapons.length > 0 || tier.unlockedEquipment.length > 0) {
 									<div>
 										<h3 class="mb-3 border-b border-[var(--c-border)] pb-2 text-lg font-bold text-[var(--c-arc-yellow)] uppercase tracking-wider">Unlocks Crafting Recipes</h3>
 										<div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -89,19 +87,7 @@ import { CommonModule } from '@angular/common';
 												</a>
 											}
 
-											@for (g of tier.unlockedGadgets; track g.id) {
-												<a [routerLink]="['/arc-raiders/gadgets', g.id]" class="group rounded bg-[var(--c-bg-primary)] p-2 text-sm border border-[var(--c-border)] hover:border-[var(--c-arc-yellow)] transition-colors">
-													<div class="font-bold text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-yellow)] truncate">{{ g.name }}</div>
-													<div class="text-xs text-[var(--c-text-muted)] mt-0.5">Gadget</div>
-												</a>
-											}
-
-											@for (c of tier.unlockedConsumables; track c.id) {
-												<a [routerLink]="['/arc-raiders/consumables', c.id]" class="group rounded bg-[var(--c-bg-primary)] p-2 text-sm border border-[var(--c-border)] hover:border-[var(--c-arc-yellow)] transition-colors">
-													<div class="font-bold text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-yellow)] truncate">{{ c.name }}</div>
-													<div class="text-xs text-[var(--c-text-muted)] mt-0.5">Consumable</div>
-												</a>
-											}
+                                            
 
 											@for (e of tier.unlockedEquipment; track e.id) {
 												<a [routerLink]="['/arc-raiders/equipment', e.id]" class="group rounded bg-[var(--c-bg-primary)] p-2 text-sm border border-[var(--c-border)] hover:border-[var(--c-arc-yellow)] transition-colors">
@@ -157,16 +143,12 @@ export class ArcRaidersStationDetailComponent {
 
 			// Reverse Lookup: What does this specific station + level unlock?
 			const unlockedWeapons = WEAPONS.filter(w => w.craftingStation?.stationId === currentStation.id && w.craftingStation?.level === tier.level);
-			const unlockedGadgets = GADGETS.filter(g => g.craftingStation?.stationId === currentStation.id && g.craftingStation?.level === tier.level);
-			const unlockedConsumables = CONSUMABLES.filter(c => c.craftingStation?.stationId === currentStation.id && c.craftingStation?.level === tier.level);
 			const unlockedEquipment = EQUIPMENT.filter(e => e.craftingStation?.stationId === currentStation.id && e.craftingStation?.level === tier.level);
 
 			return {
 				...tier,
 				costs: mappedCosts,
 				unlockedWeapons,
-				unlockedGadgets,
-				unlockedConsumables,
 				unlockedEquipment
 			};
 		});

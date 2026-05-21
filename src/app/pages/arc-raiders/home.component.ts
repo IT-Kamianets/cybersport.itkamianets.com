@@ -7,7 +7,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 			
 			<!-- 1. The Hero Banner (Top Section) -->
 			<section class="relative h-[28rem] w-full overflow-hidden rounded-2xl border border-[var(--c-border)] shadow-[var(--shadow-md)]">
-				<img src="https://placehold.co/1200x600/1a1a1a/00FFFF?text=Cinematic+ARC+Machine+Background" alt="Hero Background" class="absolute inset-0 h-full w-full object-cover" />
+				<img src="https://i.ytimg.com/vi/f0sBPoqe4Z0/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLD9DjN9EIglHRjEvl5pnQeBAPUcWA" alt="Hero Background" class="absolute inset-0 h-full w-full object-cover" />
 				<!-- Dark Gradient Overlay -->
 				<div class="absolute inset-0 bg-gradient-to-t from-[var(--c-bg-primary)] via-black/60 to-transparent"></div>
 				
@@ -155,12 +155,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 })
 export class ArcRaidersHomeComponent {
 	protected readonly quickAccessCards = [
-		{
-			title: 'Arsenal & Gear',
-			description: 'Browse Weapons, Mods, Gadgets, and Consumables.',
-			icon: '⚔️',
-			link: '/arc-raiders/weapons'
-		},
+				{
+					title: 'Arsenal & Gear',
+					description: 'Browse Weapons and Mods.',
+					icon: '⚔️',
+					link: '/arc-raiders/weapons'
+				},
 		{
 			title: 'The ARC Threat',
 			description: 'Learn enemy weaknesses, from basic Drones to Heavy Walkers.',

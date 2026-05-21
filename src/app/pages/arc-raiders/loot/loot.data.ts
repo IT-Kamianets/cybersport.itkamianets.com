@@ -19,9 +19,50 @@ export interface LootItem {
 }
 
 import { metalParts } from './data/metal-parts';
+import { plasticParts } from './data/plastic-parts';
+import { rubberParts } from './data/rubber-parts';
+import { wires } from './data/wires';
+import { oil } from './data/oil';
+import { canister } from './data/canister';
+import { magnet } from './data/magnet';
+import { steelSpring } from './data/steel-spring';
+import { exodusModules } from './data/exodus-modules';
+import { matriarchReactor } from './data/matriarch-reactor';
+import { queenReactor } from './data/queen-reactor';
+import { advancedMechanicalComponents } from './data/advanced-mechanical-components';
+import { complexGunParts } from './data/complex-gun-parts';
+import { heavyGunParts } from './data/heavy-gun-parts';
+import { mediumGunParts } from './data/medium-gun-parts';
+import { mechanicalComponents } from './data/mechanical-components';
+import { magneticAccelerator } from './data/magnetic-accelerator';
+import { lightGunParts } from './data/light-gun-parts';
+import { simpleGunParts } from './data/simple-gun-parts';
+import { vaporizerRegulator } from './data/vaporizer-regulator';
+import { shredderGyro } from './data/shredder-gyro';
+
 
 export const LOOT: LootItem[] = [
-	metalParts
+	metalParts,
+	rubberParts,
+	plasticParts,
+	wires,
+	oil,
+	canister,
+	magnet,
+	steelSpring,
+	queenReactor,
+	matriarchReactor,
+	exodusModules,
+	advancedMechanicalComponents,
+	mechanicalComponents,
+	complexGunParts,
+	heavyGunParts,
+	mediumGunParts,
+	lightGunParts,
+	simpleGunParts,
+	vaporizerRegulator,
+	shredderGyro,
+	magneticAccelerator
 ];
 
 export function resolveLootItem(id: string): LootItem {

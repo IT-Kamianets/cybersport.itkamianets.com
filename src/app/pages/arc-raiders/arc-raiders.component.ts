@@ -56,15 +56,13 @@ import ua from './i18n/ua.json';
 								<!-- Gear & Equipment Dropdown -->
 								<div class="relative group inline-flex items-center">
 									<button class="inline-flex items-center px-1 pt-1 text-sm font-medium text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-cyan)] transition-colors"
-											[class.text-[var(--c-arc-cyan)]]="['/arc-raiders/weapons', '/arc-raiders/gadgets', '/arc-raiders/consumables', '/arc-raiders/equipment'].includes(router.url)">
+											[class.text-[var(--c-arc-cyan)]]="['/arc-raiders/weapons', '/arc-raiders/equipment'].includes(router.url)">
 										<span>Gear & Equipment</span>
 										<svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
 									</button>
-									
+					
 									<div class="absolute left-0 top-full hidden w-48 flex-col rounded-md border border-[var(--c-border)] bg-[var(--c-bg-primary)] shadow-lg group-hover:flex z-50 overflow-hidden">
 										<a routerLink="/arc-raiders/weapons" routerLinkActive="bg-[var(--c-bg-secondary)] text-[var(--c-arc-cyan)]" class="px-4 py-3 text-sm font-medium text-[var(--c-text-strong)] hover:bg-[var(--c-bg-secondary)] hover:text-[var(--c-arc-cyan)] transition-colors">Weapons</a>
-										<a routerLink="/arc-raiders/gadgets" routerLinkActive="bg-[var(--c-bg-secondary)] text-[var(--c-arc-cyan)]" class="px-4 py-3 text-sm font-medium text-[var(--c-text-strong)] hover:bg-[var(--c-bg-secondary)] hover:text-[var(--c-arc-cyan)] transition-colors border-t border-[var(--c-border)]">Gadgets</a>
-										<a routerLink="/arc-raiders/consumables" routerLinkActive="bg-[var(--c-bg-secondary)] text-[var(--c-arc-cyan)]" class="px-4 py-3 text-sm font-medium text-[var(--c-text-strong)] hover:bg-[var(--c-bg-secondary)] hover:text-[var(--c-arc-cyan)] transition-colors border-t border-[var(--c-border)]">Consumables</a>
 										<a routerLink="/arc-raiders/equipment" routerLinkActive="bg-[var(--c-bg-secondary)] text-[var(--c-arc-cyan)]" class="px-4 py-3 text-sm font-medium text-[var(--c-text-strong)] hover:bg-[var(--c-bg-secondary)] hover:text-[var(--c-arc-cyan)] transition-colors border-t border-[var(--c-border)]">Equipment</a>
 									</div>
 								</div>
