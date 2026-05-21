@@ -44,7 +44,7 @@ export interface AdvancedWeaponStats {
 export interface Weapon {
 	id: string;
 	name: string;
-	class: 'SMG' | 'Assault Rifle' | 'Sniper Rifle' | 'Shotgun' | 'Heavy' | 'Pistol' | 'Melee';
+	class: 'SMG' | 'Battle Rifle' | 'Assault Rifle' | 'Sniper Rifle' | 'Shotgun' | 'Heavy' | 'Pistol' | 'Melee';
 	rarity: 'Common' | 'Uncommon' | 'Rare' | 'Epic' | 'Legendary' | 'Standard';
 	ammoType: 'Light Ammo' | 'Medium Ammo' | 'Heavy Ammo' | 'Energy' | 'Special';
 	magSize: string | number;
@@ -77,7 +77,19 @@ export interface Weapon {
 }
 
 import { kettle } from './data/kettle';
+import { rattler } from './data/rattler';
+import { arpeggio } from './data/arpeggio';
+import { tempest } from './data/tempest';
+import { bettina } from './data/bettina';
+import { ferro } from './data/ferro';
+import { renegade } from './data/renegade';
 
 export const WEAPONS: Weapon[] = [
-	kettle
+	kettle,
+	rattler,
+	arpeggio,
+	tempest,
+	bettina,
+	ferro,
+	renegade
 ];
