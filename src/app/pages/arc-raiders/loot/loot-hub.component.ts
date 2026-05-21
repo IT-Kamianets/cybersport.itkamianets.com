@@ -80,8 +80,8 @@ import { CommonModule } from '@angular/common';
 								<tr class="hover:bg-[var(--c-bg-primary)]/50 transition-colors group">
 									<td class="px-6 py-4">
 										<a [routerLink]="['/arc-raiders/loot', item.id]" class="flex items-center gap-3 font-bold text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-cyan)]">
-											<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-black/50 border border-[var(--c-border)] text-xl">
-												{{ item.icon }}
+											<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-black/50 border border-[var(--c-border)] p-1 overflow-hidden">
+												<img [src]="item.image" [alt]="item.name" class="h-full w-full object-contain drop-shadow-md" />
 											</div>
 											{{ item.name }}
 										</a>

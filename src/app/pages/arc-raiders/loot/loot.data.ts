@@ -18,18 +18,25 @@ export interface LootItem {
 	recyclesInto?: LootRecycleYield[];
 }
 
-import { magneticAccelerator } from './data/magnetic-accelerator';
-import { ionSputter } from './data/ion-sputter';
-import { blueAccessKeycard } from './data/blue-access-keycard';
-import { syntheticPolymer } from './data/synthetic-polymer';
-import { voltageConverter } from './data/voltage-converter';
-import { scrapMetal } from './data/scrap-metal';
+import { metalParts } from './data/metal-parts';
 
 export const LOOT: LootItem[] = [
-	magneticAccelerator,
-	ionSputter,
-	blueAccessKeycard,
-	syntheticPolymer,
-	voltageConverter,
-	scrapMetal
+	metalParts
 ];
+
+export function resolveLootItem(id: string): LootItem {
+	const item = LOOT.find(l => l.id === id);
+	if (item) return item;
+	return {
+		id,
+		name: id.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+		icon: '📦',
+		category: 'Material',
+		rarity: 'Common',
+		stackLimit: 10,
+		sellValue: 0,
+		foundIn: [],
+		description: 'Unknown Item',
+		image: `https://placehold.co/100x100/1a1a1a/cccccc?text=${id.substring(0, 3).toUpperCase()}`
+	};
+}

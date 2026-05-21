@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { WORKSHOP_STATIONS } from './workshop.data';
-import { LOOT } from '../loot/loot.data';
+import { LOOT, resolveLootItem } from '../loot/loot.data';
 import { WEAPONS } from '../weapons/weapons.data';
 import { GADGETS } from '../gadgets/gadgets.data';
 import { CONSUMABLES } from '../consumables/consumables.data';
@@ -57,11 +57,13 @@ import { CommonModule } from '@angular/common';
 									<h3 class="mb-3 border-b border-[var(--c-border)] pb-2 text-lg font-bold text-[var(--c-arc-cyan)] uppercase tracking-wider">Upgrade Cost</h3>
 									@if (tier.costs.length > 0) {
 										<div class="grid gap-3 sm:grid-cols-2">
-											@for (cost of tier.costs; track cost.lootItem?.id) {
-												<a [routerLink]="['/arc-raiders/loot', cost.lootItem?.id]" class="group rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-primary)] p-3 shadow-[var(--shadow-sm)] hover:border-[var(--c-arc-cyan)] transition-colors flex justify-between items-center">
+											@for (cost of tier.costs; track cost.lootItem.id) {
+												<a [routerLink]="['/arc-raiders/loot', cost.lootItem.id]" class="group rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-primary)] p-3 shadow-[var(--shadow-sm)] hover:border-[var(--c-arc-cyan)] transition-colors flex justify-between items-center">
 													<div class="flex items-center gap-3">
-														<span class="text-lg">{{ cost.lootItem?.icon }}</span>
-														<span class="text-sm font-bold text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-cyan)]">{{ cost.lootItem?.name }}</span>
+														<div class="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-black/50 overflow-hidden">
+															<img [src]="cost.lootItem.image" [alt]="cost.lootItem.name" class="h-full w-full object-contain" />
+														</div>
+														<span class="text-sm font-bold text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-cyan)]">{{ cost.lootItem.name }}</span>
 													</div>
 													<div class="bg-[var(--c-bg-secondary)] border border-[var(--c-border)] rounded px-2 py-0.5 text-xs font-bold text-[var(--c-text-strong)]">
 														x{{ cost.quantity }}
@@ -149,9 +151,9 @@ export class ArcRaidersStationDetailComponent {
 		return currentStation.tiers.map(tier => {
 			// Forward Lookup: Map upgrade costs to LOOT objects
 			const mappedCosts = tier.upgradeCosts.map(cost => ({
-				lootItem: LOOT.find(l => l.id === cost.itemId),
+				lootItem: resolveLootItem(cost.itemId),
 				quantity: cost.quantity
-			})).filter(c => c.lootItem !== undefined);
+			}));
 
 			// Reverse Lookup: What does this specific station + level unlock?
 			const unlockedWeapons = WEAPONS.filter(w => w.craftingStation?.stationId === currentStation.id && w.craftingStation?.level === tier.level);

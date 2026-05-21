@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { LOOT } from './loot.data';
+import { LOOT, resolveLootItem } from './loot.data';
 import { WORKSHOP_STATIONS } from '../workshop/workshop.data';
 import { WEAPONS } from '../weapons/weapons.data';
 import { GADGETS } from '../gadgets/gadgets.data';
@@ -70,13 +70,13 @@ import { CommonModule } from '@angular/common';
 									Recycling Yield (RMB)
 								</h2>
 								<div class="grid gap-4 sm:grid-cols-2">
-									@for (yieldData of recyclingYield(); track yieldData.lootItem?.id) {
-										<a [routerLink]="['/arc-raiders/loot', yieldData.lootItem?.id]" class="group rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-primary)] p-4 shadow-[var(--shadow-sm)] hover:border-[var(--c-arc-cyan)] transition-colors flex justify-between items-center">
+									@for (yieldData of recyclingYield(); track yieldData.lootItem.id) {
+										<a [routerLink]="['/arc-raiders/loot', yieldData.lootItem.id]" class="group rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-primary)] p-4 shadow-[var(--shadow-sm)] hover:border-[var(--c-arc-cyan)] transition-colors flex justify-between items-center">
 											<div class="flex items-center gap-3">
-												<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-black/50 border border-[var(--c-border)] text-xl">
-													{{ yieldData.lootItem?.icon }}
+												<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-black/50 border border-[var(--c-border)] p-1 overflow-hidden">
+													<img [src]="yieldData.lootItem.image" [alt]="yieldData.lootItem.name" class="h-full w-full object-contain" />
 												</div>
-												<h3 class="mb-1 text-sm font-bold uppercase tracking-wider text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-cyan)]">{{ yieldData.lootItem?.name }}</h3>
+												<h3 class="mb-1 text-sm font-bold uppercase tracking-wider text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-cyan)]">{{ yieldData.lootItem.name }}</h3>
 											</div>
 											<div class="bg-[var(--c-bg-secondary)] border border-[var(--c-border)] rounded px-3 py-1 text-sm font-bold text-[var(--c-text-strong)]">
 												x{{ yieldData.yieldAmount }}
@@ -203,13 +203,15 @@ import { CommonModule } from '@angular/common';
 						<div class="sticky top-6 overflow-hidden rounded-xl border border-[var(--c-border)] bg-[var(--c-bg-secondary)] shadow-[var(--shadow-md)]">
 							
 							<div class="bg-[var(--c-bg-primary)] p-4 text-center border-b border-[var(--c-border)] flex items-center justify-center gap-3">
-								<span class="text-2xl">{{ i.icon }}</span>
+								<div class="flex h-8 w-8 items-center justify-center rounded overflow-hidden">
+									<img [src]="i.image" [alt]="i.name" class="h-full w-full object-contain" />
+								</div>
 								<h2 class="text-xl font-black tracking-wider text-[var(--c-text-strong)]">{{ i.name }}</h2>
 							</div>
 							
 							<div class="bg-black/80 flex items-center justify-center p-8">
-								<div class="text-7xl opacity-90 drop-shadow-md text-white">
-									{{ i.icon }}
+								<div class="flex h-32 w-32 items-center justify-center">
+									<img [src]="i.image" [alt]="i.name" class="max-h-full max-w-full object-contain drop-shadow-2xl" />
 								</div>
 							</div>
 
@@ -280,12 +282,11 @@ export class ArcRaidersLootDetailComponent {
 		if (!currentItem || !currentItem.recyclesInto) return [];
 
 		return currentItem.recyclesInto.map(yieldData => {
-			const componentItem = LOOT.find(l => l.id === yieldData.itemId);
 			return {
-				lootItem: componentItem,
+				lootItem: resolveLootItem(yieldData.itemId),
 				yieldAmount: yieldData.yieldAmount
 			};
-		}).filter(mapped => mapped.lootItem !== undefined);
+		});
 	});
 
 	// --- Computed Reverse Lookups ---

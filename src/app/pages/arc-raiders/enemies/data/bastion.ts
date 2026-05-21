@@ -29,6 +29,6 @@ export const bastion: Enemy = {
 	lore: '"Don\'t play hero with a Bastion. If you don\'t have explosives or heavy rounds, just hide in the rubble and wait for it to pass. It ain\'t worth losing your haul." - Unknown Raider',
 	primaryWeakness: 'Side Cooling Vents',
 	keyDrop: 'Targeting CPU',
-	image: 'https://placehold.co/800x400/1a1a1a/FF0000?text=Bastion+Tank',
+	image: 'https://arcraiders.wiki/w/images/4/47/ARC_Bastion.png',
 	icon: '💀💀💀'
 };

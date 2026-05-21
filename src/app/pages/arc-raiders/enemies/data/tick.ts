@@ -27,6 +27,6 @@ export const tick: Enemy = {
 	lore: '"Watch the ceilings. If you hear that clicking sound, you already have three of them above you." - Speranza Scavenger Guide',
 	primaryWeakness: 'EMP / Explosives',
 	keyDrop: 'Explosive Compound',
-	image: 'https://placehold.co/800x400/1a1a1a/FF0000?text=Tick+Swarm',
+	image: 'https://arcraiders.wiki/w/images/1/17/ARC_Tick.png',
 	icon: '💀'
 };

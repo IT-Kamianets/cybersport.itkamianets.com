@@ -27,6 +27,6 @@ export const snitch: Enemy = {
 	lore: '"The Snitch doesn\'t kill you. It just invites the guys who will." - Resistance Radio Broadcast',
 	primaryWeakness: 'Coordinated Burst Fire',
 	keyDrop: 'Sensor Optics',
-	image: 'https://placehold.co/800x400/1a1a1a/FF0000?text=Snitch+Drone',
+	image: 'https://arcraiders.wiki/w/images/c/c6/ARC_Snitch.png',
 	icon: '💀💀'
 };

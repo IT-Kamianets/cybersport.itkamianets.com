@@ -11,7 +11,7 @@ import ua from './i18n/ua.json';
 	styleUrl: './arc-raiders.scss',
 	template: `
 		<div class="arc-raiders-theme">
-			<section class="min-h-screen bg-[var(--c-bg-primary)]" style="--c-primary: var(--c-arc-cyan);">
+			<section class="flex flex-col min-h-screen bg-[var(--c-bg-primary)]" style="--c-primary: var(--c-arc-cyan);">
 				<!-- Wiki Header -->
 				<header class="bg-[var(--c-bg-secondary)] shadow-[var(--shadow-sm)] border-b border-[var(--c-border)]">
 					<div class="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
@@ -75,7 +75,7 @@ import ua from './i18n/ua.json';
 				</header>
 
 				<!-- Main Content -->
-				<main class="mx-auto max-w-[var(--container)] px-4 py-8 sm:px-6 lg:px-8">
+				<main class="flex-grow w-full mx-auto max-w-[var(--container)] px-4 py-8 sm:px-6 lg:px-8">
 					<router-outlet></router-outlet>
 				</main>
 

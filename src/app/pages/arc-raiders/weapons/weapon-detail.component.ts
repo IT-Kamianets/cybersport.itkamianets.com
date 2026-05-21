@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { WEAPONS, ItemRequirement } from './weapons.data';
-import { LOOT } from '../loot/loot.data';
+import { LOOT, resolveLootItem } from '../loot/loot.data';
 import { map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 
@@ -57,13 +57,13 @@ import { CommonModule } from '@angular/common';
 									Base Crafting Requirements
 								</h2>
 								<div class="grid gap-4 sm:grid-cols-2">
-									@for (material of craftingMaterials(); track material.lootItem?.id) {
-										<a [routerLink]="['/arc-raiders/loot', material.lootItem?.id]" class="group rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-primary)] p-4 shadow-[var(--shadow-sm)] hover:border-[var(--c-arc-yellow)] transition-colors flex justify-between items-center">
+									@for (material of craftingMaterials(); track material.lootItem.id) {
+										<a [routerLink]="['/arc-raiders/loot', material.lootItem.id]" class="group rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-primary)] p-4 shadow-[var(--shadow-sm)] hover:border-[var(--c-arc-yellow)] transition-colors flex justify-between items-center">
 											<div class="flex items-center gap-3">
-												<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-black/50 border border-[var(--c-border)] text-xl">
-													{{ material.lootItem?.icon }}
+												<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-black/50 border border-[var(--c-border)] p-1 overflow-hidden">
+													<img [src]="material.lootItem.image" [alt]="material.lootItem.name" class="h-full w-full object-contain" />
 												</div>
-												<h3 class="mb-1 text-sm font-bold uppercase tracking-wider text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-yellow)]">{{ material.lootItem?.name }}</h3>
+												<h3 class="mb-1 text-sm font-bold uppercase tracking-wider text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-yellow)]">{{ material.lootItem.name }}</h3>
 											</div>
 											<div class="bg-[var(--c-bg-secondary)] border border-[var(--c-border)] rounded px-3 py-1 text-sm font-bold text-[var(--c-text-strong)]">
 												x{{ material.quantity }}
@@ -109,11 +109,13 @@ import { CommonModule } from '@angular/common';
 															<div>
 																<h4 class="mb-3 text-sm font-bold uppercase tracking-wider text-[var(--c-text-muted)]">Upgrade Cost</h4>
 																<div class="flex flex-col gap-2">
-																	@for (mat of resolveMaterials(tier.upgradeRequirements); track mat.lootItem?.id) {
-																		<a [routerLink]="['/arc-raiders/loot', mat.lootItem?.id]" class="group flex items-center justify-between rounded bg-[var(--c-bg-primary)] p-2 border border-transparent hover:border-[var(--c-arc-yellow)] transition-colors">
+																	@for (mat of resolveMaterials(tier.upgradeRequirements); track mat.lootItem.id) {
+																		<a [routerLink]="['/arc-raiders/loot', mat.lootItem.id]" class="group flex items-center justify-between rounded bg-[var(--c-bg-primary)] p-2 border border-transparent hover:border-[var(--c-arc-yellow)] transition-colors">
 																			<div class="flex items-center gap-2">
-																				<span>{{ mat.lootItem?.icon }}</span>
-																				<span class="text-sm font-medium text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-yellow)]">{{ mat.lootItem?.name }}</span>
+																				<div class="flex h-6 w-6 items-center justify-center rounded bg-black/50 overflow-hidden">
+																					<img [src]="mat.lootItem.image" [alt]="mat.lootItem.name" class="h-full w-full object-contain" />
+																				</div>
+																				<span class="text-sm font-medium text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-yellow)]">{{ mat.lootItem.name }}</span>
 																			</div>
 																			<span class="rounded bg-black/40 px-2 py-0.5 text-xs font-bold text-[var(--c-arc-cyan)]">x{{ mat.quantity }}</span>
 																		</a>
@@ -149,11 +151,13 @@ import { CommonModule } from '@angular/common';
 														<div>
 															<h4 class="mb-3 text-sm font-bold uppercase tracking-wider text-[var(--c-text-muted)]">Repair Cost <span class="text-xs text-[var(--c-arc-cyan)] normal-case ml-2">(+{{ tier.repairDurabilityRestored }} Durability)</span></h4>
 															<div class="flex flex-col gap-2">
-																@for (mat of resolveMaterials(tier.repairCost); track mat.lootItem?.id) {
-																	<a [routerLink]="['/arc-raiders/loot', mat.lootItem?.id]" class="group flex items-center justify-between rounded bg-[var(--c-bg-primary)] p-2 border border-transparent hover:border-[var(--c-arc-yellow)] transition-colors">
+																@for (mat of resolveMaterials(tier.repairCost); track mat.lootItem.id) {
+																	<a [routerLink]="['/arc-raiders/loot', mat.lootItem.id]" class="group flex items-center justify-between rounded bg-[var(--c-bg-primary)] p-2 border border-transparent hover:border-[var(--c-arc-yellow)] transition-colors">
 																		<div class="flex items-center gap-2">
-																			<span>{{ mat.lootItem?.icon }}</span>
-																			<span class="text-sm font-medium text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-yellow)]">{{ mat.lootItem?.name }}</span>
+																			<div class="flex h-6 w-6 items-center justify-center rounded bg-black/50 overflow-hidden">
+																				<img [src]="mat.lootItem.image" [alt]="mat.lootItem.name" class="h-full w-full object-contain" />
+																			</div>
+																			<span class="text-sm font-medium text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-yellow)]">{{ mat.lootItem.name }}</span>
 																		</div>
 																		<span class="rounded bg-black/40 px-2 py-0.5 text-xs font-bold text-[var(--c-arc-cyan)]">x{{ mat.quantity }}</span>
 																	</a>
@@ -167,11 +171,13 @@ import { CommonModule } from '@angular/common';
 															<div>
 																<h4 class="mb-3 text-xs font-bold uppercase tracking-wider text-[var(--c-text-muted)]">Recycle Yield</h4>
 																<div class="flex flex-col gap-2">
-																	@for (mat of resolveMaterials(tier.recycleYield); track mat.lootItem?.id) {
-																		<a [routerLink]="['/arc-raiders/loot', mat.lootItem?.id]" class="group flex items-center justify-between rounded bg-[var(--c-bg-primary)] p-1.5 border border-transparent hover:border-[var(--c-arc-yellow)] transition-colors">
+																	@for (mat of resolveMaterials(tier.recycleYield); track mat.lootItem.id) {
+																		<a [routerLink]="['/arc-raiders/loot', mat.lootItem.id]" class="group flex items-center justify-between rounded bg-[var(--c-bg-primary)] p-1.5 border border-transparent hover:border-[var(--c-arc-yellow)] transition-colors">
 																			<div class="flex items-center gap-2 truncate">
-																				<span class="text-xs">{{ mat.lootItem?.icon }}</span>
-																				<span class="text-xs font-medium text-[var(--c-text-strong)] truncate group-hover:text-[var(--c-arc-yellow)]" [title]="mat.lootItem?.name">{{ mat.lootItem?.name }}</span>
+																				<div class="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-black/50 overflow-hidden">
+																					<img [src]="mat.lootItem.image" [alt]="mat.lootItem.name" class="h-full w-full object-contain" />
+																				</div>
+																				<span class="text-xs font-medium text-[var(--c-text-strong)] truncate group-hover:text-[var(--c-arc-yellow)]" [title]="mat.lootItem.name">{{ mat.lootItem.name }}</span>
 																			</div>
 																			<span class="rounded bg-black/40 px-1.5 py-0.5 text-[10px] font-bold text-[var(--c-text)]">x{{ mat.quantity }}</span>
 																		</a>
@@ -183,11 +189,13 @@ import { CommonModule } from '@angular/common';
 															<div>
 																<h4 class="mb-3 text-xs font-bold uppercase tracking-wider text-[var(--c-text-muted)]">Salvage Yield</h4>
 																<div class="flex flex-col gap-2">
-																	@for (mat of resolveMaterials(tier.salvageYield); track mat.lootItem?.id) {
-																		<a [routerLink]="['/arc-raiders/loot', mat.lootItem?.id]" class="group flex items-center justify-between rounded bg-[var(--c-bg-primary)] p-1.5 border border-transparent hover:border-[var(--c-arc-yellow)] transition-colors">
+																	@for (mat of resolveMaterials(tier.salvageYield); track mat.lootItem.id) {
+																		<a [routerLink]="['/arc-raiders/loot', mat.lootItem.id]" class="group flex items-center justify-between rounded bg-[var(--c-bg-primary)] p-1.5 border border-transparent hover:border-[var(--c-arc-yellow)] transition-colors">
 																			<div class="flex items-center gap-2 truncate">
-																				<span class="text-xs">{{ mat.lootItem?.icon }}</span>
-																				<span class="text-xs font-medium text-[var(--c-text-strong)] truncate group-hover:text-[var(--c-arc-yellow)]" [title]="mat.lootItem?.name">{{ mat.lootItem?.name }}</span>
+																				<div class="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-black/50 overflow-hidden">
+																					<img [src]="mat.lootItem.image" [alt]="mat.lootItem.name" class="h-full w-full object-contain" />
+																				</div>
+																				<span class="text-xs font-medium text-[var(--c-text-strong)] truncate group-hover:text-[var(--c-arc-yellow)]" [title]="mat.lootItem.name">{{ mat.lootItem.name }}</span>
 																			</div>
 																			<span class="rounded bg-black/40 px-1.5 py-0.5 text-[10px] font-bold text-[var(--c-text)]">x{{ mat.quantity }}</span>
 																		</a>
@@ -368,23 +376,8 @@ export class ArcRaidersWeaponDetailComponent {
 		if (!item || !item.craftingRequirements) return [];
 
 		return item.craftingRequirements.map(req => {
-			let lootItem = LOOT.find(l => l.id === req.itemId);
-			if (!lootItem) {
-				lootItem = {
-					id: req.itemId,
-					name: req.itemId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
-					icon: '📦',
-					category: 'Material',
-					rarity: 'Common',
-					stackLimit: 10,
-					sellValue: 0,
-					foundIn: [],
-					description: 'Unknown Item',
-					image: ''
-				};
-			}
 			return {
-				lootItem: lootItem,
+				lootItem: resolveLootItem(req.itemId),
 				quantity: req.quantity
 			};
 		});
@@ -394,23 +387,8 @@ export class ArcRaidersWeaponDetailComponent {
 	protected resolveMaterials(reqs?: ItemRequirement[]) {
 		if (!reqs) return [];
 		return reqs.map(req => {
-			let lootItem = LOOT.find(l => l.id === req.itemId);
-			if (!lootItem) {
-				lootItem = {
-					id: req.itemId,
-					name: req.itemId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
-					icon: '📦',
-					category: 'Material',
-					rarity: 'Common',
-					stackLimit: 10,
-					sellValue: 0,
-					foundIn: [],
-					description: 'Unknown Item',
-					image: ''
-				};
-			}
 			return {
-				lootItem: lootItem,
+				lootItem: resolveLootItem(req.itemId),
 				quantity: req.quantity
 			};
 		});

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { EQUIPMENT } from './equipment.data';
-import { LOOT } from '../loot/loot.data';
+import { LOOT, resolveLootItem } from '../loot/loot.data';
 import { map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 
@@ -45,13 +45,13 @@ import { CommonModule } from '@angular/common';
 									Crafting Requirements
 								</h2>
 								<div class="grid gap-4 sm:grid-cols-2">
-									@for (material of craftingMaterials(); track material.lootItem?.id) {
-										<a [routerLink]="['/arc-raiders/loot', material.lootItem?.id]" class="group rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-primary)] p-4 shadow-[var(--shadow-sm)] hover:border-[var(--c-arc-cyan)] transition-colors flex justify-between items-center">
+									@for (material of craftingMaterials(); track material.lootItem.id) {
+										<a [routerLink]="['/arc-raiders/loot', material.lootItem.id]" class="group rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-primary)] p-4 shadow-[var(--shadow-sm)] hover:border-[var(--c-arc-cyan)] transition-colors flex justify-between items-center">
 											<div class="flex items-center gap-3">
-												<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-black/50 border border-[var(--c-border)] text-xl">
-													{{ material.lootItem?.icon }}
+												<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-black/50 border border-[var(--c-border)] p-1 overflow-hidden">
+													<img [src]="material.lootItem.image" [alt]="material.lootItem.name" class="h-full w-full object-contain" />
 												</div>
-												<h3 class="mb-1 text-sm font-bold uppercase tracking-wider text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-cyan)]">{{ material.lootItem?.name }}</h3>
+												<h3 class="mb-1 text-sm font-bold uppercase tracking-wider text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-cyan)]">{{ material.lootItem.name }}</h3>
 											</div>
 											<div class="bg-[var(--c-bg-secondary)] border border-[var(--c-border)] rounded px-3 py-1 text-sm font-bold text-[var(--c-text-strong)]">
 												x{{ material.quantity }}
@@ -76,13 +76,15 @@ import { CommonModule } from '@angular/common';
 						<div class="sticky top-6 overflow-hidden rounded-xl border border-[var(--c-border)] bg-[var(--c-bg-secondary)] shadow-[var(--shadow-md)]">
 							
 							<div class="bg-[var(--c-bg-primary)] p-4 text-center border-b border-[var(--c-border)] flex items-center justify-center gap-3">
-								<span class="text-2xl">{{ e.icon }}</span>
+								<div class="flex h-8 w-8 items-center justify-center rounded overflow-hidden">
+									<img [src]="e.image" [alt]="e.name" class="h-full w-full object-contain" />
+								</div>
 								<h2 class="text-xl font-black tracking-wider text-[var(--c-text-strong)]">{{ e.name }}</h2>
 							</div>
 							
 							<div class="bg-black/80 flex items-center justify-center p-8">
-								<div class="text-7xl drop-shadow-[0_0_25px_rgba(0,255,255,0.4)] text-[var(--c-arc-cyan)]">
-									{{ e.icon }}
+								<div class="flex h-32 w-32 items-center justify-center">
+									<img [src]="e.image" [alt]="e.name" class="max-h-full max-w-full object-contain drop-shadow-[0_0_25px_rgba(0,255,255,0.4)]" />
 								</div>
 							</div>
 
@@ -155,11 +157,10 @@ export class ArcRaidersEquipmentDetailComponent {
 		if (!item || !item.craftingRequirements) return [];
 
 		return item.craftingRequirements.map(req => {
-			const lootItem = LOOT.find(l => l.id === req.itemId);
 			return {
-				lootItem: lootItem,
+				lootItem: resolveLootItem(req.itemId),
 				quantity: req.quantity
 			};
-		}).filter(mapped => mapped.lootItem !== undefined);
+		});
 	});
 }
