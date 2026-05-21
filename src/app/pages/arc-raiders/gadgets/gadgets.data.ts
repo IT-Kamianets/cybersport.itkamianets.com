@@ -2,6 +2,7 @@ export interface Gadget {
 	id: string;
 	name: string;
 	craftingRequirements?: { itemId: string; quantity: number }[];
+	craftingStation?: { stationId: string; level: number };
 	category: 'Mobility' | 'Stealth' | 'Defensive' | 'Recon';
 	activationType: 'Toggle' | 'Fire/Deploy' | 'Passive';
 	cooldown: string;
@@ -19,6 +20,7 @@ export const GADGETS: Gadget[] = [
 		craftingRequirements: [
 			{ itemId: 'synthetic-polymer', quantity: 1 }
 		],
+		craftingStation: { stationId: 'gear-bench', level: 1 },
 		category: 'Stealth',
 		activationType: 'Toggle',
 		cooldown: '45 seconds',

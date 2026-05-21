@@ -7,6 +7,7 @@ export interface Weapon {
 	id: string;
 	name: string;
 	craftingRequirements?: { itemId: string; quantity: number }[];
+	craftingStation?: { stationId: string; level: number };
 	class: 'SMG' | 'Assault Rifle' | 'Sniper Rifle' | 'Shotgun' | 'Heavy' | 'Pistol' | 'Melee';
 	rarity: 'Standard' | 'Legendary' | 'Melee';
 	ammoType: 'Light Ammo' | 'Medium Ammo' | 'Heavy Ammo' | 'Energy' | 'Special';
@@ -42,6 +43,7 @@ export const WEAPONS: Weapon[] = [
 		craftingRequirements: [
 			{ itemId: 'synthetic-polymer', quantity: 3 }
 		],
+		craftingStation: { stationId: 'gunsmith', level: 1 },
 		magSize: '30 (Base) / 45 (Extended)',
 		baseDamage: 18,
 		firingMode: 'Fully Automatic',
@@ -109,6 +111,7 @@ export const WEAPONS: Weapon[] = [
 		class: 'Sniper Rifle',
 		rarity: 'Legendary',
 		ammoType: 'Heavy Ammo',
+		craftingStation: { stationId: 'gunsmith', level: 2 },
 		magSize: '5',
 		baseDamage: 95,
 		firingMode: 'Bolt-Action',

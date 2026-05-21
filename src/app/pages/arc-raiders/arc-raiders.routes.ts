@@ -117,6 +117,16 @@ export const arcRaidersRoutes: Routes = [
 				]
 			},
 			{
+				path: 'workshop',
+				loadComponent: () =>
+					import('./workshop/workshop-hub.component').then((m) => m.ArcRaidersWorkshopHubComponent),
+			},
+			{
+				path: 'workshop/:id',
+				loadComponent: () =>
+					import('./workshop/station-detail.component').then((m) => m.ArcRaidersStationDetailComponent),
+			},
+			{
 				path: 'guides',
 				loadComponent: () =>
 					import('./guides.component').then((m) => m.ArcRaidersGuidesComponent),

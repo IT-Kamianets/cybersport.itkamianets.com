@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { LOOT } from './loot.data';
+import { WORKSHOP_STATIONS } from '../workshop/workshop.data';
 import { WEAPONS } from '../weapons/weapons.data';
 import { GADGETS } from '../gadgets/gadgets.data';
 import { MAPS } from '../maps/maps.data';
@@ -98,6 +99,28 @@ import { CommonModule } from '@angular/common';
 											<h3 class="mb-1 text-sm font-bold uppercase tracking-wider text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-cyan)]">{{ source.item.name }}</h3>
 											<div class="bg-[var(--c-bg-secondary)] border border-[var(--c-border)] rounded px-3 py-1 text-sm font-bold text-[var(--c-text-strong)]">
 												Yield: {{ source.yieldAmount }}
+											</div>
+										</a>
+									}
+								</div>
+							</section>
+						}
+
+						@if (usedForStationUpgrades().length > 0) {
+							<section>
+								<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-arc-cyan)] flex items-center gap-2">
+									<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+									Required for Station Upgrades
+								</h2>
+								<div class="grid gap-4 sm:grid-cols-2">
+									@for (upgrade of usedForStationUpgrades(); track upgrade.stationId + upgrade.level) {
+										<a [routerLink]="['/arc-raiders/workshop', upgrade.stationId]" class="group rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-primary)] p-4 shadow-[var(--shadow-sm)] hover:border-[var(--c-arc-cyan)] transition-colors flex justify-between items-center">
+											<div>
+												<p class="text-xs text-[var(--c-text-muted)] mb-1">Required to unlock</p>
+												<h3 class="text-sm font-bold uppercase tracking-wider text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-cyan)]">{{ upgrade.stationName }} - Level {{ upgrade.level }}</h3>
+											</div>
+											<div class="bg-[var(--c-bg-secondary)] border border-[var(--c-border)] rounded px-3 py-1 text-sm font-bold text-[var(--c-text-strong)]">
+												x{{ upgrade.quantity }}
 											</div>
 										</a>
 									}
@@ -252,6 +275,25 @@ export class ArcRaidersLootDetailComponent {
 	});
 
 	// --- Computed Reverse Lookups ---
+
+	protected readonly usedForStationUpgrades = computed(() => {
+		const id = this.idParam();
+		if (!id) return [];
+		return WORKSHOP_STATIONS.reduce((acc, station) => {
+			station.tiers.forEach(tier => {
+				const req = tier.upgradeCosts.find(c => c.itemId === id);
+				if (req) {
+					acc.push({
+						stationId: station.id,
+						stationName: station.name,
+						level: tier.level,
+						quantity: req.quantity
+					});
+				}
+			});
+			return acc;
+		}, [] as { stationId: string, stationName: string, level: number, quantity: number }[]);
+	});
 
 	protected readonly usedToCraftWeapons = computed(() => {
 		const id = this.idParam();

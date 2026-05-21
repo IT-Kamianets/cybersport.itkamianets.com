@@ -36,7 +36,11 @@ import ua from './i18n/ua.json';
 								</a>
 
 								<a routerLink="/arc-raiders/loot" routerLinkActive="text-[var(--c-arc-cyan)] border-b-2 border-[var(--c-arc-cyan)]" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-[var(--c-text-strong)] hover:text-[var(--c-arc-cyan)]">
-									<span>Loot & Materials</span>
+									<span>Loot & Economy</span>
+								</a>
+
+								<a routerLink="/arc-raiders/workshop" routerLinkActive="text-[var(--c-arc-cyan)] border-b-2 border-[var(--c-arc-cyan)]" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-[var(--c-text-strong)] hover:text-[var(--c-arc-cyan)]">
+									<span>Workshop</span>
 								</a>
 								
 								<!-- Gear & Mods Dropdown -->

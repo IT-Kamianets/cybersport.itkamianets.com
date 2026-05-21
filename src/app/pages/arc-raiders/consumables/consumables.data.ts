@@ -2,6 +2,7 @@ export interface Consumable {
 	id: string;
 	name: string;
 	craftingRequirements?: { itemId: string; quantity: number }[];
+	craftingStation?: { stationId: string; level: number };
 	category: 'Medical' | 'Lethal' | 'Tactical' | 'Utility';
 	stackSize: number;
 	useTime: string;
@@ -18,6 +19,7 @@ export const CONSUMABLES: Consumable[] = [
 		craftingRequirements: [
 			{ itemId: 'synthetic-polymer', quantity: 2 }
 		],
+		craftingStation: { stationId: 'medical-lab', level: 1 },
 		category: 'Medical',
 		stackSize: 3,
 		useTime: 'Instant',
