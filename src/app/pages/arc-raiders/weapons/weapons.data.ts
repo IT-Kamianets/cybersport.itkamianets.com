@@ -44,9 +44,9 @@ export interface AdvancedWeaponStats {
 export interface Weapon {
 	id: string;
 	name: string;
-	class: 'SMG' | 'Battle Rifle' | 'Assault Rifle' | 'Sniper Rifle' | 'Shotgun' | 'Heavy' | 'Pistol' | 'Melee';
+	class: 'SMG' | 'Battle Rifle' | 'Assault Rifle' | 'Hand Cannon' | 'LMG' | 'Sniper Rifle' | 'Shotgun' | 'Heavy' | 'Pistol' | 'Melee';
 	rarity: 'Common' | 'Uncommon' | 'Rare' | 'Epic' | 'Legendary' | 'Standard';
-	ammoType: 'Light Ammo' | 'Medium Ammo' | 'Heavy Ammo' | 'Energy' | 'Special';
+	ammoType: 'Light Ammo' | 'Medium Ammo' | 'Heavy Ammo' | 'Shotgun Ammo' | 'Energy' | 'Special';
 	magSize: string | number;
 	firingMode: string;
 	
@@ -83,13 +83,47 @@ import { tempest } from './data/tempest';
 import { bettina } from './data/bettina';
 import { ferro } from './data/ferro';
 import { renegade } from './data/renegade';
+import { aphelion } from './data/aphelion';
+import { canto } from './data/canto';
+import { ilToro } from './data/il-toro';
+import { rascal } from './data/rascal';
+import { anvil } from './data/anvil';
+import { equalizer } from './data/equalizer';
+import { bobcat } from './data/bobcat';
+import { burletta } from './data/burletta';
+import { dolabra } from './data/dolabra';
+import { hairpin } from './data/hairpin';
+import { hullcracker } from './data/hullcracker';
+import { jupiter } from './data/jupiter';
+import { osprey } from './data/osprey';
+import { stitcher } from './data/stitcher';
+import { torrente } from './data/torrente';
+import { venator } from './data/venator';
+import { vulcano } from './data/vulcano';
 
 export const WEAPONS: Weapon[] = [
-	kettle,
-	rattler,
+	anvil,
+	aphelion,
 	arpeggio,
-	tempest,
 	bettina,
+	bobcat,
+	burletta,
+	canto,
+	dolabra,
+	equalizer,
 	ferro,
-	renegade
+	hairpin,
+	hullcracker,
+	ilToro,
+	jupiter,
+	kettle,
+	osprey,
+	rascal,
+	rattler,
+	renegade,
+	stitcher,
+	tempest,
+	torrente,
+	venator,
+	vulcano
 ];
