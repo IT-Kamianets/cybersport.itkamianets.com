@@ -8,16 +8,31 @@ export const medicalLab: WorkshopStation = {
 	tiers: [
 		{
 			level: 1,
-			title: 'Field Medic Station',
-			description: 'Allows production of basic med-pens and bandages.',
-			upgradeCosts: []
+			title: 'Medical Lab Level 1',
+			description: 'Allows production of basic bandages and adrenaline shots.',
+			upgradeCosts: [
+				{ itemId: 'fabric', quantity: 50 },
+				{ itemId: 'arc-alloy', quantity: 6 }
+			]
 		},
 		{
 			level: 2,
-			title: 'Advanced Medical Lab',
-			description: 'Enables synthesis of combat stims and high-grade restorative treatments.',
+			title: 'Medical Lab Level 2',
+			description: 'Enables synthesis of sterilized equipment and surge rechargers.',
 			upgradeCosts: [
-				{ itemId: 'synthetic-polymer', quantity: 10 }
+				{ itemId: 'cracked-bioscanner', quantity: 2 },
+				{ itemId: 'durable-cloth', quantity: 5 },
+				{ itemId: 'tick-pod', quantity: 8 }
+			]
+		},
+		{
+			level: 3,
+			title: 'Medical Lab Level 3',
+			description: 'Cutting-edge Vita-tech healing items.',
+			upgradeCosts: [
+				{ itemId: 'rusted-shut-medical-kit', quantity: 3 },
+				{ itemId: 'antiseptic', quantity: 8 },
+				{ itemId: 'surveyor-vault', quantity: 5 }
 			]
 		}
 	]

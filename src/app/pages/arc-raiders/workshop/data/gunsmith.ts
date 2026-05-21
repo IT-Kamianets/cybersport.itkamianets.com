@@ -8,17 +8,31 @@ export const gunsmith: WorkshopStation = {
 	tiers: [
 		{
 			level: 1,
-			title: 'Basic Gunsmith',
+			title: 'Gunsmith Level 1',
 			description: 'Allows assembly of standard ballistic weapons and basic modifications.',
-			upgradeCosts: []
+			upgradeCosts: [
+				{ itemId: 'metal-parts', quantity: 20 },
+				{ itemId: 'rubber-parts', quantity: 30 }
+			]
 		},
 		{
 			level: 2,
-			title: 'Advanced Gunsmith',
-			description: 'Enables crafting of high-tier ballistic weaponry and precision attachments.',
+			title: 'Gunsmith Level 2',
+			description: 'Enables crafting of high-tier ballistic weaponry.',
 			upgradeCosts: [
-				{ itemId: 'scrap-metal', quantity: 20 },
-				{ itemId: 'synthetic-polymer', quantity: 5 }
+				{ itemId: 'rusted-tools', quantity: 3 },
+				{ itemId: 'mechanical-components', quantity: 5 },
+				{ itemId: 'wasp-driver', quantity: 8 }
+			]
+		},
+		{
+			level: 3,
+			title: 'Gunsmith Level 3',
+			description: 'Master-level weapon crafting. Capable of assembling Epic-tier armaments.',
+			upgradeCosts: [
+				{ itemId: 'rusted-gear', quantity: 3 },
+				{ itemId: 'advanced-mechanical-components', quantity: 5 },
+				{ itemId: 'sentinel-firing-core', quantity: 4 }
 			]
 		}
 	]

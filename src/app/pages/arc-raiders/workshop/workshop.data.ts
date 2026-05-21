@@ -13,12 +13,22 @@ export interface WorkshopStation {
 	tiers: StationTier[];
 }
 
-import { gunsmith } from './data/gunsmith';
+import { workbench } from './data/workbench';
 import { medicalLab } from './data/medical-lab';
+import { explosivesStation } from './data/explosives-station';
+import { utilityStation } from './data/utility-station';
+import { refiner } from './data/refiner';
+import { scrappy } from './data/scrappy';
+import { gunsmith } from './data/gunsmith';
 import { gearBench } from './data/gear-bench';
 
-export const WORKSHOP_STATIONS: WorkshopStation[] = [
+export const WORKSHOP_STATIONS = [
+	workbench,
 	gunsmith,
+	gearBench,
 	medicalLab,
-	gearBench
+	explosivesStation,
+	utilityStation,
+	refiner,
+	scrappy
 ];
