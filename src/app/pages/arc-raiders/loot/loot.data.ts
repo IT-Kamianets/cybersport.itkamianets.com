@@ -1,16 +1,3 @@
-export interface LootLocationUnlock {
-	mapId: string;
-	mapName: string;
-	target: string;
-}
-
-export interface LootCraftingRecipe {
-	itemCategory: 'weapons' | 'gadgets' | 'consumables';
-	itemId: string;
-	itemName: string;
-	quantityNeeded: number;
-}
-
 export interface LootRecycleYield {
 	itemId: string;
 	itemName: string;
@@ -29,8 +16,6 @@ export interface LootItem {
 	image: string;
 	icon: string;
 	recyclesInto?: LootRecycleYield[];
-	unlocksLocations?: LootLocationUnlock[];
-	usedToCraft?: LootCraftingRecipe[];
 }
 
 export const LOOT: LootItem[] = [
@@ -72,10 +57,7 @@ export const LOOT: LootItem[] = [
 		foundIn: ['High-Tier Military Crates', 'Dropped by ARC Snitches'],
 		description: 'An encrypted Old World access card. Grants access to secure extraction points and hidden bunkers.',
 		image: 'https://placehold.co/400x400/1a1a1a/00ffff?text=Blue+Keycard',
-		icon: '🔑',
-		unlocksLocations: [
-			{ mapId: 'dam-battlegrounds', mapName: 'Dam Battlegrounds', target: 'Hidden Raider Hatch' }
-		]
+		icon: '🔑'
 	},
 	{
 		id: 'synthetic-polymer',
@@ -87,9 +69,30 @@ export const LOOT: LootItem[] = [
 		foundIn: ['All Zones (Toolboxes)', 'Industrial Areas'],
 		description: 'A versatile, lightweight plastic compound essential for crafting weapons and specialized gear.',
 		image: 'https://placehold.co/400x400/1a1a1a/00ffff?text=Synthetic+Polymer',
-		icon: '⚙️',
-		usedToCraft: [
-			{ itemCategory: 'weapons', itemId: 'rattler', itemName: 'Rattler SMG', quantityNeeded: 3 }
-		]
+		icon: '⚙️'
+	},
+	{
+		id: 'voltage-converter',
+		name: 'Voltage Converter',
+		category: 'Material',
+		rarity: 'Rare',
+		stackLimit: 5,
+		sellValue: 120,
+		foundIn: ['Recycled from Advanced ARC Tech'],
+		description: 'A high-grade electrical component essential for crafting advanced gear and energy weapons.',
+		image: 'https://placehold.co/400x400/1a1a1a/00ffff?text=Voltage+Converter',
+		icon: '🔌'
+	},
+	{
+		id: 'scrap-metal',
+		name: 'Scrap Metal',
+		category: 'Material',
+		rarity: 'Common',
+		stackLimit: 20,
+		sellValue: 5,
+		foundIn: ['All Zones', 'Recycled from various loot'],
+		description: 'Basic metallic scrap. The foundation of almost all basic crafting in Speranza.',
+		image: 'https://placehold.co/400x400/1a1a1a/00ffff?text=Scrap+Metal',
+		icon: '🔩'
 	}
 ];
