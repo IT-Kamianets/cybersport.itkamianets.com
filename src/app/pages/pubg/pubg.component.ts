@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
 import { TranslateDirective, TranslateService } from '@wawjs/ngx-translate';
 import { PubgAboutComponent } from './pubg-about.component';
 import { PubgCharactersComponent } from './pubg-characters.component';
@@ -6,6 +6,9 @@ import { PubgMapsComponent } from './pubg-maps.component';
 import { PubgStrategyComponent } from './pubg-strategy.component';
 import { PubgWeaponsComponent } from './pubg-weapons.component';
 import { PubgService } from './pubg.service';
+
+import en from './i18n/en.json';
+import ua from './i18n/ua.json';
 
 @Component({
 	imports: [
@@ -86,7 +89,7 @@ import { PubgService } from './pubg.service';
 								</p>
 								
 								<div class="mt-12 flex flex-wrap justify-center gap-4">
-									<button (click)="activeTab.set('about')" class="px-8 py-4 bg-[var(--c-primary)] text-white font-black uppercase tracking-widest rounded-2xl hover:scale-105 transition-transform shadow-[0_15px_30px_-5px_rgba(255,77,0,0.4)]" translate>
+									<button (click)="activeTab.set('about')" class="px-8 py-4 bg-[var(--c-primary)] text-white font-black uppercase tracking-widest rounded-2xl hover:scale-105 transition-transform shadow-[0_15px_30_rgba(255,77,0,0.4)]" translate>
 										Survival Guide
 									</button>
 									<button (click)="activeTab.set('strategy')" class="px-8 py-4 bg-[var(--c-bg-secondary)] text-[var(--c-text-strong)] border-2 border-[var(--c-border)] font-black uppercase tracking-widest rounded-2xl hover:border-[var(--c-primary)] transition-all" translate>
@@ -280,6 +283,18 @@ export class PubgComponent {
 		{ id: 'maps', label: 'Maps' },
 		{ id: 'strategy', label: 'Strategy' },
 	];
+
+	constructor() {
+		effect(() => {
+			const lang = this.translate.language();
+			const dict: Record<string, string> = lang === 'ua' ? ua : en;
+
+			for (const [key, value] of Object.entries(dict)) {
+				// Ensure signal exists and set its value
+				this.translate.translate(key).set(value);
+			}
+		});
+	}
 
 	protected setLang(lang: string): void {
 		this.translate.setLanguage(lang);
