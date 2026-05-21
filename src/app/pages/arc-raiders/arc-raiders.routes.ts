@@ -13,8 +13,18 @@ export const arcRaidersRoutes: Routes = [
 			},
 			{
 				path: 'enemies',
-				loadComponent: () =>
-					import('./enemies.component').then((m) => m.ArcRaidersEnemiesComponent),
+				children: [
+					{
+						path: '',
+						loadComponent: () =>
+							import('./enemies/enemies-hub.component').then((m) => m.ArcRaidersEnemiesComponent),
+					},
+					{
+						path: ':id',
+						loadComponent: () =>
+							import('./enemies/enemy-detail.component').then((m) => m.ArcRaidersEnemyDetailComponent),
+					}
+				]
 			},
 			{
 				path: 'weapons',
