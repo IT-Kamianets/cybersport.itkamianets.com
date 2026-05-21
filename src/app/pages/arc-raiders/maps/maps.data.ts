@@ -1,6 +1,7 @@
 export interface MapPoi {
 	id: string;
 	type: 'extraction' | 'loot' | 'boss' | 'landmark';
+	requiredKeyId?: string;
 	x: number; // percentage from left
 	y: number; // percentage from top
 	title: string;
@@ -53,8 +54,9 @@ export const MAPS: GameMap[] = [
 			{
 				id: 'poi-hatch',
 				type: 'extraction',
-				x: 10,
-				y: 85,
+				requiredKeyId: 'blue-access-keycard',
+				x: 35,
+				y: 20,
 				title: 'Hidden Raider Hatch',
 				description: 'Instant, silent extraction. Requires Blue Access Keycard.',
 				icon: '🚁'

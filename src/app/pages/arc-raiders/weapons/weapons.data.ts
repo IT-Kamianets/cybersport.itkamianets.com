@@ -6,6 +6,7 @@ export interface WeaponPatch {
 export interface Weapon {
 	id: string;
 	name: string;
+	craftingRequirements?: { itemId: string; quantity: number }[];
 	class: 'SMG' | 'Assault Rifle' | 'Sniper Rifle' | 'Shotgun' | 'Heavy' | 'Pistol' | 'Melee';
 	rarity: 'Standard' | 'Legendary' | 'Melee';
 	ammoType: 'Light Ammo' | 'Medium Ammo' | 'Heavy Ammo' | 'Energy' | 'Special';
@@ -38,6 +39,9 @@ export const WEAPONS: Weapon[] = [
 		class: 'SMG',
 		rarity: 'Standard',
 		ammoType: 'Light Ammo',
+		craftingRequirements: [
+			{ itemId: 'synthetic-polymer', quantity: 3 }
+		],
 		magSize: '30 (Base) / 45 (Extended)',
 		baseDamage: 18,
 		firingMode: 'Fully Automatic',

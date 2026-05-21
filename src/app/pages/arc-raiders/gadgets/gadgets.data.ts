@@ -1,6 +1,7 @@
 export interface Gadget {
 	id: string;
 	name: string;
+	craftingRequirements?: { itemId: string; quantity: number }[];
 	category: 'Mobility' | 'Stealth' | 'Defensive' | 'Recon';
 	activationType: 'Toggle' | 'Fire/Deploy' | 'Passive';
 	cooldown: string;
@@ -15,6 +16,9 @@ export const GADGETS: Gadget[] = [
 	{
 		id: 'photoelectric-cloak',
 		name: 'Photoelectric Cloak',
+		craftingRequirements: [
+			{ itemId: 'synthetic-polymer', quantity: 1 }
+		],
 		category: 'Stealth',
 		activationType: 'Toggle',
 		cooldown: '45 seconds',

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { WEAPONS } from './weapons.data';
+import { LOOT } from '../loot/loot.data';
 import { map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 
@@ -55,7 +56,32 @@ import { CommonModule } from '@angular/common';
 							</ul>
 						</section>
 
-						<!-- 3. Compatible Weapon Mods -->
+						<!-- 3. Crafting Requirements -->
+						@if (craftingMaterials().length > 0) {
+							<section>
+								<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-arc-yellow)] flex items-center gap-2">
+									<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+									Crafting Requirements
+								</h2>
+								<div class="grid gap-4 sm:grid-cols-2">
+									@for (material of craftingMaterials(); track material.lootItem?.id) {
+										<a [routerLink]="['/arc-raiders/loot', material.lootItem?.id]" class="group rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-primary)] p-4 shadow-[var(--shadow-sm)] hover:border-[var(--c-arc-yellow)] transition-colors flex justify-between items-center">
+											<div class="flex items-center gap-3">
+												<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-black/50 border border-[var(--c-border)] text-xl">
+													{{ material.lootItem?.icon }}
+												</div>
+												<h3 class="mb-1 text-sm font-bold uppercase tracking-wider text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-yellow)]">{{ material.lootItem?.name }}</h3>
+											</div>
+											<div class="bg-[var(--c-bg-secondary)] border border-[var(--c-border)] rounded px-3 py-1 text-sm font-bold text-[var(--c-text-strong)]">
+												x{{ material.quantity }}
+											</div>
+										</a>
+									}
+								</div>
+							</section>
+						}
+
+						<!-- 4. Compatible Weapon Mods -->
 						<section>
 							<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-text-strong)]">Compatible Weapon Mods</h2>
 							<div class="grid gap-4 sm:grid-cols-2">
@@ -179,5 +205,18 @@ export class ArcRaidersWeaponDetailComponent {
 	protected readonly weapon = computed(() => {
 		const id = this.idParam();
 		return WEAPONS.find(w => w.id === id);
+	});
+
+	protected readonly craftingMaterials = computed(() => {
+		const item = this.weapon();
+		if (!item || !item.craftingRequirements) return [];
+
+		return item.craftingRequirements.map(req => {
+			const lootItem = LOOT.find(l => l.id === req.itemId);
+			return {
+				lootItem: lootItem,
+				quantity: req.quantity
+			};
+		}).filter(mapped => mapped.lootItem !== undefined);
 	});
 }
