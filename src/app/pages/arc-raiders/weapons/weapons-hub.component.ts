@@ -116,11 +116,11 @@ import { CommonModule } from '@angular/common';
 								<div class="absolute inset-0 flex flex-col items-center justify-center bg-black/60 opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
 									<div class="flex gap-6 text-white">
 										<div class="text-center">
-											<span class="block text-2xl font-black text-[var(--c-arc-yellow)]">{{ weapon.baseDamage }}</span>
+											<span class="block text-2xl font-black text-[var(--c-arc-yellow)]">{{ weapon.baseDamage || weapon.advancedStats?.damage }}</span>
 											<span class="text-xs uppercase tracking-wider text-gray-300">Damage</span>
 										</div>
 										<div class="text-center">
-											<span class="block text-2xl font-black text-[var(--c-arc-yellow)]">{{ weapon.magSize.split(' ')[0] }}</span>
+											<span class="block text-2xl font-black text-[var(--c-arc-yellow)]">{{ weapon.magSize.toString().split(' ')[0] }}</span>
 											<span class="text-xs uppercase tracking-wider text-gray-300">Mag Size</span>
 										</div>
 									</div>
@@ -170,7 +170,7 @@ import { CommonModule } from '@angular/common';
 										</td>
 										<td class="px-6 py-4">{{ weapon.class }}</td>
 										<td class="px-6 py-4">{{ weapon.ammoType }}</td>
-										<td class="px-6 py-4 text-right font-mono font-medium">{{ weapon.baseDamage }}</td>
+										<td class="px-6 py-4 text-right font-mono font-medium">{{ weapon.baseDamage || weapon.advancedStats?.damage }}</td>
 										<td class="px-6 py-4 text-right font-mono">{{ weapon.magSize }}</td>
 									</tr>
 								}
@@ -198,7 +198,7 @@ export class ArcRaidersWeaponsComponent {
 
 	// Filter Options
 	protected readonly classes = ['All', 'Pistol', 'SMG', 'Assault Rifle', 'Shotgun', 'Sniper Rifle', 'Heavy'];
-	protected readonly rarities = ['All', 'Standard', 'Legendary', 'Melee'];
+	protected readonly rarities = ['All', 'Common', 'Uncommon', 'Rare', 'Epic', 'Legendary', 'Standard', 'Melee'];
 	protected readonly ammoTypes = ['All', 'Light Ammo', 'Medium Ammo', 'Heavy Ammo', 'Energy', 'Special'];
 
 	// Selected Filters

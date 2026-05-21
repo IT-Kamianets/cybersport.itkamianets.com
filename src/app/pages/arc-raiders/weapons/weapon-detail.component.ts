@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { WEAPONS } from './weapons.data';
+import { WEAPONS, ItemRequirement } from './weapons.data';
 import { LOOT } from '../loot/loot.data';
 import { map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
@@ -38,30 +38,23 @@ import { CommonModule } from '@angular/common';
 						</section>
 
 						<!-- 2. Acquisition -->
-						<section>
-							<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-text-strong)]">Acquisition / How to Get</h2>
-							<ul class="space-y-3 text-[var(--c-text)]">
-								<li class="flex gap-3">
-									<strong class="text-[var(--c-text-strong)] min-w-[80px]">Looting:</strong> 
-									<span>{{ w.acquisition.looting }}</span>
-								</li>
-								<li class="flex gap-3">
-									<strong class="text-[var(--c-text-strong)] min-w-[80px]">Crafting:</strong> 
-									<span>{{ w.acquisition.crafting }}</span>
-								</li>
-								<li class="flex gap-3">
-									<strong class="text-[var(--c-text-strong)] min-w-[80px]">Trader:</strong> 
-									<span>{{ w.acquisition.trader }}</span>
-								</li>
-							</ul>
-						</section>
+						@if (w.acquisition && w.acquisition.sources && w.acquisition.sources.length) {
+							<section>
+								<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-text-strong)]">Acquisition / How to Get</h2>
+								<ul class="space-y-3 text-[var(--c-text)] list-disc pl-5">
+									@for (source of w.acquisition.sources; track source) {
+										<li>{{ source }}</li>
+									}
+								</ul>
+							</section>
+						}
 
-						<!-- 3. Crafting Requirements -->
+						<!-- 3. Base Crafting Requirements -->
 						@if (craftingMaterials().length > 0) {
 							<section>
 								<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-arc-yellow)] flex items-center gap-2">
 									<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-									Crafting Requirements
+									Base Crafting Requirements
 								</h2>
 								<div class="grid gap-4 sm:grid-cols-2">
 									@for (material of craftingMaterials(); track material.lootItem?.id) {
@@ -88,44 +81,173 @@ import { CommonModule } from '@angular/common';
 							</section>
 						}
 
-						<!-- 4. Compatible Weapon Mods -->
-						<section>
-							<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-text-strong)]">Compatible Weapon Mods</h2>
-							<div class="grid gap-4 sm:grid-cols-2">
-								@for (mod of w.mods; track mod.category) {
-									<div class="rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-4 shadow-[var(--shadow-sm)]">
-										<h3 class="mb-2 text-sm font-bold uppercase tracking-wider text-[var(--c-arc-yellow)]">{{ mod.category }}</h3>
-										<p class="text-sm text-[var(--c-text)]">{{ mod.options }}</p>
-									</div>
-								}
-							</div>
-						</section>
+						<!-- TIER PROGRESSION -->
+						@if (w.tiers && w.tiers.length > 0) {
+							<section>
+								<h2 class="mb-6 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-text-strong)]">Tier Progression</h2>
+								<div class="space-y-8">
+									@for (tier of w.tiers; track tier.tierLevel) {
+										<div class="overflow-hidden rounded-xl border border-[var(--c-border)] bg-[var(--c-bg-secondary)] shadow-[var(--shadow-md)]">
+											<!-- Tier Header -->
+											<div class="bg-[var(--c-bg-primary)] px-6 py-4 border-b border-[var(--c-border)] flex flex-wrap items-center justify-between gap-4">
+												<div class="flex items-center gap-3">
+													<span class="flex h-10 w-10 items-center justify-center rounded bg-[var(--c-arc-yellow)] text-xl font-black text-black shadow-lg shadow-[var(--c-arc-yellow)]/20">{{ tier.romanNumeral }}</span>
+													<h3 class="text-xl font-bold text-[var(--c-text-strong)]">Tier {{ tier.tierLevel }}</h3>
+												</div>
+												<div class="flex gap-4 text-sm font-medium">
+													<div class="flex flex-col"><span class="text-[var(--c-text-muted)]">Durability</span><span class="text-[var(--c-arc-cyan)]">{{ tier.durabilityMax }}</span></div>
+													<div class="flex flex-col"><span class="text-[var(--c-text-muted)]">Weapon Value</span><span class="text-[var(--c-arc-yellow)]">{{ tier.weaponSalePrice }} ₡</span></div>
+													<div class="flex flex-col"><span class="text-[var(--c-text-muted)]">Parts Value</span><span class="text-[var(--c-arc-yellow)]">{{ tier.componentSalePricePerSlot }} ₡</span></div>
+												</div>
+											</div>
 
-						<!-- 4. Strategy & Synergies -->
-						<section>
-							<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-text-strong)]">Strategy & Synergies</h2>
-							<ul class="space-y-3 text-[var(--c-text)]">
-								@for (strat of w.strategies; track strat) {
-									<li class="flex items-start gap-3 rounded-lg bg-[var(--c-bg-primary)] p-4 border-l-4 border-[var(--c-arc-cyan)]">
-										<span>{{ strat }}</span>
-									</li>
-								}
-							</ul>
-						</section>
+											<div class="p-6 grid gap-8" [class.lg:grid-cols-2]="tier.upgradeRequirements?.length || tier.upgradePerks?.length">
+												<!-- Upgrade Column -->
+												@if (tier.upgradeRequirements?.length || tier.upgradePerks?.length) {
+													<div class="space-y-6">
+														@if (tier.upgradeRequirements && tier.upgradeRequirements.length > 0) {
+															<div>
+																<h4 class="mb-3 text-sm font-bold uppercase tracking-wider text-[var(--c-text-muted)]">Upgrade Cost</h4>
+																<div class="flex flex-col gap-2">
+																	@for (mat of resolveMaterials(tier.upgradeRequirements); track mat.lootItem?.id) {
+																		<a [routerLink]="['/arc-raiders/loot', mat.lootItem?.id]" class="group flex items-center justify-between rounded bg-[var(--c-bg-primary)] p-2 border border-transparent hover:border-[var(--c-arc-yellow)] transition-colors">
+																			<div class="flex items-center gap-2">
+																				<span>{{ mat.lootItem?.icon }}</span>
+																				<span class="text-sm font-medium text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-yellow)]">{{ mat.lootItem?.name }}</span>
+																			</div>
+																			<span class="rounded bg-black/40 px-2 py-0.5 text-xs font-bold text-[var(--c-arc-cyan)]">x{{ mat.quantity }}</span>
+																		</a>
+																	}
+																</div>
+																@if (tier.upgradeStation) {
+																	<div class="mt-2 text-xs text-[var(--c-text-muted)]">
+																		Requires <a [routerLink]="['/arc-raiders/workshop', tier.upgradeStation.stationId]" class="font-bold text-[var(--c-arc-yellow)] hover:underline capitalize">{{ tier.upgradeStation.stationId.replace('-', ' ') }} Lvl {{ tier.upgradeStation.level }}</a>
+																	</div>
+																}
+															</div>
+														}
 
-						<!-- 5. Patch History -->
-						<section>
-							<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-text-strong)]">Patch History</h2>
-							<div class="relative pl-4 border-l-2 border-[var(--c-border)] space-y-6">
-								@for (patch of w.patchHistory; track patch.version) {
-									<div class="relative">
-										<div class="absolute -left-[21px] top-1.5 h-3 w-3 rounded-full bg-[var(--c-bg-secondary)] border-2 border-[var(--c-arc-yellow)]"></div>
-										<h3 class="font-bold text-[var(--c-text-strong)]">{{ patch.version }}</h3>
-										<p class="mt-1 text-sm text-[var(--c-text)]">{{ patch.notes }}</p>
-									</div>
-								}
-							</div>
-						</section>
+														@if (tier.upgradePerks && tier.upgradePerks.length > 0) {
+															<div>
+																<h4 class="mb-3 text-sm font-bold uppercase tracking-wider text-[var(--c-text-muted)]">Tier Perks</h4>
+																<ul class="space-y-2">
+																	@for (perk of tier.upgradePerks; track perk) {
+																		<li class="flex items-start gap-2 text-sm text-[var(--c-text-strong)]">
+																			<span class="text-[var(--c-arc-yellow)] mt-0.5">✦</span>
+																			<span>{{ perk }}</span>
+																		</li>
+																	}
+																</ul>
+															</div>
+														}
+													</div>
+												}
+
+												<!-- Maintenance Column -->
+												<div class="space-y-6" [class.border-t]="tier.upgradeRequirements?.length || tier.upgradePerks?.length" [class.lg:border-t-0]="tier.upgradeRequirements?.length || tier.upgradePerks?.length" [class.lg:border-l]="tier.upgradeRequirements?.length || tier.upgradePerks?.length" [class.border-[var(--c-border)]]="tier.upgradeRequirements?.length || tier.upgradePerks?.length" [class.pt-6]="tier.upgradeRequirements?.length || tier.upgradePerks?.length" [class.lg:pt-0]="tier.upgradeRequirements?.length || tier.upgradePerks?.length" [class.lg:pl-8]="tier.upgradeRequirements?.length || tier.upgradePerks?.length">
+													@if (tier.repairCost && tier.repairCost.length > 0) {
+														<div>
+															<h4 class="mb-3 text-sm font-bold uppercase tracking-wider text-[var(--c-text-muted)]">Repair Cost <span class="text-xs text-[var(--c-arc-cyan)] normal-case ml-2">(+{{ tier.repairDurabilityRestored }} Durability)</span></h4>
+															<div class="flex flex-col gap-2">
+																@for (mat of resolveMaterials(tier.repairCost); track mat.lootItem?.id) {
+																	<a [routerLink]="['/arc-raiders/loot', mat.lootItem?.id]" class="group flex items-center justify-between rounded bg-[var(--c-bg-primary)] p-2 border border-transparent hover:border-[var(--c-arc-yellow)] transition-colors">
+																		<div class="flex items-center gap-2">
+																			<span>{{ mat.lootItem?.icon }}</span>
+																			<span class="text-sm font-medium text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-yellow)]">{{ mat.lootItem?.name }}</span>
+																		</div>
+																		<span class="rounded bg-black/40 px-2 py-0.5 text-xs font-bold text-[var(--c-arc-cyan)]">x{{ mat.quantity }}</span>
+																	</a>
+																}
+															</div>
+														</div>
+													}
+
+													<div class="grid grid-cols-2 gap-4">
+														@if (tier.recycleYield && tier.recycleYield.length > 0) {
+															<div>
+																<h4 class="mb-3 text-xs font-bold uppercase tracking-wider text-[var(--c-text-muted)]">Recycle Yield</h4>
+																<div class="flex flex-col gap-2">
+																	@for (mat of resolveMaterials(tier.recycleYield); track mat.lootItem?.id) {
+																		<a [routerLink]="['/arc-raiders/loot', mat.lootItem?.id]" class="group flex items-center justify-between rounded bg-[var(--c-bg-primary)] p-1.5 border border-transparent hover:border-[var(--c-arc-yellow)] transition-colors">
+																			<div class="flex items-center gap-2 truncate">
+																				<span class="text-xs">{{ mat.lootItem?.icon }}</span>
+																				<span class="text-xs font-medium text-[var(--c-text-strong)] truncate group-hover:text-[var(--c-arc-yellow)]" [title]="mat.lootItem?.name">{{ mat.lootItem?.name }}</span>
+																			</div>
+																			<span class="rounded bg-black/40 px-1.5 py-0.5 text-[10px] font-bold text-[var(--c-text)]">x{{ mat.quantity }}</span>
+																		</a>
+																	}
+																</div>
+															</div>
+														}
+														@if (tier.salvageYield && tier.salvageYield.length > 0) {
+															<div>
+																<h4 class="mb-3 text-xs font-bold uppercase tracking-wider text-[var(--c-text-muted)]">Salvage Yield</h4>
+																<div class="flex flex-col gap-2">
+																	@for (mat of resolveMaterials(tier.salvageYield); track mat.lootItem?.id) {
+																		<a [routerLink]="['/arc-raiders/loot', mat.lootItem?.id]" class="group flex items-center justify-between rounded bg-[var(--c-bg-primary)] p-1.5 border border-transparent hover:border-[var(--c-arc-yellow)] transition-colors">
+																			<div class="flex items-center gap-2 truncate">
+																				<span class="text-xs">{{ mat.lootItem?.icon }}</span>
+																				<span class="text-xs font-medium text-[var(--c-text-strong)] truncate group-hover:text-[var(--c-arc-yellow)]" [title]="mat.lootItem?.name">{{ mat.lootItem?.name }}</span>
+																			</div>
+																			<span class="rounded bg-black/40 px-1.5 py-0.5 text-[10px] font-bold text-[var(--c-text)]">x{{ mat.quantity }}</span>
+																		</a>
+																	}
+																</div>
+															</div>
+														}
+													</div>
+												</div>
+											</div>
+										</div>
+									}
+								</div>
+							</section>
+						}
+
+						<!-- Compatible Weapon Mods -->
+						@if (w.mods && w.mods.length > 0) {
+							<section>
+								<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-text-strong)]">Compatible Weapon Mods</h2>
+								<div class="grid gap-4 sm:grid-cols-2">
+									@for (mod of w.mods; track mod.category) {
+										<div class="rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-4 shadow-[var(--shadow-sm)]">
+											<h3 class="mb-2 text-sm font-bold uppercase tracking-wider text-[var(--c-arc-yellow)]">{{ mod.category }}</h3>
+											<p class="text-sm text-[var(--c-text)]">{{ mod.options }}</p>
+										</div>
+									}
+								</div>
+							</section>
+						}
+
+						<!-- Strategy & Synergies -->
+						@if (w.strategies && w.strategies.length > 0) {
+							<section>
+								<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-text-strong)]">Strategy & Synergies</h2>
+								<ul class="space-y-3 text-[var(--c-text)]">
+									@for (strat of w.strategies; track strat) {
+										<li class="flex items-start gap-3 rounded-lg bg-[var(--c-bg-primary)] p-4 border-l-4 border-[var(--c-arc-cyan)]">
+											<span>{{ strat }}</span>
+										</li>
+									}
+								</ul>
+							</section>
+						}
+
+						<!-- Patch History -->
+						@if (w.patchHistory && w.patchHistory.length > 0) {
+							<section>
+								<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-text-strong)]">Patch History</h2>
+								<div class="relative pl-4 border-l-2 border-[var(--c-border)] space-y-6">
+									@for (patch of w.patchHistory; track patch.version) {
+										<div class="relative">
+											<div class="absolute -left-[21px] top-1.5 h-3 w-3 rounded-full bg-[var(--c-bg-secondary)] border-2 border-[var(--c-arc-yellow)]"></div>
+											<h3 class="font-bold text-[var(--c-text-strong)]">{{ patch.version }}</h3>
+											<p class="mt-1 text-sm text-[var(--c-text)]">{{ patch.notes }}</p>
+										</div>
+									}
+								</div>
+							</section>
+						}
 
 					</div>
 
@@ -142,7 +264,44 @@ import { CommonModule } from '@angular/common';
 							</div>
 
 							<div class="p-5 text-sm">
+								<!-- ADVANCED STATS -->
+								@if (w.advancedStats) {
+									<div class="mb-6 space-y-3">
+										<h3 class="border-b border-[var(--c-border)] pb-2 text-xs font-bold uppercase tracking-wider text-[var(--c-arc-yellow)]">Advanced Stats</h3>
+										<div class="grid grid-cols-2 gap-x-4 gap-y-3">
+											<div class="flex flex-col"><span class="text-[10px] font-bold uppercase tracking-wider text-[var(--c-text-muted)]">Damage</span><span class="font-medium text-[var(--c-text-strong)] text-[var(--c-arc-yellow)]">{{ w.advancedStats.damage }}</span></div>
+											<div class="flex flex-col"><span class="text-[10px] font-bold uppercase tracking-wider text-[var(--c-text-muted)]">RPM</span><span class="font-medium text-[var(--c-text-strong)]">{{ w.advancedStats.fireRateRpm }}</span></div>
+											<div class="flex flex-col"><span class="text-[10px] font-bold uppercase tracking-wider text-[var(--c-text-muted)]">Armor Pen</span><span class="font-medium text-[var(--c-text-strong)]">{{ w.advancedStats.arcArmorPenetration }}</span></div>
+											<div class="flex flex-col"><span class="text-[10px] font-bold uppercase tracking-wider text-[var(--c-text-muted)]">Headshot X</span><span class="font-medium text-[var(--c-text-strong)]">{{ w.advancedStats.headshotMultiplier }}x</span></div>
+											<div class="flex flex-col"><span class="text-[10px] font-bold uppercase tracking-wider text-[var(--c-text-muted)]">Range</span><span class="font-medium text-[var(--c-text-strong)]">{{ w.advancedStats.range }}m</span></div>
+											<div class="flex flex-col"><span class="text-[10px] font-bold uppercase tracking-wider text-[var(--c-text-muted)]">Stability</span><span class="font-medium text-[var(--c-text-strong)]">{{ w.advancedStats.stability }}</span></div>
+											<div class="flex flex-col"><span class="text-[10px] font-bold uppercase tracking-wider text-[var(--c-text-muted)]">Agility</span><span class="font-medium text-[var(--c-text-strong)]">{{ w.advancedStats.agility }}</span></div>
+											<div class="flex flex-col"><span class="text-[10px] font-bold uppercase tracking-wider text-[var(--c-text-muted)]">Stealth</span><span class="font-medium text-[var(--c-text-strong)]">{{ w.advancedStats.stealth }}</span></div>
+											<div class="flex flex-col"><span class="text-[10px] font-bold uppercase tracking-wider text-[var(--c-text-muted)]">Weight</span><span class="font-medium text-[var(--c-text-strong)]">{{ w.advancedStats.weight }}kg</span></div>
+										</div>
+									</div>
+								} @else {
+									<!-- LEGACY STATS -->
+									<div class="mb-6 space-y-3">
+										<h3 class="border-b border-[var(--c-border)] pb-2 text-xs font-bold uppercase tracking-wider text-[var(--c-text-muted)]">Basic Stats</h3>
+										<div class="flex justify-between border-b border-[var(--c-border)] pb-2">
+											<dt class="font-semibold text-[var(--c-text-muted)]">Base Damage</dt>
+											<dd class="font-medium text-[var(--c-text-strong)] text-right text-[var(--c-arc-yellow)]">{{ w.baseDamage }} per shot</dd>
+										</div>
+										<div class="flex justify-between border-b border-[var(--c-border)] pb-2">
+											<dt class="font-semibold text-[var(--c-text-muted)]">Headshot</dt>
+											<dd class="font-medium text-[var(--c-text-strong)] text-right">{{ w.headshotMultiplier }}</dd>
+										</div>
+										<div class="flex justify-between pt-1">
+											<dt class="font-semibold text-[var(--c-text-muted)]">Effective Range</dt>
+											<dd class="font-medium text-[var(--c-text-strong)] text-right">{{ w.effectiveRange }}</dd>
+										</div>
+									</div>
+								}
+
+								<!-- GENERAL SPECS -->
 								<dl class="space-y-3">
+									<h3 class="border-b border-[var(--c-border)] pb-2 text-xs font-bold uppercase tracking-wider text-[var(--c-text-muted)]">Specifications</h3>
 									<div class="flex justify-between border-b border-[var(--c-border)] pb-2">
 										<dt class="font-semibold text-[var(--c-text-muted)]">Type</dt>
 										<dd class="font-medium text-[var(--c-text-strong)] text-right">{{ w.class }}</dd>
@@ -163,22 +322,12 @@ import { CommonModule } from '@angular/common';
 										<dt class="font-semibold text-[var(--c-text-muted)]">Magazine Size</dt>
 										<dd class="font-medium text-[var(--c-text-strong)] text-right">{{ w.magSize }}</dd>
 									</div>
-									<div class="flex justify-between border-b border-[var(--c-border)] pb-2">
-										<dt class="font-semibold text-[var(--c-text-muted)]">Base Damage</dt>
-										<dd class="font-medium text-[var(--c-text-strong)] text-right text-[var(--c-arc-yellow)]">{{ w.baseDamage }} per shot</dd>
-									</div>
-									<div class="flex justify-between border-b border-[var(--c-border)] pb-2">
-										<dt class="font-semibold text-[var(--c-text-muted)]">Headshot Multiplier</dt>
-										<dd class="font-medium text-[var(--c-text-strong)] text-right">{{ w.headshotMultiplier }}</dd>
-									</div>
-									<div class="flex justify-between border-b border-[var(--c-border)] pb-2">
-										<dt class="font-semibold text-[var(--c-text-muted)]">Effective Range</dt>
-										<dd class="font-medium text-[var(--c-text-strong)] text-right">{{ w.effectiveRange }}</dd>
-									</div>
-									<div class="flex justify-between pt-1">
-										<dt class="font-semibold text-[var(--c-text-muted)]">Blueprint Req.</dt>
-										<dd class="font-medium text-[var(--c-text-strong)] text-right">{{ w.blueprintRequired }}</dd>
-									</div>
+									@if (w.blueprintRequired) {
+										<div class="flex justify-between pt-1">
+											<dt class="font-semibold text-[var(--c-text-muted)]">Blueprint Req.</dt>
+											<dd class="font-medium text-[var(--c-text-strong)] text-right">{{ w.blueprintRequired }}</dd>
+										</div>
+									}
 								</dl>
 							</div>
 						</div>
@@ -219,11 +368,51 @@ export class ArcRaidersWeaponDetailComponent {
 		if (!item || !item.craftingRequirements) return [];
 
 		return item.craftingRequirements.map(req => {
-			const lootItem = LOOT.find(l => l.id === req.itemId);
+			let lootItem = LOOT.find(l => l.id === req.itemId);
+			if (!lootItem) {
+				lootItem = {
+					id: req.itemId,
+					name: req.itemId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+					icon: '📦',
+					category: 'Material',
+					rarity: 'Common',
+					stackLimit: 10,
+					sellValue: 0,
+					foundIn: [],
+					description: 'Unknown Item',
+					image: ''
+				};
+			}
 			return {
 				lootItem: lootItem,
 				quantity: req.quantity
 			};
-		}).filter(mapped => mapped.lootItem !== undefined);
+		});
 	});
+
+	// Helper to resolve an ItemRequirement array to loot objects
+	protected resolveMaterials(reqs?: ItemRequirement[]) {
+		if (!reqs) return [];
+		return reqs.map(req => {
+			let lootItem = LOOT.find(l => l.id === req.itemId);
+			if (!lootItem) {
+				lootItem = {
+					id: req.itemId,
+					name: req.itemId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+					icon: '📦',
+					category: 'Material',
+					rarity: 'Common',
+					stackLimit: 10,
+					sellValue: 0,
+					foundIn: [],
+					description: 'Unknown Item',
+					image: ''
+				};
+			}
+			return {
+				lootItem: lootItem,
+				quantity: req.quantity
+			};
+		});
+	}
 }
