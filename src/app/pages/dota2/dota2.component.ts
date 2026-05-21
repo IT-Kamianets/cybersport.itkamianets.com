@@ -1,48 +1,1310 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { TranslateDirective, TranslateService } from '@wawjs/ngx-translate';
+
+interface Hero {
+	id: string;
+	nameKey: string;
+	roleKey: string;
+	roles: string[];
+	winRate: string;
+	pickRate: string;
+	difficulty: string;
+	strengths: string[];
+	weaknesses: string[];
+	build: string[];
+	items: string[];
+	skills: string[];
+	counters: string[];
+	image: string;
+	attribute: string;
+	name?: string;
+	role?: string;
+	winrate?: string;
+}
+
+interface Position {
+	id: string;
+	titleKey: string;
+	descriptionKey: string;
+	duties: string[];
+	popularHeroes: string[];
+	strategy: string;
+}
+
+interface MapPoint {
+	id: string;
+	labelKey?: string;
+	descriptionKey?: string;
+	label: string;
+	description: string;
+	type: string;
+	// normalized coordinates [0..1], rendered as percentages to match image scaling
+	x: number;
+	y: number;
+}
+
+interface Item {
+	id: string;
+	name: string;
+	category: string;
+	cost: string;
+	description: string;
+	image?: string;
+}
+
+interface TabPosition {
+	name: string;
+	description: string;
+}
 
 @Component({
-	template: `
-		<section class="bg-[var(--c-bg-primary)]">
-			<div class="mx-auto max-w-[var(--container)] px-4 py-12 sm:px-6 lg:py-16">
-				<div class="max-w-3xl">
-					<p class="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--c-primary)]">
-						Five-player strategy
-					</p>
-					<h1 class="mt-4 text-4xl font-semibold text-[var(--c-text-strong)] sm:text-5xl">
-						Dota 2
-					</h1>
-					<p class="mt-5 text-lg leading-8 text-[var(--c-text)]">
-						Play structured Dota 2 matches with focused drafts, defined roles, and enough
-						post-game discussion to make the next match sharper.
-					</p>
-				</div>
-
-				<div class="mt-10 grid gap-4 md:grid-cols-3">
-					@for (item of highlights; track item.title) {
-						<article class="rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-5">
-							<h2 class="text-lg font-semibold text-[var(--c-text-strong)]">{{ item.title }}</h2>
-							<p class="mt-3 text-sm leading-6 text-[var(--c-text)]">{{ item.text }}</p>
-						</article>
-					}
-				</div>
-			</div>
-		</section>
-	`,
+	selector: 'app-dota2',
+	standalone: true,
+	imports: [CommonModule, NgFor, NgIf, TranslateDirective, RouterLink],
+	templateUrl: './dota2.component.html',
+	styleUrls: ['./dota2.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Dota2Component {
-	protected readonly highlights = [
+	private readonly _translateService = inject(TranslateService);
+
+	protected readonly translate = this._translateService.translate.bind(this._translateService);
+
+	protected activeTab = 'home';
+
+	protected readonly topHeroes = [
 		{
-			title: 'Team drafts',
-			text: 'Build clear lane plans, win conditions, and hero combinations before the horn.',
+			name: 'Lina',
+			role: 'Mid / Carry',
+			winrate: '55%',
+			attribute: 'Intelligence',
+			image: 'https://uk.dotabuff.com/assets/heroes/lina.jpg',
 		},
 		{
-			title: 'Role practice',
-			text: 'Carry, mid, offlane, support, and captain roles all get room to improve.',
+			name: 'Phantom Assassin',
+			role: 'Carry',
+			winrate: '54%',
+			attribute: 'Agility',
+			image: 'https://uk.dotabuff.com/assets/heroes/phantom-assassin.jpg',
 		},
 		{
-			title: 'Match review',
-			text: 'Review key fights, objective timing, and map control without overcomplicating it.',
+			name: 'Axe',
+			role: 'Hardlane',
+			winrate: '53%',
+			attribute: 'Strength',
+			image: 'https://uk.dotabuff.com/assets/heroes/axe.jpg',
+		},
+		{
+			name: 'Crystal Maiden',
+			role: 'Full Support',
+			winrate: '52%',
+			attribute: 'Intelligence',
+			image: 'https://uk.dotabuff.com/assets/heroes/crystal-maiden.jpg',
+		},
+		{
+			name: 'Pudge',
+			role: 'Roamer',
+			winrate: '51%',
+			attribute: 'Strength',
+			image: 'https://uk.dotabuff.com/assets/heroes/pudge.jpg',
+		},
+		{
+			name: 'Earthshaker',
+			role: 'Offlane',
+			winrate: '52%',
+			attribute: 'Strength',
+			image: 'https://uk.dotabuff.com/assets/heroes/earthshaker.jpg',
+		},
+		{
+			name: 'Razor',
+			role: 'Mid / Offlane',
+			winrate: '50%',
+			attribute: 'Agility',
+			image: 'https://uk.dotabuff.com/assets/heroes/razor.jpg',
+		},
+		{
+			name: 'Pangolier',
+			role: 'Mid / Offlane',
+			winrate: '49%',
+			attribute: 'Agility',
+			image: 'https://uk.dotabuff.com/assets/heroes/pangolier.jpg',
+		},
+		{
+			name: 'Phantom Lancer',
+			role: 'Carry',
+			winrate: '51%',
+			attribute: 'Agility',
+			image: 'https://uk.dotabuff.com/assets/heroes/phantom-lancer.jpg',
+		},
+		{
+			name: 'Spectre',
+			role: 'Carry',
+			winrate: '53%',
+			attribute: 'Agility',
+			image: 'https://uk.dotabuff.com/assets/heroes/spectre.jpg',
 		},
 	];
+
+	protected readonly positions: readonly TabPosition[] = [
+		{
+			name: 'Carry',
+			description: 'Керрі фармить золото, купує сильні предмети та стає головною силою команди в лейті.',
+		},
+		{
+			name: 'Midlane',
+			description: 'Мідлейнер грає центральну лінію, швидко отримує рівні та допомагає іншим лініям.',
+		},
+		{
+			name: 'Hardlane',
+			description: 'Хардлейнер стоїть на складній лінії, створює тиск і починає бійки.',
+		},
+		{
+			name: 'Roamer',
+			description: 'Роумер пересувається по мапі, допомагає вбивати ворогів і ставить варди.',
+		},
+		{
+			name: 'Full Support',
+			description: 'Фулсапорт купує варди, допомагає керрі та захищає команду.',
+		},
+	];
+
+	protected readonly heroes: readonly Hero[] = [
+		{
+			id: 'axe',
+			nameKey: 'hero.axe.name',
+			roleKey: 'role.offlane',
+			roles: ['role.offlane', 'role.initiator'],
+			winRate: '52.3%',
+			pickRate: '17.8%',
+			name: 'Axe',
+			role: 'Hardlane',
+			winrate: '53%',
+			difficulty: 'Medium',
+			attribute: 'Strength',
+			strengths: ['hero.axe.strengths.initiation', 'hero.axe.strengths.sustain'],
+			weaknesses: ['hero.axe.weaknesses.magic', 'hero.axe.weaknesses.push'],
+			build: ['hero.axe.build.vanguard', 'hero.axe.build.bladeMail', 'hero.axe.build.blackKingBar'],
+			items: ['item.bladeMail', 'item.arcaneBoots', 'item.blackKingBar', 'item.crimsonGuard'],
+			skills: ['ability.berserkersCall', 'ability.counterHelix', 'ability.frenzy', 'ability.cullingBlade'],
+			counters: ['hero.counter.drowRanger', 'hero.counter.phantomLancer', 'hero.counter.skywrathMage'],
+			image: 'https://uk.dotabuff.com/assets/heroes/axe.jpg',
+		},
+		{
+			id: 'invoker',
+			nameKey: 'hero.invoker.name',
+			roleKey: 'role.mid',
+			roles: ['role.mid', 'role.caster'],
+			winRate: '49.1%',
+			pickRate: '21.4%',
+			name: 'Invoker',
+			role: 'Mid / Caster',
+			winrate: '49.1%',
+			difficulty: 'Hard',
+			attribute: 'Intelligence',
+			strengths: ['hero.invoker.strengths.flexibility', 'hero.invoker.strengths.teamfight'],
+			weaknesses: ['hero.invoker.weaknesses.levelDependent', 'hero.invoker.weaknesses.controlled'],
+			build: ['hero.invoker.build.travelBoots', 'hero.invoker.build.aghanim', 'hero.invoker.build.scotty'],
+			items: ['item.travelBoots', 'item.aghanimsScepter', 'item.etherealBlade', 'item.scotty'],
+			skills: ['ability.quas', 'ability.wex', 'ability.exort', 'ability.invoke'],
+			counters: ['hero.counter.templarAssassin', 'hero.counter.puck', 'hero.counter.shadowFiend'],
+			image: 'https://uk.dotabuff.com/assets/heroes/invoker.jpg',
+		},
+		{
+			id: 'pudge',
+			nameKey: 'hero.pudge.name',
+			roleKey: 'role.roamer',
+			roles: ['role.roamer', 'role.disabler'],
+			winRate: '50.8%',
+			pickRate: '15.2%',
+			name: 'Pudge',
+			role: 'Roamer',
+			winrate: '51%',
+			difficulty: 'Medium',
+			attribute: 'Strength',
+			strengths: ['hero.pudge.strengths.pickoffs', 'hero.pudge.strengths.mapPressure'],
+			weaknesses: ['hero.pudge.weaknesses.cooldown', 'hero.pudge.weaknesses.ranged'],
+			build: ['hero.pudge.build.rodOfAtos', 'hero.pudge.build.bladeMail', 'hero.pudge.build.blackKingBar'],
+			items: ['item.rodOfAtos', 'item.bladeMail', 'item.blackKingBar', 'item.heart'],
+			skills: ['ability.meatHook', 'ability.rot', 'ability.fleshHeap', 'ability.dismember'],
+			counters: ['hero.counter.timberSaw', 'hero.counter.antiMage', 'hero.counter.windranger'],
+			image: 'https://uk.dotabuff.com/assets/heroes/pudge.jpg',
+		},
+		{
+			id: 'earthshaker',
+			nameKey: 'hero.earthshaker.name',
+			roleKey: 'role.offlane',
+			roles: ['role.offlane', 'role.initiator'],
+			winRate: '52%',
+			pickRate: '12.5%',
+			name: 'Earthshaker',
+			role: 'Offlane',
+			winrate: '52%',
+			difficulty: 'Medium',
+			attribute: 'Strength',
+			strengths: ['hero.earthshaker.strengths.initiation', 'hero.earthshaker.strengths.cc'],
+			weaknesses: ['hero.earthshaker.weaknesses.mana', 'hero.earthshaker.weaknesses.melee'],
+			build: ['hero.earthshaker.build.blink', 'hero.earthshaker.build.aghanim', 'hero.earthshaker.build.bkb'],
+			items: ['item.blink', 'item.arcaneBoots', 'item.aghanimsScepter', 'item.blackKingBar'],
+			skills: ['ability.fissure', 'ability.enchantTotem', 'ability.aftershock', 'ability.echoSlam'],
+			counters: ['hero.counter.lifestealer', 'hero.counter.juggernaut'],
+			image: 'https://uk.dotabuff.com/assets/heroes/earthshaker.jpg',
+		},
+		{
+			id: 'puck',
+			nameKey: 'hero.puck.name',
+			roleKey: 'role.mid',
+			roles: ['role.mid', 'role.caster', 'role.initiator'],
+			winRate: '51.2%',
+			pickRate: '9.8%',
+			name: 'Puck',
+			role: 'Midlane',
+			winrate: '51%',
+			difficulty: 'Hard',
+			attribute: 'Intelligence',
+			strengths: ['hero.puck.strengths.mobility'],
+			weaknesses: ['hero.puck.weaknesses.squishy'],
+			build: ['hero.puck.build.blink'],
+			items: ['item.blink', 'item.travelBoots', 'item.aghanimsScepter', 'item.witchBlade'],
+			skills: ['ability.illusoryOrb', 'ability.waningRift', 'ability.phaseShift', 'ability.dreamCoil'],
+			counters: ['hero.counter.antiMage', 'hero.counter.skywrathMage'],
+			image: 'https://uk.dotabuff.com/assets/heroes/puck.jpg',
+		},
+		{
+			id: 'leshrac',
+			nameKey: 'hero.leshrac.name',
+			roleKey: 'role.mid',
+			roles: ['role.mid', 'role.caster', 'role.carry'],
+			winRate: '52.5%',
+			pickRate: '8.2%',
+			name: 'Leshrac',
+			role: 'Midlane',
+			winrate: '53%',
+			difficulty: 'Medium',
+			attribute: 'Intelligence',
+			strengths: ['hero.leshrac.strengths.aoe'],
+			weaknesses: ['hero.leshrac.weaknesses.mana'],
+			build: ['hero.leshrac.build.bloodstone'],
+			items: ['item.bloodstone', 'item.travelBoots', 'item.blackKingBar', 'item.eternalShroud'],
+			skills: ['ability.splitEarth', 'ability.diabolicEdict', 'ability.lightningStorm', 'ability.pulseNova'],
+			counters: ['hero.counter.antiMage', 'hero.counter.pudge'],
+			image: 'https://uk.dotabuff.com/assets/heroes/leshrac-e4996d7fe1e0e0a8be27ac7542c567c35e4c06326ed14f6563fb8bf8560090b4.jpg',
+		},
+		{
+			id: 'razor',
+			nameKey: 'hero.razor.name',
+			roleKey: 'role.mid',
+			roles: ['role.mid', 'role.offlane'],
+			winRate: '50.5%',
+			pickRate: '7.2%',
+			name: 'Razor',
+			role: 'Midlane',
+			winrate: '50%',
+			difficulty: 'Medium',
+			attribute: 'Agility',
+			strengths: ['hero.razor.strengths.drain', 'hero.razor.strengths.anti-carry'],
+			weaknesses: ['hero.razor.weaknesses.range'],
+			build: ['hero.razor.build.bkb'],
+			items: ['item.blackKingBar', 'item.arcaneBoots', 'item.shivasGuard', 'item.refresher'],
+			skills: ['ability.plasmaField', 'ability.staticLink', 'ability.stormSurge', 'ability.eyeOfTheStorm'],
+			counters: ['hero.counter.antiMage'],
+			image: 'https://uk.dotabuff.com/assets/heroes/razor.jpg',
+		},
+		{
+			id: 'pangolier',
+			nameKey: 'hero.pangolier.name',
+			roleKey: 'role.mid',
+			roles: ['role.mid', 'role.offlane'],
+			winRate: '48.9%',
+			pickRate: '8.5%',
+			name: 'Pangolier',
+			role: 'Midlane',
+			winrate: '49%',
+			difficulty: 'Hard',
+			attribute: 'Agility',
+			strengths: ['hero.pangolier.strengths.mobility', 'hero.pangolier.strengths.cc'],
+			weaknesses: ['hero.pangolier.weaknesses.squishy'],
+			build: ['hero.pangolier.build.diffusal'],
+			items: ['item.diffusalBlade', 'item.blink', 'item.mantaStyle', 'item.blackKingBar'],
+			skills: ['ability.swashbuckle', 'ability.shieldCrash', 'ability.luckyShot', 'ability.rollingThunder'],
+			counters: ['hero.counter.puck'],
+			image: 'https://uk.dotabuff.com/assets/heroes/pangolier.jpg',
+		},
+		{
+			id: 'phantom_lancer',
+			nameKey: 'hero.phantom_lancer.name',
+			roleKey: 'role.carry',
+			roles: ['role.carry'],
+			winRate: '51.3%',
+			pickRate: '11.2%',
+			name: 'Phantom Lancer',
+			role: 'Carry',
+			winrate: '51%',
+			difficulty: 'Medium',
+			attribute: 'Agility',
+			strengths: ['hero.phantom_lancer.strengths.illusions'],
+			weaknesses: ['hero.phantom_lancer.weaknesses.aoe'],
+			build: ['hero.phantom_lancer.build.diffusal'],
+			items: ['item.diffusalBlade', 'item.mantaStyle', 'item.heart', 'item.aghanimsScepter'],
+			skills: ['ability.spiritLance', 'ability.doppelganger', 'ability.phantomRush', 'ability.juxtapose'],
+			counters: ['hero.counter.axe'],
+			image: 'https://uk.dotabuff.com/assets/heroes/phantom-lancer.jpg',
+		},
+		{
+			id: 'spectre',
+			nameKey: 'hero.spectre.name',
+			roleKey: 'role.carry',
+			roles: ['role.carry', 'role.durable'],
+			winRate: '53.1%',
+			pickRate: '9.4%',
+			name: 'Spectre',
+			role: 'Carry',
+			winrate: '53%',
+			difficulty: 'Medium',
+			attribute: 'Agility',
+			strengths: ['hero.spectre.strengths.late', 'hero.spectre.strengths.global'],
+			weaknesses: ['hero.spectre.weaknesses.early'],
+			build: ['hero.spectre.build.radiance'],
+			items: ['item.radiance', 'item.mantaStyle', 'item.heart', 'item.bladeMail'],
+			skills: ['ability.spectralDagger', 'ability.desolate', 'ability.dispersion', 'ability.haunt'],
+			counters: ['hero.counter.antiMage'],
+			image: 'https://uk.dotabuff.com/assets/heroes/spectre.jpg',
+		},
+		{
+			id: 'juggernaut',
+			nameKey: 'hero.juggernaut.name',
+			roleKey: 'role.carry',
+			roles: ['role.carry', 'role.pusher'],
+			winRate: '52.0%',
+			pickRate: '10.1%',
+			name: 'Juggernaut',
+			role: 'Carry',
+			winrate: '52%',
+			difficulty: 'Easy',
+			attribute: 'Agility',
+			strengths: ['hero.juggernaut.strengths.sustain', 'hero.juggernaut.strengths.pushing'],
+			weaknesses: ['hero.juggernaut.weaknesses.mana', 'hero.juggernaut.weaknesses.disable'],
+			build: ['hero.juggernaut.build.battlefury'],
+			items: ['item.battlefury', 'item.blackKingBar', 'item.mantaStyle', 'item.sangeAndYasha'],
+			skills: ['ability.bladeFury', 'ability.healingWard', 'ability.coldSnap', 'ability.omniSlash'],
+			counters: ['hero.counter.pudge', 'hero.counter.axe'],
+			image: 'https://uk.dotabuff.com/assets/heroes/juggernaut.jpg',
+		},
+		{
+			id: 'lina',
+			nameKey: 'hero.lina.name',
+			roleKey: 'role.mid',
+			roles: ['role.mid', 'role.caster'],
+			winRate: '54.8%',
+			pickRate: '13.3%',
+			name: 'Lina',
+			role: 'Mid / Carry',
+			winrate: '55%',
+			difficulty: 'Medium',
+			attribute: 'Intelligence',
+			strengths: ['hero.lina.strengths.burst', 'hero.lina.strengths.waveclear'],
+			weaknesses: ['hero.lina.weaknesses.squishy', 'hero.lina.weaknesses.escape'],
+			build: ['hero.lina.build.aghanims'],
+			items: ['item.aghanimsScepter', 'item.etherealBlade', 'item.blink', 'item.blackKingBar'],
+			skills: ['ability.dragonSlave', 'ability.lightStrikeArray', 'ability.fierySoul', 'ability.lagunaBlade'],
+			counters: ['hero.counter.phantomLancer', 'hero.counter.timbersaw'],
+			image: 'https://uk.dotabuff.com/assets/heroes/lina.jpg',
+		},
+		{
+			id: 'shadow_fiend',
+			nameKey: 'hero.shadow_fiend.name',
+			roleKey: 'role.mid',
+			roles: ['role.mid', 'role.carry'],
+			winRate: '48.9%',
+			pickRate: '12.0%',
+			name: 'Shadow Fiend',
+			role: 'Midlane',
+			winrate: '49%',
+			difficulty: 'Hard',
+			attribute: 'Agility',
+			strengths: ['hero.shadow_fiend.strengths.damage', 'hero.shadow_fiend.strengths.farming'],
+			weaknesses: ['hero.shadow_fiend.weaknesses.survivability'],
+			build: ['hero.shadow_fiend.build.necronomicon'],
+			items: ['item.necronomicon', 'item.blink', 'item.blackKingBar', 'item.mantaStyle'],
+			skills: ['ability.shadowRaze', 'ability.necromastery', 'ability.requiemOfSouls'],
+			counters: ['hero.counter.antiMage', 'hero.counter.puck'],
+			image: 'https://uk.dotabuff.com/assets/heroes/nevermore.jpg',
+		},
+		{
+			id: 'tidehunter',
+			nameKey: 'hero.tidehunter.name',
+			roleKey: 'role.offlane',
+			roles: ['role.offlane', 'role.initiator', 'role.durable'],
+			winRate: '51.0%',
+			pickRate: '8.8%',
+			name: 'Tidehunter',
+			role: 'Offlane',
+			winrate: '51%',
+			difficulty: 'Medium',
+			attribute: 'Strength',
+			strengths: ['hero.tidehunter.strengths.teamfight', 'hero.tidehunter.strengths.tankiness'],
+			weaknesses: ['hero.tidehunter.weaknesses.mana', 'hero.tidehunter.weaknesses.movement'],
+			build: ['hero.tidehunter.build.guardianGreaves'],
+			items: ['item.guardianGreaves', 'item.blackKingBar', 'item.shivasGuard', 'item.bladeMail'],
+			skills: ['ability.gush', 'ability.krakenShell', 'ability.anchorSmash', 'ability.ravage'],
+			counters: ['hero.counter.emberSpirit', 'hero.counter.legionCommander'],
+			image: 'https://uk.dotabuff.com/assets/heroes/tidehunter.jpg',
+		},
+		{
+			id: 'crystal_maiden',
+			nameKey: 'hero.crystal_maiden.name',
+			roleKey: 'role.support',
+			roles: ['role.support', 'role.disabler'],
+			winRate: '50.5%',
+			pickRate: '14.0%',
+			name: 'Crystal Maiden',
+			role: 'Full Support',
+			winrate: '52%',
+			difficulty: 'Easy',
+			attribute: 'Intelligence',
+			strengths: ['hero.crystal_maiden.strengths.control', 'hero.crystal_maiden.strengths.utility'],
+			weaknesses: ['hero.crystal_maiden.weaknesses.squishy'],
+			build: ['hero.crystal_maiden.build.aghanims', 'hero.crystal_maiden.build.guardianGreaves'],
+			items: ['item.aghanimsScepter', 'item.glimmerCape', 'item.forceStaff', 'item.blackKingBar'],
+			skills: ['ability.frostbite', 'ability.crystalNova', 'ability.arcaneAura', 'ability.freezingField'],
+			counters: ['hero.counter.lich', 'hero.counter.antiMage'],
+			image: 'https://uk.dotabuff.com/assets/heroes/crystal-maiden.jpg',
+		},
+		{
+			id: 'lion',
+			nameKey: 'hero.lion.name',
+			roleKey: 'role.support',
+			roles: ['role.support', 'role.disabler'],
+			winRate: '48.2%',
+			pickRate: '15.8%',
+			name: 'Lion',
+			role: 'Support',
+			winrate: '49%',
+			difficulty: 'Easy',
+			attribute: 'Intelligence',
+			strengths: ['hero.lion.strengths.control', 'hero.lion.strengths.burst'],
+			weaknesses: ['hero.lion.weaknesses.squishy'],
+			build: ['hero.lion.build.aghanims', 'hero.lion.build.blink'],
+			items: ['item.aghanimsScepter', 'item.ghostScepter', 'item.blink', 'item.forceStaff'],
+			skills: ['ability.earthSpike', 'ability.hex', 'ability.manaDrain', 'ability.fingerOfDeath'],
+			counters: ['hero.counter.phantomLancer', 'hero.counter.antiMage'],
+			image: 'https://uk.dotabuff.com/assets/heroes/lion.jpg',
+		},
+		{
+			id: 'shadow_shaman',
+			nameKey: 'hero.shadow_shaman.name',
+			roleKey: 'role.support',
+			roles: ['role.support', 'role.pusher'],
+			winRate: '49.7%',
+			pickRate: '10.6%',
+			name: 'Shadow Shaman',
+			role: 'Support',
+			winrate: '50%',
+			difficulty: 'Medium',
+			attribute: 'Intelligence',
+			strengths: ['hero.shadow_shaman.strengths.push', 'hero.shadow_shaman.strengths.lockdown'],
+			weaknesses: ['hero.shadow_shaman.weaknesses.squishy'],
+			build: ['hero.shadow_shaman.build.aghanims', 'hero.shadow_shaman.build.blink'],
+			items: ['item.aghanimsScepter', 'item.blink', 'item.forceStaff', 'item.ghostScepter'],
+			skills: ['ability.shackles', 'ability.voodoo', 'ability.massSerpentWard', 'ability.hex'],
+			counters: ['hero.counter.earthshaker', 'hero.counter.enigma'],
+			image: 'https://uk.dotabuff.com/assets/heroes/shadow-shaman.jpg',
+		},
+		{
+			id: 'viper',
+			nameKey: 'hero.viper.name',
+			roleKey: 'role.mid',
+			roles: ['role.mid', 'role.offlane'],
+			winRate: '52.4%',
+			pickRate: '11.5%',
+			name: 'Viper',
+			role: 'Mid / Offlane',
+			winrate: '52%',
+			difficulty: 'Medium',
+			attribute: 'Agility',
+			strengths: ['hero.viper.strengths.damage', 'hero.viper.strengths.slow'],
+			weaknesses: ['hero.viper.weaknesses.mana', 'hero.viper.weaknesses.control'],
+			build: ['hero.viper.build.rodOfAtos'],
+			items: ['item.rodOfAtos', 'item.blackKingBar', 'item.dragonLance', 'item.aghanimsScepter'],
+			skills: ['ability.poisonAttack', 'ability.nethertoxin', 'ability.corrosiveSkin', 'ability.viperStrike'],
+			counters: ['hero.counter.antiMage', 'hero.counter.axe'],
+			image: 'https://uk.dotabuff.com/assets/heroes/viper.jpg',
+		},
+		{
+			id: 'storm_spirit',
+			nameKey: 'hero.storm_spirit.name',
+			roleKey: 'role.mid',
+			roles: ['role.mid', 'role.ganker'],
+			winRate: '50.1%',
+			pickRate: '11.0%',
+			name: 'Storm Spirit',
+			role: 'Midlane',
+			winrate: '50%',
+			difficulty: 'Hard',
+			attribute: 'Intelligence',
+			strengths: ['hero.storm_spirit.strengths.mobility', 'hero.storm_spirit.strengths.pickoff'],
+			weaknesses: ['hero.storm_spirit.weaknesses.early'],
+			build: ['hero.storm_spirit.build.bloodstone', 'hero.storm_spirit.build.orchid'],
+			items: ['item.bloodstone', 'item.orchidMalevolence', 'item.blackKingBar', 'item.kayaAndSange'],
+			skills: ['ability.staticRemnant', 'ability.overload', 'ability.ballLightning', 'ability.electricVortex'],
+			counters: ['hero.counter.riki', 'hero.counter.vengefulSpirit'],
+			image: 'https://uk.dotabuff.com/assets/heroes/storm-spirit.jpg',
+		},
+		{
+			id: 'queen_of_pain',
+			nameKey: 'hero.queen_of_pain.name',
+			roleKey: 'role.mid',
+			roles: ['role.mid', 'role.ganker'],
+			winRate: '51.8%',
+			pickRate: '9.2%',
+			name: 'Queen of Pain',
+			role: 'Midlane',
+			winrate: '52%',
+			difficulty: 'Medium',
+			attribute: 'Intelligence',
+			strengths: ['hero.queen_of_pain.strengths.burst', 'hero.queen_of_pain.strengths.mobility'],
+			weaknesses: ['hero.queen_of_pain.weaknesses.mana'],
+			build: ['hero.queen_of_pain.build.aghanims', 'hero.queen_of_pain.build.blink'],
+			items: ['item.aghanimsScepter', 'item.blackKingBar', 'item.blink', 'item.scotty'],
+			skills: ['ability.shadowStrike', 'ability.screamOfPain', 'ability.blink', 'ability.sonicWave'],
+			counters: ['hero.counter.antiMage', 'hero.counter.vengefulSpirit'],
+			image: 'https://uk.dotabuff.com/assets/heroes/queen-of-pain.jpg',
+		},
+		{
+			id: 'luna',
+			nameKey: 'hero.luna.name',
+			roleKey: 'role.carry',
+			roles: ['role.carry', 'role.pusher'],
+			winRate: '50.9%',
+			pickRate: '9.8%',
+			name: 'Luna',
+			role: 'Carry',
+			winrate: '51%',
+			difficulty: 'Medium',
+			attribute: 'Agility',
+			strengths: ['hero.luna.strengths.push', 'hero.luna.strengths.farm'],
+			weaknesses: ['hero.luna.weaknesses.early'],
+			build: ['hero.luna.build.manta'],
+			items: ['item.mantaStyle', 'item.blackKingBar', 'item.aghanimsScepter', 'item.silverEdge'],
+			skills: ['ability.lucentBeam', 'ability.lunarBlessing', 'ability.lucentBeam', 'ability.eclipse'],
+			counters: ['hero.counter.antiMage', 'hero.counter.ma'],
+			image: 'https://uk.dotabuff.com/assets/heroes/luna.jpg',
+		},
+		{
+			id: 'sven',
+			nameKey: 'hero.sven.name',
+			roleKey: 'role.carry',
+			roles: ['role.carry', 'role.initiator'],
+			winRate: '50.7%',
+			pickRate: '10.5%',
+			name: 'Sven',
+			role: 'Carry',
+			winrate: '51%',
+			difficulty: 'Medium',
+			attribute: 'Strength',
+			strengths: ['hero.sven.strengths.damage', 'hero.sven.strengths.teamfight'],
+			weaknesses: ['hero.sven.weaknesses.range'],
+			build: ['hero.sven.build.echoSabre', 'hero.sven.build.blackKingBar'],
+			items: ['item.echoSabre', 'item.blackKingBar', 'item.blink', 'item.sangeAndYasha'],
+			skills: ['ability.stormBolt', 'ability.greatCleave', 'ability.warCry', 'ability.godsStrength'],
+			counters: ['hero.counter.lich', 'hero.counter.antiMage'],
+			image: 'https://uk.dotabuff.com/assets/heroes/sven.jpg',
+		},
+		{
+			id: 'faceless_void',
+			nameKey: 'hero.faceless_void.name',
+			roleKey: 'role.carry',
+			roles: ['role.carry', 'role.initiator'],
+			winRate: '49.5%',
+			pickRate: '11.3%',
+			name: 'Faceless Void',
+			role: 'Carry',
+			winrate: '50%',
+			difficulty: 'Hard',
+			attribute: 'Agility',
+			strengths: ['hero.faceless_void.strengths.control', 'hero.faceless_void.strengths.late'],
+			weaknesses: ['hero.faceless_void.weaknesses.early'],
+			build: ['hero.faceless_void.build.manta', 'hero.faceless_void.build.assault'],
+			items: ['item.mantaStyle', 'item.blackKingBar', 'item.sangeAndYasha', 'item.assaultCuirass'],
+			skills: ['ability.timeWalk', 'ability.timeDilation', 'ability.timeLock', 'ability.chronosphere'],
+			counters: ['hero.counter.abyssalUnderlord', 'hero.counter.bloodseeker'],
+			image: 'https://uk.dotabuff.com/assets/heroes/faceless-void.jpg',
+		},
+		{
+			id: 'anti_mage',
+			nameKey: 'hero.anti_mage.name',
+			roleKey: 'role.carry',
+			roles: ['role.carry', 'role.splitPusher'],
+			winRate: '49.9%',
+			pickRate: '12.5%',
+			name: 'Anti-Mage',
+			role: 'Carry',
+			winrate: '50%',
+			difficulty: 'Hard',
+			attribute: 'Agility',
+			strengths: ['hero.anti_mage.strengths.splitpush', 'hero.anti_mage.strengths.magicResist'],
+			weaknesses: ['hero.anti_mage.weaknesses.early'],
+			build: ['hero.anti_mage.build.battlefury', 'hero.anti_mage.build.manta'],
+			items: ['item.battlefury', 'item.mantaStyle', 'item.blackKingBar', 'item.skythe'],
+			skills: ['ability.manaBreak', 'ability.blink', 'ability.spellShield', 'ability.manaVoid'],
+			counters: ['hero.counter.queen_of_pain', 'hero.counter.puck'],
+			image: 'https://uk.dotabuff.com/assets/heroes/anti-mage.jpg',
+		},
+		{
+			id: 'slark',
+			nameKey: 'hero.slark.name',
+			roleKey: 'role.carry',
+			roles: ['role.carry', 'role.ganker'],
+			winRate: '51.0%',
+			pickRate: '7.5%',
+			name: 'Slark',
+			role: 'Carry',
+			winrate: '51%',
+			difficulty: 'Medium',
+			attribute: 'Agility',
+			strengths: ['hero.slark.strengths.escape', 'hero.slark.strengths.sustain'],
+			weaknesses: ['hero.slark.weaknesses.control'],
+			build: ['hero.slark.build.shadowBlade', 'hero.slark.build.skadi'],
+			items: ['item.shadowBlade', 'item.blackKingBar', 'item.skadi', 'item.silverEdge'],
+			skills: ['ability.pounce', 'ability.essenceShift', 'ability.darkPact', 'ability.shadowDance'],
+			counters: ['hero.counter.axe', 'hero.counter.vengefulSpirit'],
+			image: 'https://uk.dotabuff.com/assets/heroes/slark.jpg',
+		},
+		{
+			id: 'sniper',
+			nameKey: 'hero.sniper.name',
+			roleKey: 'role.carry',
+			roles: ['role.carry', 'role.ranged'],
+			winRate: '49.1%',
+			pickRate: '10.8%',
+			name: 'Sniper',
+			role: 'Carry',
+			winrate: '49%',
+			difficulty: 'Medium',
+			attribute: 'Agility',
+			strengths: ['hero.sniper.strengths.range', 'hero.sniper.strengths.pickoff'],
+			weaknesses: ['hero.sniper.weaknesses.mobility'],
+			build: ['hero.sniper.build.manta', 'hero.sniper.build.hurricanePike'],
+			items: ['item.mantaStyle', 'item.blackKingBar', 'item.sangeAndYasha', 'item.hurricanePike'],
+			skills: ['ability.shrapnel', 'ability.headshot', 'ability.takeAim', 'ability.assassinate'],
+			counters: ['hero.counter.riki', 'hero.counter.meepo'],
+			image: 'https://uk.dotabuff.com/assets/heroes/sniper.jpg',
+		},
+		{
+			id: 'chaos_knight',
+			nameKey: 'hero.chaos_knight.name',
+			roleKey: 'role.carry',
+			roles: ['role.carry', 'role.initiator'],
+			winRate: '50.4%',
+			pickRate: '6.6%',
+			name: 'Chaos Knight',
+			role: 'Carry',
+			winrate: '50%',
+			difficulty: 'Medium',
+			attribute: 'Strength',
+			strengths: ['hero.chaos_knight.strengths.burst', 'hero.chaos_knight.strengths.tankiness'],
+			weaknesses: ['hero.chaos_knight.weaknesses.hp'],
+			build: ['hero.chaos_knight.build.echoSabre'],
+			items: ['item.echoSabre', 'item.blackKingBar', 'item.assaultCuirass', 'item.sangeAndYasha'],
+			skills: ['ability.realityRift', 'ability.chaosBolt', 'ability.realityRift', 'ability.phantomRush'],
+			counters: ['hero.counter.axe', 'hero.counter.tidehunter'],
+			image: 'https://uk.dotabuff.com/assets/heroes/chaos-knight.jpg',
+		},
+		{
+			id: 'necrophos',
+			nameKey: 'hero.necrophos.name',
+			roleKey: 'role.mid',
+			roles: ['role.mid', 'role.support'],
+			winRate: '50.7%',
+			pickRate: '8.8%',
+			name: 'Necrophos',
+			role: 'Midlane',
+			winrate: '51%',
+			difficulty: 'Medium',
+			attribute: 'Intelligence',
+			strengths: ['hero.necrophos.strengths.sustain', 'hero.necrophos.strengths.teamfight'],
+			weaknesses: ['hero.necrophos.weaknesses.early'],
+			build: ['hero.necrophos.build.heart'],
+			items: ['item.heart', 'item.aghanimsScepter', 'item.blink', 'item.spiritVessel'],
+			skills: ['ability.deathPulse', 'ability.sadist', 'ability.ghostShroud', 'ability.reapersScythe'],
+			counters: ['hero.counter.antiMage', 'hero.counter.silencer'],
+			image: 'https://uk.dotabuff.com/assets/heroes/necrophos.jpg',
+		},
+		{
+			id: 'magnus',
+			nameKey: 'hero.magnus.name',
+			roleKey: 'role.offlane',
+			roles: ['role.offlane', 'role.initiator'],
+			winRate: '49.8%',
+			pickRate: '7.0%',
+			name: 'Magnus',
+			role: 'Offlane',
+			winrate: '50%',
+			difficulty: 'Medium',
+			attribute: 'Strength',
+			strengths: ['hero.magnus.strengths.teamfight', 'hero.magnus.strengths.maneuver'],
+			weaknesses: ['hero.magnus.weaknesses.mana'],
+			build: ['hero.magnus.build.blink'],
+			items: ['item.blink', 'item.blackKingBar', 'item.assaultCuirass', 'item.scotty'],
+			skills: ['ability.skewer', 'ability.reversePolarity', 'ability.empower', 'ability.shockwave'],
+			counters: ['hero.counter.tidehunter', 'hero.counter.enigma'],
+			image: 'https://uk.dotabuff.com/assets/heroes/magnus.jpg',
+		},
+		{
+			id: 'ember_spirit',
+			nameKey: 'hero.ember_spirit.name',
+			roleKey: 'role.mid',
+			roles: ['role.mid', 'role.ganker'],
+			winRate: '51.2%',
+			pickRate: '10.2%',
+			name: 'Ember Spirit',
+			role: 'Midlane',
+			winrate: '51%',
+			difficulty: 'Hard',
+			attribute: 'Agility',
+			strengths: ['hero.ember_spirit.strengths.mobility', 'hero.ember_spirit.strengths.damage'],
+			weaknesses: ['hero.ember_spirit.weaknesses.early'],
+			build: ['hero.ember_spirit.build.battlefury', 'hero.ember_spirit.build.linkens'],
+			items: ['item.battlefury', 'item.blackKingBar', 'item.linkensSphere', 'item.kayaAndSange'],
+			skills: ['ability.searingChains', 'ability.sleightOfFist', 'ability.flameGuard', 'ability.fireRemnant'],
+			counters: ['hero.counter.vengefulSpirit', 'hero.counter.axe'],
+			image: 'https://uk.dotabuff.com/assets/heroes/ember-spirit.jpg',
+		},
+		{
+			id: 'bristleback',
+			nameKey: 'hero.bristleback.name',
+			roleKey: 'role.offlane',
+			roles: ['role.offlane', 'role.durable'],
+			winRate: '50.3%',
+			pickRate: '9.0%',
+			name: 'Bristleback',
+			role: 'Offlane',
+			winrate: '50%',
+			difficulty: 'Medium',
+			attribute: 'Strength',
+			strengths: ['hero.bristleback.strengths.sustain', 'hero.bristleback.strengths.teamfight'],
+			weaknesses: ['hero.bristleback.weaknesses.magic'],
+			build: ['hero.bristleback.build.thornmail'],
+			items: ['item.thornmail', 'item.heart', 'item.assaultCuirass', 'item.spiritVessel'],
+			skills: ['ability.viscousNasalDrip', 'ability.quillSpray', 'ability.bristleback', 'ability.warpath'],
+			counters: ['hero.counter.legionCommander', 'hero.counter.emberSpirit'],
+			image: 'https://uk.dotabuff.com/assets/heroes/bristleback.jpg',
+		},
+		{
+			id: 'templar_assassin',
+			nameKey: 'hero.templar_assassin.name',
+			roleKey: 'role.mid',
+			roles: ['role.mid', 'role.carry'],
+			winRate: '50.2%',
+			pickRate: '9.7%',
+			name: 'Templar Assassin',
+			role: 'Midlane',
+			winrate: '50%',
+			difficulty: 'Medium',
+			attribute: 'Agility',
+			strengths: ['hero.templar_assassin.strengths.gank', 'hero.templar_assassin.strengths.burst'],
+			weaknesses: ['hero.templar_assassin.weaknesses.vision'],
+			build: ['hero.templar_assassin.build.desolator'],
+			items: ['item.desolator', 'item.blackKingBar', 'item.mantaStyle', 'item.blink'],
+			skills: ['ability.psiBlades', 'ability.refraction', 'ability.meld', 'ability.psiTrap'],
+			counters: ['hero.counter.pudge', 'hero.counter.axe'],
+			image: 'https://uk.dotabuff.com/assets/heroes/templar-assassin.jpg',
+		},
+		{
+			id: 'dark_seer',
+			nameKey: 'hero.dark_seer.name',
+			roleKey: 'role.offlane',
+			roles: ['role.offlane', 'role.initiator'],
+			winRate: '50.0%',
+			pickRate: '7.8%',
+			name: 'Dark Seer',
+			role: 'Offlane',
+			winrate: '50%',
+			difficulty: 'Hard',
+			attribute: 'Intelligence',
+			strengths: ['hero.dark_seer.strengths.aoe', 'hero.dark_seer.strengths.teamfight'],
+			weaknesses: ['hero.dark_seer.weaknesses.squishy'],
+			build: ['hero.dark_seer.build.guardianGreaves', 'hero.dark_seer.build.blink'],
+			items: ['item.guardianGreaves', 'item.blackKingBar', 'item.pipeOfInsight', 'item.blink'],
+			skills: ['ability.vacuum', 'ability.ionShell', 'ability.surge', 'ability.wallOfReplica'],
+			counters: ['hero.counter.undying', 'hero.counter.legionCommander'],
+			image: 'https://uk.dotabuff.com/assets/heroes/dark-seer.jpg',
+		},
+		{
+			id: 'mirana',
+			nameKey: 'hero.mirana.name',
+			roleKey: 'role.carry',
+			roles: ['role.carry', 'role.ganker'],
+			winRate: '49.7%',
+			pickRate: '10.9%',
+			name: 'Mirana',
+			role: 'Carry',
+			winrate: '50%',
+			difficulty: 'Medium',
+			attribute: 'Agility',
+			strengths: ['hero.mirana.strengths.mobility', 'hero.mirana.strengths.pickoff'],
+			weaknesses: ['hero.mirana.weaknesses.early'],
+			build: ['hero.mirana.build.desolator'],
+			items: ['item.desolator', 'item.blackKingBar', 'item.mantaStyle', 'item.abyssalBlade'],
+			skills: ['ability.starfall', 'ability.arrow', 'ability.leap', 'ability.invis'],
+			counters: ['hero.counter.phantomAssassin', 'hero.counter.riki'],
+			image: 'https://uk.dotabuff.com/assets/heroes/mirana.jpg',
+		},
+	];
+
+	protected readonly items: readonly Item[] = [
+		{
+			id: 'blink_dagger',
+			name: 'Blink Dagger',
+			category: 'Mobility',
+			cost: '2250',
+			description: 'Instantly teleports a short distance to close gaps, escape, or initiate fights.',
+			image: 'https://uk.dotabuff.com/assets/items/blink-dagger.jpg',
+		},
+		{
+			id: 'black_king_bar',
+			name: 'Black King Bar',
+			category: 'Defensive',
+			cost: '4050',
+			description: 'Grants spell immunity on activation, protecting from most enemy disables and nukes.',
+			image: 'https://uk.dotabuff.com/assets/items/black-king-bar.jpg',
+		},
+		{
+			id: 'aghanims_scepter',
+			name: 'Aghanim\'s Scepter',
+			category: 'Upgrade',
+			cost: '4200',
+			description: 'Upgrades the hero\'s ultimate and grants stats, improving late-game power.',
+			image: 'https://uk.dotabuff.com/assets/items/aghanims-scepter.jpg',
+		},
+		{
+			id: 'force_staff',
+			name: 'Force Staff',
+			category: 'Utility',
+			cost: '2250',
+			description: 'Pushes a target forward, useful for escape, initiation, or saving allies.',
+			image: 'https://uk.dotabuff.com/assets/items/force-staff.jpg',
+		},
+		{
+			id: 'euls_scepter',
+			name: 'Eul\'s Scepter of Divinity',
+			category: 'Control',
+			cost: '2750',
+			description: 'Cyclones a target into the air, disabling them for 2.5 seconds.',
+			image: 'https://uk.dotabuff.com/assets/items/euls-scepter-of-divinity.jpg',
+		},
+		{
+			id: 'boots_of_travel',
+			name: 'Boots of Travel',
+			category: 'Movement',
+			cost: '2500',
+			description: 'Grants global teleportation to allied units and structures.',
+			image: 'https://uk.dotabuff.com/assets/items/boots-of-travel.jpg',
+		},
+		{
+			id: 'pipe_of_insight',
+			name: 'Pipe of Insight',
+			category: 'Support',
+			cost: '3875',
+			description: 'Provides spell resistance aura and a shield against magical damage.',
+			image: 'https://uk.dotabuff.com/assets/items/pipe-of-insight.jpg',
+		},
+		{
+			id: 'assault_cuirass',
+			name: 'Assault Cuirass',
+			category: 'Armor',
+			cost: '5275',
+			description: 'Increases armor and attack speed while reducing enemy armor in the aura.',
+			image: 'https://uk.dotabuff.com/assets/items/assault-cuirass.jpg',
+		},
+		{
+			id: 'heart_of_tarrasque',
+			name: 'Heart of Tarrasque',
+			category: 'Durable',
+			cost: '5200',
+			description: 'Greatly increases health and regeneration for extended teamfights.',
+			image: 'https://uk.dotabuff.com/assets/items/heart-of-tarrasque.jpg',
+		},
+		{
+			id: 'octarine_core',
+			name: 'Octarine Core',
+			category: 'Utility',
+			cost: '5900',
+			description: 'Reduces cooldowns and spell mana costs, accelerating hero power spikes.',
+			image: 'https://uk.dotabuff.com/assets/items/octarine-core.jpg',
+		},
+		{
+			id: 'manta_style',
+			name: 'Manta Style',
+			category: 'Offense',
+			cost: '4600',
+			description: 'Creates illusions of the hero and provides stats for damage and survivability.',
+			image: 'https://uk.dotabuff.com/assets/items/manta-style.jpg',
+		},
+		{
+			id: 'battle_fury',
+			name: 'Battle Fury',
+			category: 'Farming',
+			cost: '4100',
+			description: 'Grants cleave damage for rapid farming and increased right-click impact.',
+			image: 'https://uk.dotabuff.com/assets/items/battle-fury.jpg',
+		},
+		{
+			id: 'radiance',
+			name: 'Radiance',
+			category: 'Damage',
+			cost: '5150',
+			description: 'Emits an aura that deals damage over time to nearby enemies and improves farming.',
+			image: 'https://uk.dotabuff.com/assets/items/radiance.jpg',
+		},
+		{
+			id: 'abyssal_blade',
+			name: 'Abyssal Blade',
+			category: 'Disable',
+			cost: '6250',
+			description: 'Provides stun on hit and high strength for durable initiators and carries.',
+			image: 'https://uk.dotabuff.com/assets/items/abyssal-blade.jpg',
+		},
+		{
+			id: 'scythe_of_vyse',
+			name: 'Scythe of Vyse',
+			category: 'Control',
+			cost: '5700',
+			description: 'Transforms a target into a harmless critter, an extremely powerful single-target disable.',
+			image: 'https://uk.dotabuff.com/assets/items/scythe-of-vyse.jpg',
+		},
+		{
+			id: 'diffusal_blade',
+			name: 'Diffusal Blade',
+			category: 'Utility',
+			cost: '3150',
+			description: 'Burns mana on hit and slows the target; powerful versus spell-dependant heroes.',
+			image: 'https://uk.dotabuff.com/assets/items/diffusal-blade.jpg',
+		},
+		{
+			id: 'desolator',
+			name: 'Desolator',
+			category: 'Damage',
+			cost: '3500',
+			description: 'Reduces enemy armor on hit, increasing physical damage taken by the target.',
+			image: 'https://uk.dotabuff.com/assets/items/desolator.jpg',
+		},
+		{
+			id: 'echo_sabre',
+			name: 'Echo Sabre',
+			category: 'Attack',
+			cost: '2700',
+			description: 'Grants a double-hit burst and stat bonuses for melee carries.',
+			image: 'https://uk.dotabuff.com/assets/items/echo-sabre.jpg',
+		},
+		{
+			id: 'shadow_blade',
+			name: 'Shadow Blade',
+			category: 'Utility',
+			cost: '3000',
+			description: 'Grants invisibility and bonus damage on first strike from invisibility.',
+			image: 'https://uk.dotabuff.com/assets/items/shadow-blade.jpg',
+		},
+		{
+			id: 'silver_edge',
+			name: 'Silver Edge',
+			category: 'Utility',
+			cost: '5800',
+			description: 'Upgraded Shadow Blade with a break effect that disables passive abilities.',
+			image: 'https://uk.dotabuff.com/assets/items/silver-edge.jpg',
+		},
+		{
+			id: 'hurricane_pike',
+			name: 'Hurricane Pike',
+			category: 'Utility',
+			cost: '4100',
+			description: 'Pushes self or an ally away and increases attack range temporarily.',
+			image: 'https://uk.dotabuff.com/assets/items/hurricane-pike.jpg',
+		},
+		{
+			id: 'lotus_orb',
+			name: 'Lotus Orb',
+			category: 'Defense',
+			cost: '2350',
+			description: 'Reflects targeted spells and provides strong defensive stats and regen.',
+			image: 'https://uk.dotabuff.com/assets/items/lotus-orb.jpg',
+		},
+		{
+			id: 'glimmer_cape',
+			name: 'Glimmer Cape',
+			category: 'Defense',
+			cost: '1950',
+			description: 'Grants invisibility and magic resistance for saving allies or initiating stealth plays.',
+			image: 'https://uk.dotabuff.com/assets/items/glimmer-cape.jpg',
+		},
+		{
+			id: 'solar_crest',
+			name: 'Solar Crest',
+			category: 'Utility',
+			cost: '2350',
+			description: 'Improves ally armor and attack speed or reduces an enemy’s armor.',
+			image: 'https://uk.dotabuff.com/assets/items/solar-crest.jpg',
+		},
+		{
+			id: 'orchid_malevolence',
+			name: 'Orchid Malevolence',
+			category: 'Control',
+			cost: '3475',
+			description: 'Silences a target and amplifies damage taken while active.',
+			image: 'https://uk.dotabuff.com/assets/items/orchid-malevolence.jpg',
+		},
+	];
+
+	protected readonly rolePositions: readonly Position[] = [
+		{
+			id: 'position1',
+			titleKey: 'position.carry',
+			descriptionKey: 'position.carry.description',
+			duties: ['position.carry.duties.farm', 'position.carry.duties.teamfights', 'position.carry.duties.objectives'],
+			popularHeroes: ['hero.axe.name', 'hero.invoker.name'],
+			strategy: 'position.carry.strategy',
+		},
+		{
+			id: 'position2',
+			titleKey: 'position.mid',
+			descriptionKey: 'position.mid.description',
+			duties: ['position.mid.duties.control', 'position.mid.duties.powerSpike', 'position.mid.duties.roam'],
+			popularHeroes: ['hero.invoker.name', 'hero.pudge.name'],
+			strategy: 'position.mid.strategy',
+		},
+		{
+			id: 'position3',
+			titleKey: 'position.offlane',
+			descriptionKey: 'position.offlane.description',
+			duties: ['position.offlane.duties.stall', 'position.offlane.duties.peel', 'position.offlane.duties.vision'],
+			popularHeroes: ['hero.axe.name', 'hero.pudge.name'],
+			strategy: 'position.offlane.strategy',
+		},
+		{
+			id: 'position4',
+			titleKey: 'position.softSupport',
+			descriptionKey: 'position.softSupport.description',
+			duties: ['position.softSupport.duties.pull', 'position.softSupport.duties.roam', 'position.softSupport.duties.itemization'],
+			popularHeroes: ['hero.pudge.name', 'hero.axe.name'],
+			strategy: 'position.softSupport.strategy',
+		},
+		{
+			id: 'position5',
+			titleKey: 'position.hardSupport',
+			descriptionKey: 'position.hardSupport.description',
+			duties: ['position.hardSupport.duties.vision', 'position.hardSupport.duties.save', 'position.hardSupport.duties.control'],
+			popularHeroes: ['hero.pudge.name', 'hero.invoker.name'],
+			strategy: 'position.hardSupport.strategy',
+		},
+	];
+
+	protected readonly mapImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAutWmJMzaFDvJKsJdQR2HxLwWbanfRVq_ZA&s';
+
+	protected readonly mapPoints: readonly MapPoint[] = [
+		{
+			id: 'roshan',
+			labelKey: 'mapPoint.roshan',
+			descriptionKey: 'mapPoint.roshan.detail',
+			label: 'Roshan Pit',
+			description: 'Center objective where teams fight for Aegis, Cheese, and map control.',
+			type: 'Objective',
+			x: 0.57,
+			y: 0.47,
+		},
+		{
+			id: 'radiant_base',
+			labelKey: 'mapPoint.radiantFountain',
+			descriptionKey: 'mapPoint.radiantFountain.detail',
+			label: 'Radiant Fountain',
+			description: 'The Radiant team base and safety zone with fountain regen.',
+			type: 'Base',
+			x: 0.17,
+			y: 0.84,
+		},
+		{
+			id: 'dire_base',
+			labelKey: 'mapPoint.direFountain',
+			descriptionKey: 'mapPoint.direFountain.detail',
+			label: 'Dire Fountain',
+			description: 'The Dire team base and safety zone with fountain regen.',
+			type: 'Base',
+			x: 0.83,
+			y: 0.16,
+		},
+		{
+			id: 'radiant_secret',
+			labelKey: 'mapPoint.secretShop',
+			descriptionKey: 'mapPoint.secretShop.detail',
+			label: 'Radiant Secret Shop',
+			description: 'A hidden shop in the Radiant jungle for powerful mid-game items.',
+			type: 'Shop',
+			x: 0.31,
+			y: 0.67,
+		},
+		{
+			id: 'dire_secret',
+			labelKey: 'mapPoint.secretShop',
+			descriptionKey: 'mapPoint.secretShop.detail',
+			label: 'Dire Secret Shop',
+			description: 'A hidden shop in the Dire jungle for powerful mid-game items.',
+			type: 'Shop',
+			x: 0.69,
+			y: 0.31,
+		},
+		{
+			id: 'top_lane',
+			labelKey: 'mapPoint.topLane',
+			descriptionKey: 'mapPoint.topLane.detail',
+			label: 'Top Lane',
+			description: 'Long lane for Radiant safe and Dire offlane control.',
+			type: 'Lane',
+			x: 0.45,
+			y: 0.18,
+		},
+		{
+			id: 'mid_lane',
+			labelKey: 'mapPoint.midLane',
+			descriptionKey: 'mapPoint.midLane.detail',
+			label: 'Mid Lane',
+			description: 'The central lane where many key fights and ganks happen.',
+			type: 'Lane',
+			x: 0.5,
+			y: 0.5,
+		},
+		{
+			id: 'bot_lane',
+			labelKey: 'mapPoint.botLane',
+			descriptionKey: 'mapPoint.botLane.detail',
+			label: 'Bottom Lane',
+			description: 'Long lane for Radiant offlane and Dire safe lane control.',
+			type: 'Lane',
+			x: 0.55,
+			y: 0.82,
+		},
+		{
+			id: 'tormentor_radiant',
+			labelKey: 'mapPoint.tormentor',
+			descriptionKey: 'mapPoint.tormentor.detail',
+			label: 'Radiant Camp',
+			description: 'Radiant jungle camp ideal for stacking and early pressure.',
+			type: 'Camp',
+			x: 0.40,
+			y: 0.71,
+		},
+		{
+			id: 'tormentor_dire',
+			labelKey: 'mapPoint.tormentor',
+			descriptionKey: 'mapPoint.tormentor.detail',
+			label: 'Dire Camp',
+			description: 'Dire jungle camp ideal for stacking and vision control.',
+			type: 'Camp',
+			x: 0.60,
+			y: 0.29,
+		},
+		{
+			id: 'gate_left',
+			labelKey: 'mapPoint.twinGate',
+			descriptionKey: 'mapPoint.twinGate.detail',
+			label: 'Twin Gate',
+			description: 'A teleport gate linking the two halves of the map.',
+			type: 'Objective',
+			x: 0.18,
+			y: 0.36,
+		},
+		{
+			id: 'gate_right',
+			labelKey: 'mapPoint.twinGate',
+			descriptionKey: 'mapPoint.twinGate.detail',
+			label: 'Twin Gate',
+			description: 'A teleport gate linking the two halves of the map.',
+			type: 'Objective',
+			x: 0.82,
+			y: 0.64,
+		},
+	];
+
+	protected readonly selectedHero = signal<Hero>(this.heroes[0]);
+	protected readonly heroSearch = signal('');
+	protected readonly selectedRole = signal('all');
+	protected readonly activePosition = signal(this.rolePositions[0]);
+	protected readonly selectedMapPoint = signal(this.mapPoints[0]);
+
+	protected readonly heroFilters = computed(() => ['all', ...new Set(this.heroes.map((hero) => hero.roleKey))]);
+
+	protected readonly filteredHeroes = computed(() => {
+		const search = this.heroSearch().trim().toLowerCase();
+		const role = this.selectedRole();
+		return this.heroes.filter((hero) => {
+			const matchesRole = role === 'all' || hero.roles.includes(role);
+			const name = this.translate(hero.nameKey)?.()?.toLowerCase() ?? hero.nameKey.toLowerCase();
+			const matchesSearch = search ? name.includes(search) : true;
+			return matchesRole && matchesSearch;
+		});
+	});
+
+	protected readonly heroesByStrength = computed(() => this.heroes.filter((h) => (h.attribute || '').toLowerCase() === 'strength'));
+
+	protected readonly heroesNotStrength = computed(() => this.heroes.filter((h) => (h.attribute || '').toLowerCase() !== 'strength'));
+
+	protected selectHero(hero: Hero) {
+		this.selectedHero.set(hero);
+	}
+
+	protected setHeroFilter(filter: string) {
+		this.selectedRole.set(filter);
+	}
+
+	protected setPosition(position: Position) {
+		this.activePosition.set(position);
+	}
+
+	protected setMapPoint(point: MapPoint) {
+		this.selectedMapPoint.set(point);
+	}
+
+	// Deterministic difficulty helper for display (Easy/Medium/Hard)
+	protected difficultyFor(hero: Hero | { id?: string; name?: string; difficulty?: string }) {
+		if (!hero) return 'Medium';
+		if ((hero as any).difficulty) return (hero as any).difficulty;
+		const id = (hero as any).id || (hero as any).name || '';
+		let h = 2166136261 >>> 0;
+		for (let i = 0; i < id.length; i++) {
+			h ^= id.charCodeAt(i);
+			h = Math.imul(h, 16777619) >>> 0;
+		}
+		return ['Easy', 'Medium', 'Hard'][h % 3];
+	}
+
+	// Generate a short "origin" story describing how the hero arrived at the Battle of the Ancients
+	protected heroOrigin(hero: Hero | { id?: string; name?: string }) {
+		if (!hero) return '';
+		const id = (hero as any).id || (hero as any).name || '';
+		let h = 2166136261 >>> 0;
+		for (let i = 0; i < id.length; i++) {
+			h ^= id.charCodeAt(i);
+			h = Math.imul(h, 16777619) >>> 0;
+		}
+
+		const intros = [
+			`From distant battlefields to the Ancients,`,
+			`Called by whispers of war,`,
+			`Having followed a trail of ruin,`,
+			`Bound by oath and blood,`,
+			`Driven by a personal vendetta,`,
+		];
+
+		const motives = [
+			`they sought redemption and glory.`,
+			`they answered a summons older than kingdoms.`,
+			`they pursued a lost relic that could change fate.`,
+			`they fought to protect those who could not.`,
+			`they were drawn by the promise of power.`,
+		];
+
+		const intro = intros[h % intros.length];
+		const motive = motives[(h >> 7) % motives.length];
+
+		return `${intro} ${(hero as any).name || id} ${motive}`;
+	}
 }

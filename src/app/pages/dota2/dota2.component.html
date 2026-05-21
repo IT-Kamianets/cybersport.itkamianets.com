@@ -1,0 +1,180 @@
+<div class="dota2-page bg-[var(--c-bg-primary)] text-white">
+	<section class="dota2-hero-banner relative overflow-hidden px-4 py-20 sm:px-6 lg:px-8">
+		<div class="mx-auto max-w-[var(--container)] relative z-10">
+			<div class="max-w-3xl rounded-[2rem] border border-white/10 bg-black/50 p-8 shadow-[0_40px_120px_rgba(0,0,0,0.7)]">
+				<p class="text-sm font-semibold uppercase tracking-[0.22em] text-red-500" translate>
+					Dota 2 Wiki
+				</p>
+				<h1 class="mt-4 text-5xl font-semibold leading-tight text-white sm:text-6xl">
+					Dota 2 — Patch 7.41b
+				</h1>
+				<p class="mt-6 max-w-2xl text-lg leading-8 text-[var(--c-text)]" translate>
+					A modern Dota 2 guide for heroes, roles, map control, and the meta of patch 7.41b.
+				</p>
+				<div class="mt-8 flex flex-wrap gap-4 text-sm">
+					<span class="dota2-pill">EN / UA</span>
+					<span class="dota2-pill" translate>Patch 7.41b</span>
+					<span class="dota2-pill" translate>Dark UI</span>
+					<span class="dota2-pill" translate>Interactive map</span>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="mx-auto max-w-[var(--container)] px-4 py-12 sm:px-6 lg:py-16">
+		<nav class="tabs">
+			<button [class.active]="activeTab === 'home'" (click)="activeTab = 'home'" type="button">Головна</button>
+			<button [class.active]="activeTab === 'heroes'" (click)="activeTab = 'heroes'" type="button">Герої</button>
+			<button [class.active]="activeTab === 'items'" (click)="activeTab = 'items'" type="button">Предмети</button>
+			<button [class.active]="activeTab === 'positions'" (click)="activeTab = 'positions'" type="button">Позиції</button>
+			<button [class.active]="activeTab === 'guides'" (click)="activeTab = 'guides'" type="button">Гайди</button>
+			<button [class.active]="activeTab === 'origins'" (click)="activeTab = 'origins'" type="button">Походження</button>
+			<button [class.active]="activeTab === 'map'" (click)="activeTab = 'map'" type="button">Мапа</button>
+		</nav>
+
+		<section *ngIf="activeTab === 'home'" class="page">
+			<h1>Top 10 Strongest Heroes</h1>
+			<p>Топ 10 найсильніших героїв патчу 7.41b</p>
+
+			<div class="hero-grid">
+				<div class="hero-card" *ngFor="let hero of topHeroes">
+					<img [src]="hero.image" [alt]="hero.name" />
+					<h3>{{ hero.name }} <span class="difficulty-pill" [class.easy]="difficultyFor(hero)==='Easy'" [class.medium]="difficultyFor(hero)==='Medium'" [class.hard]="difficultyFor(hero)==='Hard'">{{ difficultyFor(hero) }}</span></h3>
+					<p>Role: {{ hero.role }}</p>
+					<p>Attribute: {{ hero.attribute }}</p>
+					<p>Winrate: {{ hero.winrate }}</p>
+				</div>
+			</div>
+		</section>
+
+		<section *ngIf="activeTab === 'heroes'" class="page">
+			<h1>All Heroes / Всі герої</h1>
+
+			<section class="mb-6">
+				<h2>Strength / Сила</h2>
+				<div class="hero-grid">
+					<div class="hero-card" *ngFor="let hero of heroesByStrength()">
+						<img [src]="hero.image" [alt]="hero.name" />
+						<h3>{{ hero.name }} <span class="difficulty-pill" [class.easy]="difficultyFor(hero)==='Easy'" [class.medium]="difficultyFor(hero)==='Medium'" [class.hard]="difficultyFor(hero)==='Hard'">{{ difficultyFor(hero) }}</span></h3>
+						<p>{{ hero.role }}</p>
+						<p>Attribute: {{ hero.attribute }}</p>
+						<p>Winrate: {{ hero.winrate }}</p>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<h2>Other Heroes</h2>
+				<div class="hero-grid">
+					<div class="hero-card" *ngFor="let hero of heroesNotStrength()">
+						<img [src]="hero.image" [alt]="hero.name" />
+						<h3>{{ hero.name }} <span class="difficulty-pill" [class.easy]="difficultyFor(hero)==='Easy'" [class.medium]="difficultyFor(hero)==='Medium'" [class.hard]="difficultyFor(hero)==='Hard'">{{ difficultyFor(hero) }}</span></h3>
+						<p>{{ hero.role }}</p>
+						<p>Attribute: {{ hero.attribute }}</p>
+						<p>Winrate: {{ hero.winrate }}</p>
+					</div>
+				</div>
+			</section>
+		</section>
+
+		<section *ngIf="activeTab === 'items'" class="page">
+			<h1>Items / Предмети</h1>
+			<p>Ключові предмети, які можна купити в Dota 2 на момент патчу 7.41c.</p>
+
+				<div class="hero-card" *ngFor="let hero of heroes">
+					<img [src]="hero.image" [alt]="hero.name" />
+					<h3>{{ hero.name }} <span class="difficulty-pill" [class.easy]="difficultyFor(hero)==='Easy'" [class.medium]="difficultyFor(hero)==='Medium'" [class.hard]="difficultyFor(hero)==='Hard'">{{ difficultyFor(hero) }}</span></h3>
+					<p>Attribute: {{ hero.attribute }}</p>
+					<p>Оптимальний білд, предмети та стратегія гри.</p>
+					<a [routerLink]="['/dota2/guide', hero.id]" [state]="{ hero: hero }" class="mt-4 inline-block rounded-full bg-[#9b1c1c] px-5 py-2 text-white transition hover:bg-[#d32f2f]">Відкрити гайд</a>
+				</div>
+				</div>
+			</div>
+		</section>
+
+		<section *ngIf="activeTab === 'positions'" class="page">
+			<h1>Positions / Позиції</h1>
+
+			<div class="position-grid">
+				<div class="position-card" *ngFor="let position of positions">
+					<h3>{{ position.name }}</h3>
+					<p>{{ position.description }}</p>
+				</div>
+			</div>
+
+			<button class="mt-10 rounded-[1rem] bg-[#9b1c1c] px-6 py-3 text-white transition hover:bg-[#d32f2f]" (click)="activeTab = 'map'" type="button">Перейти до інтерактивної мапи</button>
+		</section>
+
+		<section *ngIf="activeTab === 'guides'" class="page">
+			<h1>Hero Guides / Гайди на героїв</h1>
+
+			<div class="hero-grid">
+				<div class="hero-card" *ngFor="let hero of heroes">
+					<img [src]="hero.image" [alt]="hero.name" />
+					<h3>{{ hero.name }}</h3>
+                    <p>Attribute: {{ hero.attribute }}</p>
+                    <p>Оптимальний білд, предмети та стратегія гри.</p>
+					<a [routerLink]="['/dota2/guide', hero.id]" [state]="{ hero: hero }" class="mt-4 inline-block rounded-full bg-[#9b1c1c] px-5 py-2 text-white transition hover:bg-[#d32f2f]">Відкрити гайд</a>
+				</div>
+			</div>
+		</section>
+
+		<section *ngIf="activeTab === 'origins'" class="page">
+			<h1>Origins / Походження героїв</h1>
+
+			<div class="hero-grid">
+				<div class="hero-card" *ngFor="let hero of heroes">
+					<img [src]="hero.image" [alt]="hero.name" />
+					<h3>{{ hero.name }} <span class="difficulty-pill" [class.easy]="difficultyFor(hero)==='Easy'" [class.medium]="difficultyFor(hero)==='Medium'" [class.hard]="difficultyFor(hero)==='Hard'">{{ difficultyFor(hero) }}</span></h3>
+					<p class="list-label">{{ heroOrigin(hero) }}</p>
+					<div class="mt-3">
+						<a [routerLink]="['/dota2/guide', hero.id]" [state]="{ hero: hero }" class="inline-block rounded-full bg-[#6b21a8] px-4 py-2 text-white text-sm hover:opacity-90">Читати повністю</a>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section *ngIf="activeTab === 'map'" class="page map-page">
+			<h1>Interactive Map / Інтерактивна мапа</h1>
+
+			<div class="dota-map">
+				<img class="map-image" [src]="mapImage" alt="Dota 2 Map" />
+
+				<button
+					*ngFor="let point of mapPoints"
+					type="button"
+					class="map-point"
+					[attr.data-label]="point.label"
+					[style.top]="(point.y * 100) + '%'"
+					[style.left]="(point.x * 100) + '%'"
+					[class.is-active]="selectedMapPoint().id === point.id"
+					(click)="setMapPoint(point)"
+				></button>
+			</div>
+
+			<div class="map-controls">
+				<div class="point-details-panel">
+					<div class="details-title">{{ selectedMapPoint().label }}</div>
+					<p class="details-text">{{ selectedMapPoint().description }}</p>
+					<p class="details-text"><strong>Type:</strong> {{ selectedMapPoint().type }}</p>
+				</div>
+
+				<div class="map-list">
+					<h3>Ключові точки мапи:</h3>
+					<ul>
+						<li *ngFor="let point of mapPoints">
+							<button
+								type="button"
+								class="map-list-button"
+								[class.active]="selectedMapPoint().id === point.id"
+								(click)="setMapPoint(point)"
+							>
+								{{ point.label }}
+							</button>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+
+		<section class="mx-auto max-w-[var(--container)] px-4 pb-20 sm:px-6 lg:pb-28">

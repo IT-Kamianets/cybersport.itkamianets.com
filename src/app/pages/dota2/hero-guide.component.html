@@ -1,0 +1,105 @@
+<div class="mx-auto max-w-[var(--container)] px-4 py-12 sm:px-6 lg:py-16">
+    <a routerLink="/dota2" class="inline-block mb-4 text-sm text-white/80 hover:underline">← Повернутися до Dota 2</a>
+
+    <ng-container *ngIf="hero; else notFound">
+        <div class="hero-guide">
+            <aside class="hero-card">
+                <div class="hero-meta">
+                    <div class="hero-avatar" [style.backgroundImage]="'url(' + hero.image + ')'" aria-hidden="true"></div>
+                    <div class="hero-info">
+                        <h1 class="text-2xl">{{ hero.name }}</h1>
+                        <p class="list-label">{{ hero.role }} • {{ hero.attribute }}</p>
+                        <p class="list-label">Winrate: {{ hero.winRate || hero.winrate }}</p>
+                        <div class="stats-grid mt-3">
+                            <div *ngIf="derivedStats(hero) as s">
+                                <div class="stat"><strong>Range:</strong> {{ s.attackRange }}</div>
+                                <div class="stat"><strong>MS:</strong> {{ s.moveSpeed }}</div>
+                                <div class="stat"><strong>STR:</strong> {{ s.strength }}</div>
+                                <div class="stat"><strong>AGI:</strong> {{ s.agility }}</div>
+                                <div class="stat"><strong>INT:</strong> {{ s.intelligence }}</div>
+                                <div class="stat"><strong>DMG:</strong> {{ s.attackDamage }}</div>
+                                <div class="stat"><strong>Armor:</strong> {{ s.armor }}</div>
+                                <div class="stat"><strong>MR:</strong> {{ (s.magicResist * 100) | number:'1.0-0' }}%</div>
+                                <div class="stat"><strong>AS:</strong> {{ s.attackSpeed }}</div>
+                                <div class="stat"><strong>Difficulty:</strong> {{ s.difficulty }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <div class="section-title">Quick Facts</div>
+                    <ul class="list-label">
+                        <li *ngFor="let s of hero.strengths">{{ s }}</li>
+                        <li *ngFor="let w of hero.weaknesses">{{ w }}</li>
+                    </ul>
+                </div>
+            </aside>
+
+            <main>
+                <div class="hero-card">
+                    <div class="guide-columns">
+                        <section>
+                            <div class="section-title">Skill build / Розкачка здібностей</div>
+                            <div class="icons-row">
+                                <img *ngFor="let s of hero.skills" class="icon-token" [src]="skillIcon(s)" [alt]="s" (error)="usePlaceholder($event)" [title]="s" />
+                            </div>
+                        </section>
+
+                        <section>
+                            <div class="section-title">Items / Закупка</div>
+                            <div class="icons-row">
+                                <img *ngFor="let it of hero.items" class="icon-token" [src]="itemIcon(it)" [alt]="it" (error)="usePlaceholder($event)" [title]="it" />
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="mt-6">
+                        <div class="section-title">Build notes</div>
+                        <div class="list-label">
+                            <ul>
+                                <li *ngFor="let b of hero.build">{{ b }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <div class="section-title">Talents / Таланти</div>
+                        <div class="talents-grid">
+                            <div *ngFor="let t of derivedTalents(hero)" class="talent-row">
+                                <div class="talent-level">Lv {{ t.level }}</div>
+                                <div class="talent-left">{{ t.left }}</div>
+                                <div class="talent-right">{{ t.right }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <div class="section-title">Lore / Біографія</div>
+                        <div class="lore-card">
+                            <p class="biography">{{ (derivedLore(hero)?.biography) }}</p>
+
+                            <div class="mt-4">
+                                <div class="section-subtitle">Factions</div>
+                                <div class="factions-row">
+                                    <span *ngFor="let f of derivedLore(hero)?.factions" class="faction-pill">{{ f }}</span>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <div class="section-subtitle">Relations</div>
+                                <ul class="relations-list">
+                                    <li *ngFor="let r of derivedLore(hero)?.relations">{{ r }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </ng-container>
+
+    <ng-template #notFound>
+        <div class="rounded p-6 bg-black/60">Гайд для цього героя не знайдено.</div>
+    </ng-template>
+</div>
