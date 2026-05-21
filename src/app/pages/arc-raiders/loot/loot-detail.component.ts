@@ -5,6 +5,7 @@ import { LOOT } from './loot.data';
 import { WORKSHOP_STATIONS } from '../workshop/workshop.data';
 import { WEAPONS } from '../weapons/weapons.data';
 import { GADGETS } from '../gadgets/gadgets.data';
+import { EQUIPMENT } from '../equipment/equipment.data';
 import { MAPS } from '../maps/maps.data';
 import { map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
@@ -178,6 +179,19 @@ import { CommonModule } from '@angular/common';
 											</div>
 										</a>
 									}
+
+									<!-- Equipment -->
+									@for (equip of usedToCraftEquipment(); track equip.equipment.id) {
+										<a [routerLink]="['/arc-raiders/equipment', equip.equipment.id]" class="group rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-primary)] p-4 shadow-[var(--shadow-sm)] hover:border-[var(--c-arc-yellow)] transition-colors flex justify-between items-center">
+											<div>
+												<h3 class="mb-1 text-sm font-bold uppercase tracking-wider text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-yellow)]">{{ equip.equipment.name }}</h3>
+												<p class="text-xs text-[var(--c-text-muted)] capitalize">{{ equip.equipment.type }}</p>
+											</div>
+											<div class="bg-[var(--c-bg-secondary)] border border-[var(--c-border)] rounded px-3 py-1 text-sm font-bold text-[var(--c-text-strong)]">
+												x{{ equip.quantity }}
+											</div>
+										</a>
+									}
 								</div>
 							</section>
 						}
@@ -317,6 +331,18 @@ export class ArcRaidersLootDetailComponent {
 			}
 			return acc;
 		}, [] as { gadget: any, quantity: number }[]);
+	});
+
+	protected readonly usedToCraftEquipment = computed(() => {
+		const id = this.idParam();
+		if (!id) return [];
+		return EQUIPMENT.reduce((acc, equipment) => {
+			const req = equipment.craftingRequirements?.find(r => r.itemId === id);
+			if (req) {
+				acc.push({ equipment, quantity: req.quantity });
+			}
+			return acc;
+		}, [] as { equipment: any, quantity: number }[]);
 	});
 
 	protected readonly recycledFrom = computed(() => {

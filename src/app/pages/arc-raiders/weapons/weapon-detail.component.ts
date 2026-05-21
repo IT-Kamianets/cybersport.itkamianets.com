@@ -78,6 +78,13 @@ import { CommonModule } from '@angular/common';
 										</a>
 									}
 								</div>
+								
+								@if (w.craftingStation) {
+									<div class="mt-4 inline-flex items-center gap-2 rounded border border-[var(--c-border)] bg-[var(--c-bg-primary)] px-4 py-2 text-sm text-[var(--c-text-muted)]">
+										<span>Requires:</span>
+										<a [routerLink]="['/arc-raiders/workshop', w.craftingStation.stationId]" class="font-bold text-[var(--c-arc-yellow)] hover:underline capitalize">{{ w.craftingStation.stationId.replace('-', ' ') }} (Level {{ w.craftingStation.level }})</a>
+									</div>
+								}
 							</section>
 						}
 
