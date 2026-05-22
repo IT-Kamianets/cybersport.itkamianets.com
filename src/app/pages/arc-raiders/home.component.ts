@@ -19,22 +19,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 						Resist. Scavenge. Survive. <span class="opacity-75 text-sm font-normal ml-2">(Currently tracking 452 articles)</span>
 					</p>
 					
-					<!-- Search Bar -->
-					<div class="mt-8 w-full max-w-2xl relative">
-						<div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-							<svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-						</div>
-						<input 
-							type="search" 
-							placeholder="Search for weapons, maps, ARC variants..." 
-							class="w-full rounded-full border-2 border-[var(--c-arc-cyan)] bg-black/50 py-4 pl-12 pr-4 text-white placeholder-gray-400 backdrop-blur-sm transition-all focus:bg-black/80 focus:outline-none focus:ring-4 focus:ring-[var(--c-arc-cyan)]/30"
-						/>
-					</div>
+
 				</div>
 			</section>
 
 			<!-- 2. Quick Access Cards (Middle Section) -->
-			<section class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+			<section class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
 				@for (card of quickAccessCards; track card.title) {
 					<a [href]="card.link" class="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-6 shadow-[var(--shadow-sm)] transition-all hover:-translate-y-1 hover:border-[var(--c-arc-cyan)] hover:shadow-[var(--shadow-md)]">
 						<div class="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-gradient-to-br from-[var(--c-arc-cyan)]/20 to-transparent transition-transform group-hover:scale-150"></div>
@@ -155,12 +145,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 })
 export class ArcRaidersHomeComponent {
 	protected readonly quickAccessCards = [
-				{
-					title: 'Arsenal & Gear',
-					description: 'Browse Weapons and Mods.',
-					icon: '⚔️',
-					link: '/arc-raiders/weapons'
-				},
 		{
 			title: 'The ARC Threat',
 			description: 'Learn enemy weaknesses, from basic Drones to Heavy Walkers.',
@@ -168,15 +152,33 @@ export class ArcRaidersHomeComponent {
 			link: '/arc-raiders/enemies'
 		},
 		{
+			title: 'Arsenal',
+			description: 'Browse Weapons, Mods, and attachments.',
+			icon: '⚔️',
+			link: '/arc-raiders/weapons'
+		},
+		{
 			title: 'Rust Belt Maps',
-			description: 'Explore extraction points, breach rooms, and keycard locations.',
+			description: 'Explore conditions, puzzles, and resource locks.',
 			icon: '🗺️',
 			link: '/arc-raiders/maps'
 		},
 		{
-			title: 'Speranza Base',
+			title: 'Loot & Economy',
+			description: 'Materials, recycling yields, and rarity tiers.',
+			icon: '💎',
+			link: '/arc-raiders/loot'
+		},
+		{
+			title: 'Workshop Stations',
+			description: 'Crafting requirements, upgrades, and progression.',
+			icon: '🔧',
+			link: '/arc-raiders/workshop'
+		},
+		{
+			title: 'Guides & Intel',
 			description: 'Traders, Quests, Blueprints, and the Safe Pocket.',
-			icon: '⚙️',
+			icon: '📚',
 			link: '/arc-raiders/guides'
 		}
 	];

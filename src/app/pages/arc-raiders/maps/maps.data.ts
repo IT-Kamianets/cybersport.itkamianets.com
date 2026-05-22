@@ -33,8 +33,18 @@ export interface GameMap {
 	patchHistory: { version: string; notes: string; }[];
 }
 
+import { buriedCity } from './data/buried-city';
 import { damBattlegrounds } from './data/dam-battlegrounds';
+import { spaceport } from './data/spaceport';
+import { theBlueGate } from './data/blue-gate';
+import { rivenTides } from './data/riven-tides';
+import { stellaMontis } from './data/stella-montis';
 
 export const MAPS: GameMap[] = [
-	damBattlegrounds
+	damBattlegrounds,
+	spaceport,
+	buriedCity,
+	theBlueGate,
+	stellaMontis,
+	rivenTides
 ];

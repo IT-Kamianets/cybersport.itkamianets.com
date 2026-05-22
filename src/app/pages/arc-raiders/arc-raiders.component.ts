@@ -21,47 +21,14 @@ import ua from './i18n/ua.json';
 									{{ t()['ARC Raiders Wiki'] }}
 								</h1>
 							</div>
-							<nav class="hidden md:flex space-x-8">
-								
-								<!-- Game Info Dropdown -->
-								<div class="relative group inline-flex items-center">
-									<button class="inline-flex items-center px-1 pt-1 text-sm font-medium text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-cyan)] transition-colors"
-											[class.text-[var(--c-arc-cyan)]]="['/arc-raiders', '/arc-raiders/enemies', '/arc-raiders/maps', '/arc-raiders/guides'].includes(router.url)">
-										<span>Game Info</span>
-										<svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-									</button>
-									
-									<div class="absolute left-0 top-full hidden w-48 flex-col rounded-md border border-[var(--c-border)] bg-[var(--c-bg-primary)] shadow-lg group-hover:flex z-50 overflow-hidden">
-										<a routerLink="/arc-raiders" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="bg-[var(--c-bg-secondary)] text-[var(--c-arc-cyan)]" class="px-4 py-3 text-sm font-medium text-[var(--c-text-strong)] hover:bg-[var(--c-bg-secondary)] hover:text-[var(--c-arc-cyan)] transition-colors">{{ t()['Wiki Home'] }}</a>
-										<a routerLink="/arc-raiders/enemies" routerLinkActive="bg-[var(--c-bg-secondary)] text-[var(--c-arc-cyan)]" class="px-4 py-3 text-sm font-medium text-[var(--c-text-strong)] hover:bg-[var(--c-bg-secondary)] hover:text-[var(--c-arc-cyan)] transition-colors border-t border-[var(--c-border)]">{{ t()['Enemies'] }}</a>
-										<a routerLink="/arc-raiders/maps" routerLinkActive="bg-[var(--c-bg-secondary)] text-[var(--c-arc-cyan)]" class="px-4 py-3 text-sm font-medium text-[var(--c-text-strong)] hover:bg-[var(--c-bg-secondary)] hover:text-[var(--c-arc-cyan)] transition-colors border-t border-[var(--c-border)]">{{ t()['Maps'] }}</a>
-										<a routerLink="/arc-raiders/guides" routerLinkActive="bg-[var(--c-bg-secondary)] text-[var(--c-arc-cyan)]" class="px-4 py-3 text-sm font-medium text-[var(--c-text-strong)] hover:bg-[var(--c-bg-secondary)] hover:text-[var(--c-arc-cyan)] transition-colors border-t border-[var(--c-border)]">{{ t()['Guides'] }}</a>
-									</div>
-								</div>
-
-								<!-- Economy & Crafting Dropdown -->
-								<div class="relative group inline-flex items-center">
-									<button class="inline-flex items-center px-1 pt-1 text-sm font-medium text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-cyan)] transition-colors"
-											[class.text-[var(--c-arc-cyan)]]="['/arc-raiders/loot', '/arc-raiders/workshop'].includes(router.url)">
-										<span>Economy & Crafting</span>
-										<svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-									</button>
-									
-									<div class="absolute left-0 top-full hidden w-48 flex-col rounded-md border border-[var(--c-border)] bg-[var(--c-bg-primary)] shadow-lg group-hover:flex z-50 overflow-hidden">
-										<a routerLink="/arc-raiders/loot" routerLinkActive="bg-[var(--c-bg-secondary)] text-[var(--c-arc-cyan)]" class="px-4 py-3 text-sm font-medium text-[var(--c-text-strong)] hover:bg-[var(--c-bg-secondary)] hover:text-[var(--c-arc-cyan)] transition-colors">Loot & Economy</a>
-										<a routerLink="/arc-raiders/workshop" routerLinkActive="bg-[var(--c-bg-secondary)] text-[var(--c-arc-cyan)]" class="px-4 py-3 text-sm font-medium text-[var(--c-text-strong)] hover:bg-[var(--c-bg-secondary)] hover:text-[var(--c-arc-cyan)] transition-colors border-t border-[var(--c-border)]">Workshop</a>
-									</div>
-								</div>
-
-								<!-- Weapons Link -->
-								<div class="relative group inline-flex items-center">
-									<a routerLink="/arc-raiders/weapons"
-									   routerLinkActive="text-[var(--c-arc-cyan)]"
-									   class="inline-flex items-center px-1 pt-1 text-sm font-medium text-[var(--c-text-strong)] hover:text-[var(--c-arc-cyan)] transition-colors">
-										Weapons
-									</a>
-								</div>
-								
+							<nav class="hidden md:flex space-x-6">
+								<a routerLink="/arc-raiders" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="text-[var(--c-arc-cyan)]" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-[var(--c-text-strong)] hover:text-[var(--c-arc-cyan)] transition-colors">Home</a>
+								<a routerLink="/arc-raiders/enemies" routerLinkActive="text-[var(--c-arc-cyan)]" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-[var(--c-text-strong)] hover:text-[var(--c-arc-cyan)] transition-colors">Enemies</a>
+								<a routerLink="/arc-raiders/weapons" routerLinkActive="text-[var(--c-arc-cyan)]" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-[var(--c-text-strong)] hover:text-[var(--c-arc-cyan)] transition-colors">Weapons</a>
+								<a routerLink="/arc-raiders/maps" routerLinkActive="text-[var(--c-arc-cyan)]" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-[var(--c-text-strong)] hover:text-[var(--c-arc-cyan)] transition-colors">Maps</a>
+								<a routerLink="/arc-raiders/loot" routerLinkActive="text-[var(--c-arc-cyan)]" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-[var(--c-text-strong)] hover:text-[var(--c-arc-cyan)] transition-colors">Loot</a>
+								<a routerLink="/arc-raiders/workshop" routerLinkActive="text-[var(--c-arc-cyan)]" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-[var(--c-text-strong)] hover:text-[var(--c-arc-cyan)] transition-colors">Workshop</a>
+								<a routerLink="/arc-raiders/guides" routerLinkActive="text-[var(--c-arc-cyan)]" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-[var(--c-text-strong)] hover:text-[var(--c-arc-cyan)] transition-colors">Guides</a>
 							</nav>
 						</div>
 					</div>
