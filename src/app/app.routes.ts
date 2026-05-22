@@ -49,13 +49,13 @@ export const routes: Routes = [
 		path: 'arc-raiders',
 		data: {
 			meta: {
-				title: 'ARC Raiders',
+				title: 'ARC Raiders Wiki',
 				description:
-					'ARC Raiders co-op sessions focused on squad coordination, extraction routes, and shared objectives.',
+					'Unofficial ARC Raiders wiki: enemies, weapons, maps, and guides.',
 			},
 		},
-		loadComponent: () =>
-			import('./pages/arc-raiders/arc-raiders.component').then((m) => m.ArcRaidersComponent),
+		loadChildren: () =>
+			import('./pages/arc-raiders/arc-raiders.routes').then((m) => m.arcRaidersRoutes),
 	},
 	{
 		path: '**',
