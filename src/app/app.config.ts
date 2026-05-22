@@ -42,6 +42,7 @@ export const appConfig: ApplicationConfig = {
 			defaultLanguage: environment.defaultLanguage,
 			languages: environment.languages,
 			folder: '/i18n/',
+			folders: ['/assets/dota2/i18n/'],
 		}),
 		{
 			provide: APP_INITIALIZER,

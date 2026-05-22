@@ -35,12 +35,21 @@ export const routes: Routes = [
 		loadComponent: () => import('./pages/pubg/pubg.component').then((m) => m.PubgComponent),
 	},
 	{
+		path: 'dota2/guide/:id',
+		data: {
+			meta: {
+				title: 'Dota 2 — Hero Guide',
+			},
+		},
+		loadComponent: () => import('./pages/dota2/hero-guide.component').then((m) => m.HeroGuideComponent),
+	},
+	{
 		path: 'dota2',
 		data: {
 			meta: {
-				title: 'Dota 2',
+				title: 'Dota 2 Wiki — Patch 7.41b',
 				description:
-					'Dota 2 match days with drafts, five-player teams, strategy practice, and tournament-style games.',
+					'Dota 2 patch 7.41b guide with heroes, roles, meta builds, and interactive map support.',
 			},
 		},
 		loadComponent: () => import('./pages/dota2/dota2.component').then((m) => m.Dota2Component),
