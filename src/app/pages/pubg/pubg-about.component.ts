@@ -39,7 +39,7 @@ import { TranslateDirective } from '@wawjs/ngx-translate';
 					<div class="relative group">
 						<div class="absolute -inset-4 bg-[var(--c-primary)] opacity-20 blur-2xl group-hover:opacity-30 transition-opacity rounded-[3rem]"></div>
 						<div class="relative rounded-[2.5rem] overflow-hidden border-2 border-[var(--c-border)] shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]">
-							<img src="https://web-assets.pubg.com/pubg-world/assets/images/about/bg-about.jpg" alt="PUBG Gameplay" class="w-full h-full object-cover">
+							<img src="https://wstatic-prod-boc.krafton.com/PUBG_OFFICIAL/20230328/mbxdf34X_thumb.png" alt="PUBG Gameplay" class="w-full h-full object-cover">
 						</div>
 					</div>
 				</div>

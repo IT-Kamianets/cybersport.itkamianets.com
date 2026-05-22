@@ -60,32 +60,50 @@ export class PubgService {
 		{
 			name: 'Miramar',
 			size: '8x8 km',
-			image: 'https://web-assets.pubg.com/pubg-world/assets/images/map/map-miramar.jpg',
+			image: 'https://wstatic-prod.pubg.com/web/live/main_fa53437/img/24a088e.webp',
 			description: 'Miramar_Desc',
 		},
 		{
 			name: 'Sanhok',
 			size: '4x4 km',
-			image: 'https://web-assets.pubg.com/pubg-world/assets/images/map/map-sanhok.jpg',
+			image: 'https://wstatic-prod.pubg.com/web/live/main_fa53437/img/ad22769.webp',
 			description: 'Sanhok_Desc',
 		},
 		{
 			name: 'Vikendi',
 			size: '6x6 km',
-			image: 'https://web-assets.pubg.com/pubg-world/assets/images/map/map-vikendi.jpg',
+			image: 'https://wstatic-prod.pubg.com/web/live/main_fa53437/img/d1080a6.webp',
 			description: 'Vikendi_Desc',
 		},
 		{
 			name: 'Taego',
 			size: '8x8 km',
-			image: 'https://web-assets.pubg.com/pubg-world/assets/images/map/map-taego.jpg',
+			image: 'https://wstatic-prod.pubg.com/web/live/main_fa53437/img/19581ee.webp',
 			description: 'Taego_Desc',
 		},
 		{
 			name: 'Deston',
 			size: '8x8 km',
-			image: 'https://web-assets.pubg.com/pubg-world/assets/images/map/map-deston.jpg',
+			image: 'https://wstatic-prod.pubg.com/web/live/main_fa53437/img/e2bdf1e.webp',
 			description: 'Deston_Desc',
+		},
+		{
+			name: 'Rondo',
+			size: '8x8 km',
+			image: 'https://wstatic-prod.pubg.com/web/live/main_fa53437/img/8dad1dc.webp',
+			description: 'Rondo_Desc',
+		},
+		{
+			name: 'Karakin',
+			size: '2x2 km',
+			image: 'https://wstatic-prod.pubg.com/web/live/main_fa53437/img/c79a707.webp',
+			description: 'Karakin_Desc',
+		},
+		{
+			name: 'Paramo',
+			size: '3x3 km',
+			image: 'https://wstatic-prod.pubg.com/web/live/main_fa53437/img/b18244b.webp',
+			description: 'Paramo_Desc',
 		},
 	]);
 
