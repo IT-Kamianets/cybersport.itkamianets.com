@@ -46,31 +46,30 @@ import { CommonModule } from '@angular/common';
 			<!-- Equipment Grid -->
 			<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
 				@for (item of filteredEquipment(); track item.id) {
-					<a [routerLink]="['/arc-raiders/equipment', item.id]" class="group flex flex-col overflow-hidden rounded-xl border border-[var(--c-border)] bg-[var(--c-bg-secondary)] shadow-[var(--shadow-md)] transition-all hover:-translate-y-1 hover:border-[var(--c-arc-cyan)] hover:shadow-lg">
+					<a [routerLink]="['/arc-raiders/equipment', item.id]" [style.--rarity-color]="getRarityColor(item.rarity)" class="group flex flex-col overflow-hidden rounded-xl border border-[var(--c-border)] bg-[var(--c-bg-secondary)] shadow-[var(--shadow-md)] transition-all hover:-translate-y-1 hover:border-[var(--rarity-color)] hover:shadow-lg hover:shadow-[var(--rarity-color)]/20">
 						
 						<!-- Image / Icon Header -->
 						<div class="relative h-48 w-full bg-black">
-							<img [src]="item.image" [alt]="item.name" class="h-full w-full object-cover opacity-70 transition-opacity group-hover:opacity-100" />
-							<div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+							<!-- Subtitle glowing background for rarity -->
+							<div class="absolute inset-0 bg-gradient-to-t from-[var(--rarity-color)]/20 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
 							
-							<div class="absolute top-4 right-4 rounded bg-black/80 px-2 py-1 text-xs font-bold uppercase tracking-wider border border-[var(--c-border)]"
-								 [class.text-gray-400]="item.rarity === 'Common'"
-								 [class.text-green-400]="item.rarity === 'Uncommon'"
-								 [class.text-blue-400]="item.rarity === 'Rare'"
-								 [class.text-purple-400]="item.rarity === 'Epic'"
-								 [class.text-yellow-400]="item.rarity === 'Legendary'">
+							<div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10"></div>
+							<img [src]="item.image" [alt]="item.name" class="h-full w-full object-cover opacity-70 transition-opacity group-hover:opacity-100" />
+							
+							<div class="absolute top-4 right-4 rounded bg-black/80 px-2 py-1 text-xs font-bold uppercase tracking-wider border transition-colors border-[var(--c-border)] group-hover:border-[var(--rarity-color)] z-20"
+								 [style.color]="'var(--rarity-color)'">
 								{{ item.rarity }}
 							</div>
 							
-							<div class="absolute bottom-4 left-4 text-4xl">
+							<div class="absolute bottom-4 left-4 text-4xl z-20">
 								{{ item.icon }}
 							</div>
 						</div>
 
 						<!-- Content -->
-						<div class="flex flex-1 flex-col p-5">
-							<h2 class="text-xl font-black tracking-wide text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-cyan)] transition-colors">{{ item.name }}</h2>
-							<p class="mt-1 text-sm font-bold uppercase tracking-widest text-[var(--c-arc-cyan)]">{{ item.type }}</p>
+						<div class="relative z-10 flex flex-1 flex-col p-5 bg-gradient-to-b from-[var(--c-bg-secondary)] to-[var(--c-bg-primary)]">
+							<h2 class="text-xl font-black tracking-wide text-[var(--c-text-strong)] transition-colors group-hover:!text-[var(--rarity-color)]">{{ item.name }}</h2>
+							<p class="mt-1 text-sm font-bold uppercase tracking-widest text-[var(--c-text-muted)] group-hover:text-[var(--c-text-strong)] transition-colors">{{ item.type }}</p>
 							
 							<div class="mt-4 flex gap-4 text-sm text-[var(--c-text)]">
 								@if (item.type === 'Shield') {
@@ -114,4 +113,15 @@ export class ArcRaidersEquipmentHubComponent {
 		
 		return items;
 	});
+
+	protected getRarityColor(rarity: string): string {
+		switch (rarity) {
+			case 'Common': return '#8b8d94';
+			case 'Uncommon': return '#10b981';
+			case 'Rare': return '#3b82f6';
+			case 'Epic': return '#a855f7';
+			case 'Legendary': return '#f59e0b';
+			default: return '#eceef5';
+		}
+	}
 }

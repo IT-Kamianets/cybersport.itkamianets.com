@@ -56,22 +56,6 @@ export const arcRaidersRoutes: Routes = [
 					}
 				]
 			},
-
-			{
-				path: 'mods',
-				children: [
-					{
-						path: '',
-						loadComponent: () =>
-							import('./mods/mods-hub.component').then((m) => m.ArcRaidersModsComponent),
-					},
-					{
-						path: ':id',
-						loadComponent: () =>
-							import('./mods/mod-detail.component').then((m) => m.ArcRaidersModDetailComponent),
-					}
-				]
-			},
 			{
 				path: 'loot',
 				children: [

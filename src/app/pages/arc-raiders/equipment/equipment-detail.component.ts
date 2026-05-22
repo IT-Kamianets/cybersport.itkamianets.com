@@ -14,13 +14,13 @@ import { CommonModule } from '@angular/common';
 			
 			<!-- Breadcrumb -->
 			<nav class="mb-6 flex items-center gap-2 text-sm text-[var(--c-text-muted)]">
-				<a routerLink="/arc-raiders/equipment" class="hover:text-[var(--c-arc-cyan)] transition-colors">Equipment</a>
+				<a routerLink="/arc-raiders/equipment" class="hover:text-[var(--rarity-color)] transition-colors" [style.--rarity-color]="getRarityColor(equipment()?.rarity)">Equipment</a>
 				<span>/</span>
-				<span class="text-[var(--c-text-strong)]">{{ equipment()?.name || 'Not Found' }}</span>
+				<span class="text-[var(--c-text-strong)]" [style.color]="getRarityColor(equipment()?.rarity)">{{ equipment()?.name || 'Not Found' }}</span>
 			</nav>
 
 			@if (equipment(); as e) {
-				<div class="flex flex-col gap-10 lg:flex-row lg:items-start">
+				<div class="flex flex-col gap-10 lg:flex-row lg:items-start" [style.--rarity-color]="getRarityColor(e.rarity)">
 					
 					<!-- Left Side: Main Content Column -->
 					<div class="flex-1 space-y-10">
@@ -28,7 +28,11 @@ import { CommonModule } from '@angular/common';
 						<!-- Header -->
 						<header>
 							<h1 class="text-4xl font-black tracking-wide text-[var(--c-text-strong)]">{{ e.name }}</h1>
-							<p class="mt-2 text-lg text-[var(--c-arc-cyan)] font-medium uppercase tracking-widest">{{ e.type }}</p>
+							<p class="mt-2 inline-flex items-center gap-2 text-lg font-medium uppercase tracking-widest" [style.color]="'var(--rarity-color)'">
+								<span>{{ e.type }}</span>
+								<span class="opacity-50">•</span>
+								<span>{{ e.rarity }}</span>
+							</p>
 						</header>
 
 						<!-- 1. Overview -->
@@ -40,20 +44,20 @@ import { CommonModule } from '@angular/common';
 						<!-- 2. Crafting Requirements -->
 						@if (craftingMaterials().length > 0) {
 							<section>
-								<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-arc-cyan)] flex items-center gap-2">
+								<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold flex items-center gap-2" [style.color]="'var(--rarity-color)'">
 									<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
 									Crafting Requirements
 								</h2>
 								<div class="grid gap-4 sm:grid-cols-2">
 									@for (material of craftingMaterials(); track material.lootItem.id) {
-										<a [routerLink]="['/arc-raiders/loot', material.lootItem.id]" class="group rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-primary)] p-4 shadow-[var(--shadow-sm)] hover:border-[var(--c-arc-cyan)] transition-colors flex justify-between items-center">
+										<a [routerLink]="['/arc-raiders/loot', material.lootItem.id]" class="group rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-primary)] p-4 shadow-[var(--shadow-sm)] hover:border-[var(--rarity-color)] transition-colors flex justify-between items-center">
 											<div class="flex items-center gap-3">
-												<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-black/50 border border-[var(--c-border)] p-1 overflow-hidden">
+												<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-black/50 border border-[var(--c-border)] p-1 overflow-hidden group-hover:border-[var(--rarity-color)] transition-colors">
 													<img [src]="material.lootItem.image" [alt]="material.lootItem.name" class="h-full w-full object-contain" />
 												</div>
-												<h3 class="mb-1 text-sm font-bold uppercase tracking-wider text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-cyan)]">{{ material.lootItem.name }}</h3>
+												<h3 class="mb-1 text-sm font-bold uppercase tracking-wider text-[var(--c-text-strong)] transition-colors" [style.color]="'var(--rarity-color)'">{{ material.lootItem.name }}</h3>
 											</div>
-											<div class="bg-[var(--c-bg-secondary)] border border-[var(--c-border)] rounded px-3 py-1 text-sm font-bold text-[var(--c-text-strong)]">
+											<div class="bg-[var(--c-bg-secondary)] border border-[var(--c-border)] rounded px-3 py-1 text-sm font-bold text-[var(--c-text-strong)] group-hover:border-[var(--rarity-color)] group-hover:text-[var(--rarity-color)] transition-colors">
 												x{{ material.quantity }}
 											</div>
 										</a>
@@ -63,7 +67,7 @@ import { CommonModule } from '@angular/common';
 								@if (e.craftingStation) {
 									<div class="mt-4 inline-flex items-center gap-2 rounded border border-[var(--c-border)] bg-[var(--c-bg-primary)] px-4 py-2 text-sm text-[var(--c-text-muted)]">
 										<span>Requires:</span>
-										<a [routerLink]="['/arc-raiders/workshop', e.craftingStation.stationId]" class="font-bold text-[var(--c-arc-cyan)] hover:underline capitalize">{{ e.craftingStation.stationId.replace('-', ' ') }} (Level {{ e.craftingStation.level }})</a>
+										<a [routerLink]="['/arc-raiders/workshop', e.craftingStation.stationId]" class="font-bold hover:underline capitalize" [style.color]="'var(--rarity-color)'">{{ e.craftingStation.stationId.replace('-', ' ') }} (Level {{ e.craftingStation.level }})</a>
 									</div>
 								}
 							</section>
@@ -72,19 +76,21 @@ import { CommonModule } from '@angular/common';
 					</div>
 
 					<!-- Right Side: The Infobox (Sticky) -->
-					<aside class="w-full lg:w-80 shrink-0">
+					<aside class="w-full lg:w-80 shrink-0" [style.--rarity-color]="getRarityColor(e.rarity)">
 						<div class="sticky top-6 overflow-hidden rounded-xl border border-[var(--c-border)] bg-[var(--c-bg-secondary)] shadow-[var(--shadow-md)]">
 							
 							<div class="bg-[var(--c-bg-primary)] p-4 text-center border-b border-[var(--c-border)] flex items-center justify-center gap-3">
 								<div class="flex h-8 w-8 items-center justify-center rounded overflow-hidden">
-									<img [src]="e.image" [alt]="e.name" class="h-full w-full object-contain" />
+									<span class="text-2xl">{{ e.icon }}</span>
 								</div>
-								<h2 class="text-xl font-black tracking-wider text-[var(--c-text-strong)]">{{ e.name }}</h2>
+								<h2 class="text-xl font-black tracking-wider text-[var(--c-text-strong)]" [style.color]="'var(--rarity-color)'">{{ e.name }}</h2>
 							</div>
 							
-							<div class="bg-black/80 flex items-center justify-center p-8">
-								<div class="flex h-32 w-32 items-center justify-center">
-									<img [src]="e.image" [alt]="e.name" class="max-h-full max-w-full object-contain drop-shadow-[0_0_25px_rgba(0,255,255,0.4)]" />
+							<div class="relative bg-black/80 flex items-center justify-center p-8 h-48 border-b border-[var(--c-border)]" [style.border-bottom-color]="'var(--rarity-color)'">
+								<div class="absolute inset-0 bg-gradient-to-t from-[var(--rarity-color)]/20 via-transparent to-transparent"></div>
+								<div class="absolute inset-0" style="background: radial-gradient(circle at center, var(--rarity-color) 0%, transparent 70%); opacity: 0.15;"></div>
+								<div class="relative z-10 flex h-32 w-32 items-center justify-center">
+									<img [src]="e.image" [alt]="e.name" class="max-h-full max-w-full object-contain drop-shadow-[0_0_25px_rgba(var(--rarity-color),0.4)]" />
 								</div>
 							</div>
 
@@ -96,12 +102,7 @@ import { CommonModule } from '@angular/common';
 									</div>
 									<div class="flex justify-between border-b border-[var(--c-border)] pb-2">
 										<dt class="font-semibold text-[var(--c-text-muted)]">Rarity</dt>
-										<dd class="font-bold text-right"
-											[class.text-gray-400]="e.rarity === 'Common'"
-											[class.text-green-400]="e.rarity === 'Uncommon'"
-											[class.text-blue-400]="e.rarity === 'Rare'"
-											[class.text-purple-400]="e.rarity === 'Epic'"
-											[class.text-yellow-400]="e.rarity === 'Legendary'">
+										<dd class="font-bold text-right" [style.color]="'var(--rarity-color)'">
 											{{ e.rarity }}
 										</dd>
 									</div>
@@ -109,14 +110,14 @@ import { CommonModule } from '@angular/common';
 									@if (e.type === 'Shield') {
 										<div class="flex justify-between border-b border-[var(--c-border)] pb-2">
 											<dt class="font-semibold text-[var(--c-text-muted)]">Shield Health</dt>
-											<dd class="font-bold text-[var(--c-arc-cyan)] text-right font-mono">{{ e.shieldHealth }}</dd>
+											<dd class="font-bold text-right font-mono" [style.color]="'var(--rarity-color)'">{{ e.shieldHealth }}</dd>
 										</div>
 									}
 									
 									@if (e.type === 'Augment') {
 										<div class="flex justify-between border-b border-[var(--c-border)] pb-2">
 											<dt class="font-semibold text-[var(--c-text-muted)]">Inventory Slots</dt>
-											<dd class="font-bold text-[var(--c-arc-cyan)] text-right font-mono">+{{ e.inventorySlots }}</dd>
+											<dd class="font-bold text-right font-mono" [style.color]="'var(--rarity-color)'">+{{ e.inventorySlots }}</dd>
 										</div>
 									}
 								</dl>
@@ -163,4 +164,15 @@ export class ArcRaidersEquipmentDetailComponent {
 			};
 		});
 	});
+
+	protected getRarityColor(rarity?: string): string {
+		switch (rarity) {
+			case 'Common': return '#8b8d94';
+			case 'Uncommon': return '#10b981';
+			case 'Rare': return '#3b82f6';
+			case 'Epic': return '#a855f7';
+			case 'Legendary': return '#f59e0b';
+			default: return '#eceef5';
+		}
+	}
 }

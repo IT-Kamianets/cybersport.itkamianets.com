@@ -101,26 +101,36 @@ import { CommonModule } from '@angular/common';
 			@if (viewMode() === 'grid') {
 				<section class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 					@for (weapon of filteredWeapons(); track weapon.id) {
-						<a [routerLink]="['/arc-raiders/weapons', weapon.id]" class="group relative overflow-hidden rounded-xl border border-[var(--c-border)] bg-[var(--c-bg-secondary)] shadow-[var(--shadow-sm)] transition-all hover:-translate-y-1 hover:border-[var(--c-arc-yellow)] hover:shadow-[var(--shadow-md)]">
+						<a [routerLink]="['/arc-raiders/weapons', weapon.id]"
+						   [style.--rarity-color]="getRarityColor(weapon.rarity)"
+						   class="group relative overflow-hidden rounded-xl border border-[var(--c-border)] bg-[var(--c-bg-secondary)] shadow-[var(--shadow-sm)] transition-all hover:-translate-y-1 hover:border-[var(--rarity-color)] hover:shadow-[var(--rarity-color)] hover:shadow-lg">
 							
+							<!-- Faded gradient for rarity -->
+							<div class="absolute inset-0 z-0 bg-gradient-to-t from-[var(--rarity-color)]/20 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+
 							<!-- Image & Badge -->
-							<div class="relative h-48 w-full overflow-hidden bg-black/50 p-6 flex items-center justify-center">
-								<img [src]="weapon.image" [alt]="weapon.name" class="max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100 drop-shadow-2xl" />
+							<div class="relative z-10 h-48 w-full overflow-hidden bg-black/50 p-6 flex flex-col items-center justify-center"
+							     style="background: radial-gradient(circle at center, var(--rarity-color) 0%, transparent 80%);">
+								<div class="absolute inset-0 bg-black/80"></div>
+								<div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/90"></div>
+								<div class="absolute inset-0 bg-gradient-to-t from-[var(--rarity-color)]/30 to-transparent"></div>
+								<img [src]="weapon.image" [alt]="weapon.name" class="relative z-20 max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100 drop-shadow-2xl" />
 								
 								<!-- Top Left Badge -->
-								<div class="absolute left-3 top-3 flex items-center gap-1.5 rounded-full bg-black/70 px-2.5 py-1 text-xs font-bold text-white backdrop-blur-sm border border-white/10">
+								<div class="absolute left-3 top-3 z-30 flex items-center gap-1.5 rounded-full bg-black/70 px-2.5 py-1 text-xs font-bold text-white backdrop-blur-sm border"
+								     style="border-color: var(--rarity-color)">
 									<span>{{ weapon.icon }}</span> {{ weapon.class }}
 								</div>
 
 								<!-- Hover Stats Overlay -->
-								<div class="absolute inset-0 flex flex-col items-center justify-center bg-black/60 opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
+								<div class="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/60 opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
 									<div class="flex gap-6 text-white">
 										<div class="text-center">
-											<span class="block text-2xl font-black text-[var(--c-arc-yellow)]">{{ weapon.baseDamage || weapon.advancedStats?.damage }}</span>
+											<span class="block text-2xl font-black" style="color: var(--rarity-color)">{{ weapon.baseDamage || weapon.advancedStats?.damage }}</span>
 											<span class="text-xs uppercase tracking-wider text-gray-300">Damage</span>
 										</div>
 										<div class="text-center">
-											<span class="block text-2xl font-black text-[var(--c-arc-yellow)]">{{ weapon.magSize.toString().split(' ')[0] }}</span>
+											<span class="block text-2xl font-black" style="color: var(--rarity-color)">{{ weapon.magSize.toString().split(' ')[0] }}</span>
 											<span class="text-xs uppercase tracking-wider text-gray-300">Mag Size</span>
 										</div>
 									</div>
@@ -128,10 +138,10 @@ import { CommonModule } from '@angular/common';
 							</div>
 							
 							<!-- Bottom Banner -->
-							<div class="border-t border-[var(--c-border)] bg-gradient-to-b from-[var(--c-bg-secondary)] to-[var(--c-bg-primary)] p-4">
-								<h3 class="text-xl font-bold text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-yellow)] transition-colors">{{ weapon.name }}</h3>
+							<div class="relative z-10 border-t border-[var(--c-border)] bg-gradient-to-b from-[var(--c-bg-secondary)] to-[var(--c-bg-primary)] p-4">
+								<h3 class="text-xl font-bold text-[var(--c-text-strong)] transition-colors group-hover:!text-[var(--rarity-color)]">{{ weapon.name }}</h3>
 								<div class="mt-1 flex items-center gap-2 text-xs text-[var(--c-text-muted)]">
-									<span class="rounded bg-[var(--c-bg-primary)] px-2 py-0.5 border border-[var(--c-border)]">{{ weapon.rarity }}</span>
+									<span class="rounded bg-[var(--c-bg-primary)] px-2 py-0.5 border border-[var(--c-border)] transition-colors group-hover:border-[var(--rarity-color)] group-hover:text-[var(--rarity-color)]">{{ weapon.rarity }}</span>
 									<span class="rounded bg-[var(--c-bg-primary)] px-2 py-0.5 border border-[var(--c-border)]">{{ weapon.ammoType }}</span>
 								</div>
 							</div>
@@ -161,11 +171,12 @@ import { CommonModule } from '@angular/common';
 							</thead>
 							<tbody class="divide-y divide-[var(--c-border)]">
 								@for (weapon of filteredWeapons(); track weapon.id) {
-									<tr class="hover:bg-[var(--c-bg-primary)]/50 transition-colors">
+									<tr class="hover:bg-[var(--c-bg-primary)]/50 transition-colors group" [style.--rarity-color]="getRarityColor(weapon.rarity)">
 										<td class="px-6 py-4">
-											<a [routerLink]="['/arc-raiders/weapons', weapon.id]" class="font-bold text-[var(--c-text-strong)] hover:text-[var(--c-arc-yellow)] flex items-center gap-3">
-												<div class="flex h-10 w-16 items-center justify-center rounded border border-[var(--c-border)] bg-black/50 p-1">
-													<img [src]="weapon.image" class="max-h-full max-w-full object-contain" alt="">
+											<a [routerLink]="['/arc-raiders/weapons', weapon.id]" class="font-bold text-[var(--c-text-strong)] group-hover:text-[var(--rarity-color)] flex items-center gap-3 transition-colors">
+												<div class="relative flex h-10 w-16 items-center justify-center rounded border border-[var(--c-border)] bg-black/50 p-1 overflow-hidden group-hover:border-[var(--rarity-color)] transition-colors">
+													<div class="absolute inset-0 bg-gradient-to-t from-[var(--rarity-color)]/20 to-transparent"></div>
+													<img [src]="weapon.image" class="relative z-10 max-h-full max-w-full object-contain" alt="">
 												</div>
 												{{ weapon.name }}
 											</a>
@@ -217,4 +228,15 @@ export class ArcRaidersWeaponsComponent {
 			return classMatch && rarityMatch && ammoMatch;
 		});
 	});
+
+	protected getRarityColor(rarity: string): string {
+		switch (rarity) {
+			case 'Common': return '#8b8d94';
+			case 'Uncommon': return '#10b981';
+			case 'Rare': return '#3b82f6';
+			case 'Epic': return '#a855f7';
+			case 'Legendary': return '#f59e0b';
+			default: return '#eceef5';
+		}
+	}
 }

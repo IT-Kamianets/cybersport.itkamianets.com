@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 	selector: 'app-loot-detail',
 	imports: [RouterLink, CommonModule],
 	template: `
-		<div class="pb-12">
+		<div class="pb-12" [style.--rarity-color]="getRarityColor(item()?.rarity)">
 			
 			<!-- Breadcrumb -->
 			<nav class="mb-6 flex items-center gap-2 text-sm text-[var(--c-text-muted)]">
@@ -31,12 +31,7 @@ import { CommonModule } from '@angular/common';
 						<!-- Header -->
 						<header>
 							<h1 class="text-4xl font-black tracking-wide text-[var(--c-text-strong)]">{{ i.name }}</h1>
-							<p class="mt-2 text-lg font-medium uppercase tracking-widest"
-							   [class.text-gray-400]="i.rarity === 'Common'"
-							   [class.text-green-400]="i.rarity === 'Uncommon'"
-							   [class.text-blue-400]="i.rarity === 'Rare'"
-							   [class.text-purple-400]="i.rarity === 'Epic'"
-							   [class.text-yellow-400]="i.rarity === 'Legendary'">
+							<p class="mt-2 text-lg font-medium uppercase tracking-widest text-[var(--rarity-color)]">
 								{{ i.rarity }} {{ i.category }}
 							</p>
 						</header>
@@ -187,17 +182,18 @@ import { CommonModule } from '@angular/common';
 
 					<!-- Right Side: The Infobox (Sticky) -->
 					<aside class="w-full lg:w-80 shrink-0">
-						<div class="sticky top-6 overflow-hidden rounded-xl border border-[var(--c-border)] bg-[var(--c-bg-secondary)] shadow-[var(--shadow-md)]">
+						<div class="sticky top-6 overflow-hidden rounded-xl border border-[var(--rarity-color)] bg-[var(--c-bg-secondary)] shadow-[var(--shadow-md)]">
 							
-							<div class="bg-[var(--c-bg-primary)] p-4 text-center border-b border-[var(--c-border)] flex items-center justify-center gap-3">
+							<div class="bg-[var(--c-bg-primary)] p-4 text-center border-b border-[var(--rarity-color)] flex items-center justify-center gap-3">
 								<div class="flex h-8 w-8 items-center justify-center rounded overflow-hidden">
 									<img [src]="i.image" [alt]="i.name" class="h-full w-full object-contain" />
 								</div>
 								<h2 class="text-xl font-black tracking-wider text-[var(--c-text-strong)]">{{ i.name }}</h2>
 							</div>
 							
-							<div class="bg-black/80 flex items-center justify-center p-8">
-								<div class="flex h-32 w-32 items-center justify-center">
+							<div class="bg-black/80 flex items-center justify-center p-8 relative">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[var(--rarity-color)]/20 to-transparent"></div>
+								<div class="relative z-10 flex h-32 w-32 items-center justify-center">
 									<img [src]="i.image" [alt]="i.name" class="max-h-full max-w-full object-contain drop-shadow-2xl" />
 								</div>
 							</div>
@@ -206,12 +202,7 @@ import { CommonModule } from '@angular/common';
 								<dl class="space-y-3">
 									<div class="flex justify-between border-b border-[var(--c-border)] pb-2">
 										<dt class="font-semibold text-[var(--c-text-muted)]">Rarity</dt>
-										<dd class="font-bold text-right"
-											[class.text-gray-400]="i.rarity === 'Common'"
-											[class.text-green-400]="i.rarity === 'Uncommon'"
-											[class.text-blue-400]="i.rarity === 'Rare'"
-											[class.text-purple-400]="i.rarity === 'Epic'"
-											[class.text-yellow-400]="i.rarity === 'Legendary'">
+										<dd class="font-bold text-right text-[var(--rarity-color)]">
 											{{ i.rarity }}
 										</dd>
 									</div>
@@ -347,4 +338,15 @@ export class ArcRaidersLootDetailComponent {
 			return acc;
 		}, [] as { map: any, poi: any }[]);
 	});
+
+	protected getRarityColor(rarity?: string): string {
+		switch (rarity) {
+			case 'Common': return '#8b8d94';
+			case 'Uncommon': return '#10b981';
+			case 'Rare': return '#3b82f6';
+			case 'Epic': return '#a855f7';
+			case 'Legendary': return '#f59e0b';
+			default: return '#eceef5';
+		}
+	}
 }
