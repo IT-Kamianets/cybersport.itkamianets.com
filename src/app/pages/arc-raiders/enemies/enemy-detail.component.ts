@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ENEMIES } from './enemies.data';
 import { map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
+import { resolveLootItem } from '../loot/loot.data';
 
 @Component({
 	selector: 'app-enemy-detail',
@@ -42,12 +43,12 @@ import { CommonModule } from '@angular/common';
 						<section>
 							<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-text-strong)]">Behavior & Attacks</h2>
 							<ul class="space-y-4 text-[var(--c-text)]">
-								@for (beh of e.behavior; track beh.mode) {
+								@for (beh of e.abilities; track beh) {
 									<li class="flex gap-3">
 										<span class="mt-1 flex h-2 w-2 shrink-0 rounded-full bg-[var(--c-arc-yellow)]"></span>
 										<div>
-											<strong class="text-[var(--c-text-strong)]">{{ beh.mode }}:</strong> 
-											{{ beh.description }}
+											<strong class="text-[var(--c-text-strong)]">{{ beh.split(':')[0] }}:</strong> 
+											{{ beh.split(':').slice(1).join(':') }}
 										</div>
 									</li>
 								}
@@ -62,38 +63,56 @@ import { CommonModule } from '@angular/common';
 							</h2>
 							
 							<div class="grid gap-4 sm:grid-cols-2 mb-6">
-								@for (weak of e.weakPoints; track weak.point) {
+								@for (weak of e.weaknesses; track weak) {
 									<div class="rounded-lg border border-[var(--c-arc-red)]/30 bg-[var(--c-arc-red)]/5 p-4 shadow-[var(--shadow-sm)]">
-										<h3 class="mb-2 text-sm font-bold uppercase tracking-wider text-[var(--c-arc-red)]">{{ weak.point }}</h3>
-										<p class="text-sm text-[var(--c-text)]">{{ weak.description }}</p>
+										<h3 class="mb-2 text-sm font-bold uppercase tracking-wider text-[var(--c-arc-red)]">{{ weak.split(':')[0] }}</h3>
+										<p class="text-sm text-[var(--c-text)]">{{ weak.split(':').slice(1).join(':') }}</p>
 									</div>
 								}
 							</div>
 							
 							<div class="rounded-xl border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-6 shadow-sm">
 								<h3 class="font-bold text-[var(--c-text-strong)] mb-2 uppercase text-sm tracking-wider">Tactical Approach</h3>
-								<p class="text-[var(--c-text)] leading-relaxed">{{ e.tactics }}</p>
+								<ul class="list-disc list-inside text-[var(--c-text)] leading-relaxed space-y-2">
+									@for (tactic of e.tactics; track tactic) {
+										<li>{{ tactic }}</li>
+									}
+								</ul>
 							</div>
 						</section>
 
 						<!-- 4. Loot Drops -->
 						<section>
 							<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-text-strong)]">Loot Drops</h2>
-							<div class="grid gap-4 sm:grid-cols-3">
-								<div class="rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-4 border-t-4 border-t-gray-400">
-									<h3 class="text-xs font-bold uppercase text-gray-500 mb-2">Guaranteed</h3>
-									<p class="text-sm text-[var(--c-text-strong)] font-medium">{{ e.lootDrops.guaranteed }}</p>
-								</div>
-								<div class="rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-4 border-t-4 border-t-green-500">
-									<h3 class="text-xs font-bold uppercase text-green-500 mb-2">Common</h3>
-									<p class="text-sm text-[var(--c-text-strong)] font-medium">{{ e.lootDrops.common }}</p>
-								</div>
-								<div class="rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-4 border-t-4 border-t-purple-500">
-									<h3 class="text-xs font-bold uppercase text-purple-500 mb-2">Rare</h3>
-									<p class="text-sm text-[var(--c-text-strong)] font-medium">{{ e.lootDrops.rare }}</p>
-								</div>
+							<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+								@for (lootId of e.lootDropIds; track lootId) {
+									<a [routerLink]="['/arc-raiders/loot', lootId]" class="group flex items-center gap-3 rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-3 shadow-sm transition-colors hover:border-[var(--c-arc-cyan)] hover:bg-[var(--c-arc-cyan)]/10">
+										<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-black/50 border border-[var(--c-border)] p-1 overflow-hidden group-hover:border-[var(--c-arc-cyan)] transition-colors">
+											<img [src]="getLootItem(lootId).image" [alt]="getLootItem(lootId).name" class="h-full w-full object-contain" />
+										</div>
+										<div class="flex flex-col">
+											<span class="text-sm font-bold text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-cyan)] transition-colors">{{ getLootItem(lootId).name }}</span>
+											<span class="text-xs text-[var(--c-text-muted)]">{{ getLootItem(lootId).rarity }} • {{ getLootItem(lootId).category }}</span>
+										</div>
+									</a>
+								}
 							</div>
 						</section>
+
+						<!-- 4.5. XP Rewards -->
+						@if (e.xpGained && e.xpGained.length > 0) {
+							<section>
+								<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-text-strong)]">XP Rewards</h2>
+								<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+									@for (xpReward of e.xpGained; track xpReward.action) {
+										<div class="flex items-center justify-between rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-3 shadow-[var(--shadow-sm)]">
+											<span class="text-sm font-medium text-[var(--c-text-strong)]">{{ xpReward.action }}</span>
+											<span class="rounded bg-black/40 px-2 py-0.5 text-xs font-bold text-[var(--c-arc-cyan)]">+{{ xpReward.xp }} XP</span>
+										</div>
+									}
+								</div>
+							</section>
+						}
 
 						<!-- 5. Lore / Field Notes -->
 						<section>
@@ -102,6 +121,39 @@ import { CommonModule } from '@angular/common';
 								<p class="leading-loose">{{ e.lore }}</p>
 							</div>
 						</section>
+
+						<!-- 6. Achievement Tips -->
+						@if (e.achievementTips && e.achievementTips.length > 0) {
+							<section>
+								<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-arc-yellow)] flex items-center gap-2">
+									<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+									Achievement Tips
+								</h2>
+								<ul class="space-y-3 text-[var(--c-text)]">
+									@for (tip of e.achievementTips; track tip) {
+										<li class="flex items-start gap-3 rounded-lg bg-[var(--c-bg-primary)] p-4 border-l-4 border-[var(--c-arc-yellow)] shadow-[var(--shadow-sm)]">
+											<span>{{ tip }}</span>
+										</li>
+									}
+								</ul>
+							</section>
+						}
+
+						<!-- 7. Patch History -->
+						@if (e.patchHistory && e.patchHistory.length > 0) {
+							<section>
+								<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-text-strong)]">Patch History</h2>
+								<div class="relative pl-4 border-l-2 border-[var(--c-border)] space-y-6">
+									@for (patch of e.patchHistory; track patch.version) {
+										<div class="relative">
+											<div class="absolute -left-[21px] top-1.5 h-3 w-3 rounded-full bg-[var(--c-bg-secondary)] border-2 border-[var(--c-arc-yellow)]"></div>
+											<h3 class="font-bold text-[var(--c-text-strong)]">{{ patch.version }}</h3>
+											<p class="mt-1 text-sm text-[var(--c-text)]">{{ patch.notes }}</p>
+										</div>
+									}
+								</div>
+							</section>
+						}
 
 					</div>
 
@@ -136,8 +188,14 @@ import { CommonModule } from '@angular/common';
 									</div>
 									<div class="flex flex-col border-b border-[var(--c-border)] pb-2 gap-1">
 										<dt class="font-semibold text-[var(--c-text-muted)]">Armor Type</dt>
-										<dd class="font-medium text-[var(--c-text-strong)]">{{ e.armorType }}</dd>
+										<dd class="font-medium text-[var(--c-text-strong)]">{{ e.armor }}</dd>
 									</div>
+									@if (e.health) {
+										<div class="flex justify-between border-b border-[var(--c-border)] pb-2">
+											<dt class="font-semibold text-[var(--c-text-muted)]">Health</dt>
+											<dd class="font-medium text-[var(--c-text-strong)] text-right">{{ e.health }}</dd>
+										</div>
+									}
 									<div class="flex flex-col border-b border-[var(--c-border)] pb-2 gap-1">
 										<dt class="font-semibold text-[var(--c-text-muted)]">Primary Attack</dt>
 										<dd class="font-medium text-[var(--c-text-strong)] text-[var(--c-arc-yellow)]">{{ e.primaryAttack }}</dd>
@@ -145,10 +203,6 @@ import { CommonModule } from '@angular/common';
 									<div class="flex flex-col border-b border-[var(--c-border)] pb-2 gap-1">
 										<dt class="font-semibold text-[var(--c-text-muted)]">Secondary Attack</dt>
 										<dd class="font-medium text-[var(--c-text-strong)] text-[var(--c-arc-yellow)]">{{ e.secondaryAttack }}</dd>
-									</div>
-									<div class="flex flex-col pt-1 gap-1">
-										<dt class="font-semibold text-[var(--c-text-muted)]">Spawns In</dt>
-										<dd class="font-medium text-[var(--c-text-strong)] text-[var(--c-arc-cyan)]">{{ e.spawnsIn }}</dd>
 									</div>
 								</dl>
 							</div>
@@ -194,4 +248,8 @@ export class ArcRaidersEnemyDetailComponent {
 		const id = this.idParam();
 		return ENEMIES.find(e => e.id === id);
 	});
+
+	protected getLootItem(id: string) {
+		return resolveLootItem(id);
+	}
 }

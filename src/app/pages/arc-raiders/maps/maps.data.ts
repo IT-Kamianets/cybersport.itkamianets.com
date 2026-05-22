@@ -1,17 +1,17 @@
-export interface MapPoi {
-	id: string;
-	type: 'extraction' | 'loot' | 'boss' | 'landmark';
-	requiredKeyId?: string;
-	x: number; // percentage from left
-	y: number; // percentage from top
+export interface MapPuzzle {
 	title: string;
-	description: string;
-	icon: string;
+	steps: string[];
+	requiredGadgets?: string[];
 }
 
-export interface MapSection {
+export interface MapResourceLock {
 	title: string;
 	description: string;
+	requiredItems: { 
+		category: 'Large' | 'Small'; 
+		itemIds: string[]; 
+		quantity: string; 
+	}[];
 }
 
 export interface GameMap {
@@ -20,20 +20,21 @@ export interface GameMap {
 	environment: string;
 	size: 'Small' | 'Medium' | 'Large';
 	maxSquads: number;
-	signatureThreat: string;
 	overview: string;
 	thumbnail: string;
 	mapImage: string;
-	pois: MapPoi[];
-	extractions: MapSection[];
-	highValueTargets: MapSection[];
-	hazards: MapSection[];
+	
+	conditions: string[];
+	puzzles?: MapPuzzle[];
+	resourceLocks?: MapResourceLock[];
+	
+	extractions: { title: string; description: string; }[];
+	lore: string;
+	patchHistory: { version: string; notes: string; }[];
 }
 
 import { damBattlegrounds } from './data/dam-battlegrounds';
-import { buriedCity } from './data/buried-city';
 
 export const MAPS: GameMap[] = [
-	damBattlegrounds,
-	buriedCity
+	damBattlegrounds
 ];

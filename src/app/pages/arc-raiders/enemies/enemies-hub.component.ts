@@ -98,11 +98,11 @@ import { CommonModule } from '@angular/common';
 							<div class="absolute inset-0 flex flex-col items-center justify-center bg-black/80 opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100 p-6 text-center">
 								<div class="mb-4">
 									<span class="block text-xs uppercase tracking-wider text-[var(--c-text-muted)]">Primary Weakness</span>
-									<span class="text-lg font-bold text-[var(--c-arc-yellow)]">{{ enemy.primaryWeakness }}</span>
+									<span class="text-lg font-bold text-[var(--c-arc-yellow)]">{{ enemy.weaknesses && enemy.weaknesses.length > 0 ? (enemy.weaknesses[0].split(':')[0] || 'Unknown') : 'Unknown' }}</span>
 								</div>
 								<div>
 									<span class="block text-xs uppercase tracking-wider text-[var(--c-text-muted)]">Key Drop</span>
-									<span class="text-lg font-bold text-[var(--c-arc-cyan)]">{{ enemy.keyDrop }}</span>
+									<span class="text-lg font-bold text-[var(--c-arc-cyan)]">{{ enemy.keyDropId || 'None' }}</span>
 								</div>
 							</div>
 						</div>

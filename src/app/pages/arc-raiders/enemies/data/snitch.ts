@@ -2,31 +2,33 @@ import { Enemy } from '../enemies.data';
 
 export const snitch: Enemy = {
 	id: 'snitch',
-	name: 'Snitch Drone',
+	name: 'Snitch',
 	threatLevel: 'Standard',
 	mobility: 'Aerial',
 	damageType: 'Energy/Laser',
-	armorType: 'Light Shielding',
-	primaryAttack: 'Target Designator (Calls Reinforcements)',
-	secondaryAttack: 'Light Plasma Volley',
-	spawnsIn: 'Open fields, patrolling extraction zones',
-	overview: 'The Snitch is a scout drone that patrols the skies. While its offensive capabilities are minimal, it serves as the eyes of the ARC network. If it spots a Raider, it will paint the target with a laser and call in drop-pods containing heavier combat units.',
-	behavior: [
-		{ mode: 'Search Pattern', description: 'Flies in large circular patterns scanning the ground with a sweeping blue cone.' },
-		{ mode: 'Alert Mode', description: 'Cone turns red, it emits a loud siren, and begins dodging incoming fire while summoning reinforcements.' }
+	armor: 'None',
+	health: 158,
+	primaryAttack: 'None',
+	abilities: ['Summon ARC'],
+	weaknesses: ['Thrusters'],
+	xpGained: [
+		{ action: 'Destroy', xp: 100 },
+		{ action: 'Scavenging Core', xp: 200 }
 	],
-	weakPoints: [
-		{ point: 'Rotor Hubs', description: 'Destroying any of the four rotor hubs will send the drone crashing to the ground.' }
+	overview: 'The Snitch is a small, unarmed ARC reconnaissance drone that diligently searches the environment for Raider activity. Its wide-angle scanner projects a visible beam resembling a spotlight, which the drone uses to detects targets. Once a Raider is spotted, the Snitch alerts nearby ARC and calls down reinforcements from orbit before making its escape.',
+	tactics: [
+		'The Snitch relies on four unarmored thrusters for flight and stabilization. Destroying multiple thrusters in any combination will destabilize the drone, causing it to lose flight control and spiral into the ground. Each collision with the environment inflicts heavy damage, with a high probability of permanently disabling or destroying the machine.',
+		'A few well-placed shots with a Weapon that fires Medium or Heavy Ammo is usually enough to destroy a Snitch before it begins calling for reinforcements.',
+		'Hiding in heavy foliage may be enough to avoid being spotted by its scanner.',
+		'Reinforcements are only guaranteed to appear after the Snitch begins the third in its series of calls.',
+		'Snitches become significantly harder to hit when their thrusters are destroyed, as their flight becomes erratic and unpredictable.'
 	],
-	tactics: 'Stealth is preferred. If you must engage, coordinate with your squad to destroy it instantly before it can finish its alert broadcast. Smoke grenades break its line of sight and interrupt the summoning sequence.',
-	lootDrops: {
-		guaranteed: '5x Scrap Metal, 1x Energy Cell.',
-		common: 'Sensor Optics.',
-		rare: 'Pristine ARC Communication Array.'
-	},
-	lore: '"The Snitch doesn\'t kill you. It just invites the guys who will." - Resistance Radio Broadcast',
-	primaryWeakness: 'Coordinated Burst Fire',
-	keyDrop: 'Sensor Optics',
+	lootDropIds: [
+		'arc-powercell', 'arc-alloy', 'snitch-scanner', 
+		'arc-synthetic-resin', 'arc-thermo-lining', 'sensors'
+	],
+	keyDropId: 'snitch-scanner',
+	lore: 'Pesky and vigilant, the Snitch is an unarmed reconnaissance drone, equipped with advanced scanning technology. They are frequently found patrolling strategic areas or scouting ahead for other enemy units. If it detects any human threat, it calls in reinforcements from orbit.\n\nThe purpose of the Snitch seems to be to uphold communication networks and coordinate orbital drops. Shani refers to them as ARC\'s "eyes in the sky"; calling in reinforcements and maintaining operational awareness.\n\nThe ability to call in reinforcements make Snitches a high-priority target for Raiders who want to avoid escalating encounters. However, some Raiders have been known to intentionally aggravate it in a bid to conveniently harvest Wasp and Hornet Drivers.',
 	image: 'https://arcraiders.wiki/w/images/c/c6/ARC_Snitch.png',
-	icon: '💀💀'
+	icon: '👁️'
 };

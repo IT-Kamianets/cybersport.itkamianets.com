@@ -2,6 +2,7 @@ export interface StationTier {
 	level: number;
 	title: string;
 	description: string;
+	image?: string;
 	upgradeCosts: { itemId: string; quantity: number }[];
 }
 
@@ -10,6 +11,7 @@ export interface WorkshopStation {
 	name: string;
 	description: string;
 	icon: string;
+	image?: string;
 	tiers: StationTier[];
 }
 

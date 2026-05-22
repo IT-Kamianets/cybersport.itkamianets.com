@@ -4,7 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { WORKSHOP_STATIONS } from './workshop.data';
 import { LOOT, resolveLootItem } from '../loot/loot.data';
 import { WEAPONS } from '../weapons/weapons.data';
-import { EQUIPMENT } from '../equipment/equipment.data';
+
 import { map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 
@@ -22,13 +22,22 @@ import { CommonModule } from '@angular/common';
 			</nav>
 
 			@if (station(); as s) {
-				<header class="mb-10 border-b border-[var(--c-border)] pb-8 flex items-center gap-6">
-					<div class="flex h-24 w-24 items-center justify-center rounded-xl bg-[var(--c-bg-secondary)] border border-[var(--c-border)] text-5xl shadow-[var(--shadow-md)]">
-						{{ s.icon }}
-					</div>
-					<div>
-						<h1 class="text-4xl font-black tracking-widest text-[var(--c-text-strong)]">{{ s.name }}</h1>
-						<p class="mt-2 text-lg text-[var(--c-text)] max-w-3xl">{{ s.description }}</p>
+				<header class="mb-10 overflow-hidden rounded-2xl border border-[var(--c-border)] bg-[var(--c-bg-secondary)] shadow-[var(--shadow-md)] relative">
+					@if (s.image) {
+						<div class="absolute inset-0 z-0 opacity-30 mix-blend-screen pointer-events-none">
+							<img [src]="s.image" [alt]="s.name" class="w-full h-full object-cover" />
+							<div class="absolute inset-0 bg-gradient-to-t from-[var(--c-bg-secondary)] via-[var(--c-bg-secondary)]/50 to-transparent"></div>
+							<div class="absolute inset-0 bg-gradient-to-r from-[var(--c-bg-secondary)] via-transparent to-transparent"></div>
+						</div>
+					}
+					<div class="relative z-10 p-8 flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left">
+						<div class="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl bg-[var(--c-bg-primary)]/80 backdrop-blur-sm border border-[var(--c-border)] text-5xl shadow-[var(--shadow-md)]">
+							{{ s.icon }}
+						</div>
+						<div>
+							<h1 class="text-4xl font-black tracking-widest text-[var(--c-text-strong)]">{{ s.name }}</h1>
+							<p class="mt-2 text-lg text-[var(--c-text)] max-w-3xl">{{ s.description }}</p>
+						</div>
 					</div>
 				</header>
 
@@ -37,8 +46,14 @@ import { CommonModule } from '@angular/common';
 						<div class="rounded-xl border border-[var(--c-border)] bg-[var(--c-bg-secondary)] overflow-hidden shadow-[var(--shadow-md)] flex flex-col md:flex-row relative">
 							
 							<!-- Left Header Section -->
-							<div class="bg-[var(--c-bg-primary)] p-8 md:w-1/3 flex flex-col items-center justify-center text-center border-b md:border-b-0 md:border-r border-[var(--c-border)]">
-								<div class="text-[var(--c-arc-cyan)] font-black text-8xl opacity-20 absolute md:relative top-4 right-4 md:top-auto md:right-auto md:mb-4 drop-shadow-lg">
+							<div class="bg-[var(--c-bg-primary)] p-8 md:w-1/3 flex flex-col items-center justify-center text-center border-b md:border-b-0 md:border-r border-[var(--c-border)] relative overflow-hidden group">
+								@if (tier.image) {
+									<div class="absolute inset-0 z-0 opacity-40 mix-blend-screen pointer-events-none transition-opacity duration-500 group-hover:opacity-60">
+										<img [src]="tier.image" [alt]="tier.title" class="w-full h-full object-cover" />
+										<div class="absolute inset-0 bg-gradient-to-t from-[var(--c-bg-primary)] via-[var(--c-bg-primary)]/40 to-transparent"></div>
+									</div>
+								}
+								<div class="text-[var(--c-arc-cyan)] font-black text-8xl opacity-20 absolute md:relative top-4 right-4 md:top-auto md:right-auto md:mb-4 drop-shadow-lg z-10 transition-transform duration-500 group-hover:scale-110">
 									{{ tier.level }}
 								</div>
 								<h2 class="text-2xl font-black tracking-wider text-[var(--c-text-strong)] relative z-10">{{ tier.title }}</h2>
@@ -75,24 +90,14 @@ import { CommonModule } from '@angular/common';
 								</div>
 
 								<!-- Unlocked Recipes -->
-								@if (tier.unlockedWeapons.length > 0 || tier.unlockedEquipment.length > 0) {
+								@if (tier.unlockedWeapons.length > 0) {
 									<div>
 										<h3 class="mb-3 border-b border-[var(--c-border)] pb-2 text-lg font-bold text-[var(--c-arc-yellow)] uppercase tracking-wider">Unlocks Crafting Recipes</h3>
 										<div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-											
 											@for (w of tier.unlockedWeapons; track w.id) {
 												<a [routerLink]="['/arc-raiders/weapons', w.id]" class="group rounded bg-[var(--c-bg-primary)] p-2 text-sm border border-[var(--c-border)] hover:border-[var(--c-arc-yellow)] transition-colors">
 													<div class="font-bold text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-yellow)] truncate">{{ w.name }}</div>
 													<div class="text-xs text-[var(--c-text-muted)] mt-0.5">Weapon</div>
-												</a>
-											}
-
-                                            
-
-											@for (e of tier.unlockedEquipment; track e.id) {
-												<a [routerLink]="['/arc-raiders/equipment', e.id]" class="group rounded bg-[var(--c-bg-primary)] p-2 text-sm border border-[var(--c-border)] hover:border-[var(--c-arc-yellow)] transition-colors">
-													<div class="font-bold text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-yellow)] truncate">{{ e.name }}</div>
-													<div class="text-xs text-[var(--c-text-muted)] mt-0.5">{{ e.type }}</div>
 												</a>
 											}
 										</div>
@@ -143,13 +148,11 @@ export class ArcRaidersStationDetailComponent {
 
 			// Reverse Lookup: What does this specific station + level unlock?
 			const unlockedWeapons = WEAPONS.filter(w => w.craftingStation?.stationId === currentStation.id && w.craftingStation?.level === tier.level);
-			const unlockedEquipment = EQUIPMENT.filter(e => e.craftingStation?.stationId === currentStation.id && e.craftingStation?.level === tier.level);
 
 			return {
 				...tier,
 				costs: mappedCosts,
-				unlockedWeapons,
-				unlockedEquipment
+				unlockedWeapons
 			};
 		});
 	});

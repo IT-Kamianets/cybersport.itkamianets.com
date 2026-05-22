@@ -81,11 +81,11 @@ import { CommonModule } from '@angular/common';
 								</div>
 							</div>
 
-							<!-- Hover Overlay (Signature Threat) -->
+							<!-- Hover Overlay -->
 							<div class="absolute inset-0 flex flex-col items-center justify-center bg-black/80 opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100 p-6 text-center">
 								<div>
-									<span class="block text-xs uppercase tracking-wider text-[var(--c-text-muted)] mb-1">Signature Threat</span>
-									<span class="text-xl font-bold text-[var(--c-arc-red)]">{{ map.signatureThreat }}</span>
+									<span class="block text-xs uppercase tracking-wider text-[var(--c-text-muted)] mb-1">Conditions</span>
+									<span class="text-sm font-bold text-[var(--c-arc-cyan)]">{{ map.conditions.length > 0 ? map.conditions.length + ' Active Conditions' : 'Normal Weather' }}</span>
 								</div>
 							</div>
 						</div>

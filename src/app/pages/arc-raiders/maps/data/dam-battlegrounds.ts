@@ -6,49 +6,50 @@ export const damBattlegrounds: GameMap = {
 	environment: 'Industrial / Forest',
 	size: 'Large',
 	maxSquads: 6,
-	signatureThreat: 'The Queen (Harvester Event)',
-	overview: 'Dam Battlegrounds is a massive, highly vertical map. The central dam acts as a natural choke point, often drawing heavy PvP firefights. Squads should stick to the wooded perimeter for stealth, or control the central comms tower to dominate the map.',
-	thumbnail: 'https://placehold.co/600x400/1a1a1a/00ff00?text=Dam+Thumbnail',
-	mapImage: 'https://placehold.co/1200x800/1a1a1a/333333?text=Dam+Battlegrounds+Top-Down+Map',
-	pois: [
+	overview: 'Alcantara Power Plant, or "The Dam", stands as a silent sentinel amidst a toxic, waterlogged land, nourishing a riot of resilient vegetation and fauna. A monument echoing with the memories of a power once generated.',
+	thumbnail: 'https://arcraiders.wiki/w/images/a/a6/Dam_Battlegrounds.png',
+	mapImage: 'https://arcraiders.wiki/w/images/thumb/9/96/Dam_Battlegrounds_Map.jpg/1920px-Dam_Battlegrounds_Map.jpg.webp',
+	
+	conditions: [
+		'Normal condition', 
+		'Lush Blooms', 
+		'Uncovered Caches', 
+		'Prospecting Probes', 
+		'Harvester', 
+		'Husk Graveyard', 
+		'Matriarch', 
+		'Electromagnetic Storm', 
+		'Night Raid', 
+		'Cold Snap', 
+		'Hurricane', 
+		'Close Scrutiny (ARC OPERATION)'
+	],
+	
+	puzzles: [
 		{
-			id: 'poi-metro',
-			type: 'extraction',
-			x: 80,
-			y: 15,
-			title: 'Metro Station Extraction',
-			description: 'Loud extraction requiring a 60-second hold. Highly exposed to sniper fire.',
-			icon: '🚁'
-		},
-		{
-			id: 'poi-hatch',
-			type: 'extraction',
-			requiredKeyId: 'blue-access-keycard',
-			x: 35,
-			y: 20,
-			title: 'Hidden Raider Hatch',
-			description: 'Instant, silent extraction. Requires Blue Access Keycard.',
-			icon: '🚁'
-		},
-		{
-			id: 'poi-tower',
-			type: 'loot',
-			x: 50,
-			y: 45,
-			title: 'Central Control Tower',
-			description: 'High density of weapon cases and medical supplies. Usually heavily contested.',
-			icon: '🔒'
-		},
-		{
-			id: 'poi-boss',
-			type: 'boss',
-			x: 30,
-			y: 75,
-			title: 'Harvester Drop Zone',
-			description: 'At 15 minutes, the Queen boss drops here. Area becomes highly radioactive.',
-			icon: '💀'
+			title: 'Controlled Access Zone',
+			steps: [
+				'Powering up a lock room: Find the Fuel Cell (often spawns on the ground floor). Carry it to the top of the room and insert it into the wall receptacle. This unlocks the room containing the fourth switch.',
+				'Activating the switches: All 4 buttons must be pressed at nearly the same time. There is a short delay allowed. This is possible with three people, but requires a Snap Hook to hit the last button in time.',
+				'Resource lock: A second door is closed; to open it, you will need to deposit randomized items into an electrical panel.'
+			],
+			requiredGadgets: ['snap-hook']
 		}
 	],
+	
+	resourceLocks: [
+		{
+			title: 'Controlled Access Zone - Resource Lock',
+			description: 'You must deposit specific items to unlock the final rewards behind that second door. These items are randomized each match.',
+			requiredItems: [
+				{ category: 'Large', itemIds: ['arc-performance-steel'], quantity: '1-x' },
+				{ category: 'Large', itemIds: ['industrial-battery', 'leaper-pulse-unit', 'motor', 'rocketeer-driver'], quantity: '1' },
+				{ category: 'Small', itemIds: ['arc-powercell', 'battery', 'wires'], quantity: '1-3' },
+				{ category: 'Small', itemIds: ['metal-parts'], quantity: '2-12' }
+			]
+		}
+	],
+	
 	extractions: [
 		{
 			title: 'The Metro Station',
@@ -63,24 +64,11 @@ export const damBattlegrounds: GameMap = {
 			description: 'Silent and instant, but requires a Blue Access Keycard to open.'
 		}
 	],
-	highValueTargets: [
-		{
-			title: 'The Control Tower',
-			description: 'Usually spawns 2x Weapon Cases and Meds, but features long sightlines making it a sniper\'s paradise.'
-		},
-		{
-			title: 'Sub-Level Breach Room',
-			description: 'Located inside the dam wall. Requires a Breach Charge to open. Guaranteed to contain Medical Supplies and Synthetic Polymers.'
-		}
-	],
-	hazards: [
-		{
-			title: 'The Harvester Drop',
-			description: 'At the 15-minute mark, the sky turns red and the ARC Harvester ship drops The Queen boss. The immediate area becomes a high-radiation zone.'
-		},
-		{
-			title: 'Rolling Fog',
-			description: 'Occasionally, dense fog covers the lower river basin, reducing visibility to 10 meters. Excellent for sneaking past Bastions, but makes spotting Snitches difficult.'
-		}
+	
+	lore: 'The Alcantara Power Plant, or The Dam, stands a silent sentinel amidst waterlogged lands. Once a rare lifeline for settlers during the age of Sunrise, it became a shell-scarred battleground during the closing battles of the First Wave.\n\nEven now, these toxic, waterlogged lands remain a hot spot for ARC skirmishes. Between the research buildings, various Dam structures and the ramshackle hydroponic domes, Raiders know it to be a reliable source of valuable loot.\n\nDuring the First Wave, the Alcantara Dam was the site for many of the conflict\'s most harrowing battles, with scars and structures still pockmarking the area today.',
+	
+	patchHistory: [
+		{ version: '1.17.0', notes: 'A new high-value loot area called the Controlled Access Zone was added.' },
+		{ version: 'Release', notes: 'Added to the game.' }
 	]
 };

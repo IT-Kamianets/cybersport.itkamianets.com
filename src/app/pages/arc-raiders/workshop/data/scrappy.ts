@@ -5,17 +5,20 @@ export const scrappy: WorkshopStation = {
 	name: 'Scrappy',
 	description: 'A rooster resident of the workshop. Scrappy periodically brings back dubiously-sourced materials (Metal Parts, Fabric, Plastic Parts, Chemicals, Rubber Parts, and Assorted Seeds) based on how long you survive in a raid.',
 	icon: '🐓',
+	image: 'https://arcraiders.wiki/w/images/7/73/Scrappy.png',
 	tiers: [
 		{
 			level: 1,
 			title: 'Fledgling',
 			description: 'Max Yield (>15m Extracted): 6x per Resource, 5x Seeds.',
+			image: 'https://arcraiders.wiki/w/images/7/73/Scrappy.png',
 			upgradeCosts: []
 		},
 		{
 			level: 2,
 			title: 'Forager',
 			description: 'Max Yield (>15m Extracted): 7x per Resource, 7x Seeds.',
+			image: 'https://arcraiders.wiki/w/images/7/73/Scrappy.png',
 			upgradeCosts: [
 				{ itemId: 'dog-collar', quantity: 1 }
 			]
@@ -24,6 +27,7 @@ export const scrappy: WorkshopStation = {
 			level: 3,
 			title: 'Scavenger',
 			description: 'Max Yield (>15m Extracted): 8x per Resource, 8x Seeds.',
+			image: 'https://arcraiders.wiki/w/images/7/73/Scrappy.png',
 			upgradeCosts: [
 				{ itemId: 'lemon', quantity: 3 },
 				{ itemId: 'apricot', quantity: 3 }
@@ -33,6 +37,7 @@ export const scrappy: WorkshopStation = {
 			level: 4,
 			title: 'Treasure Hunter',
 			description: 'Max Yield (>15m Extracted): 8x per Resource, 11x Seeds.',
+			image: 'https://arcraiders.wiki/w/images/7/73/Scrappy.png',
 			upgradeCosts: [
 				{ itemId: 'prickly-pear', quantity: 6 },
 				{ itemId: 'olives', quantity: 6 },
@@ -43,6 +48,7 @@ export const scrappy: WorkshopStation = {
 			level: 5,
 			title: 'Master Hoarder',
 			description: 'Max Yield (>15m Extracted): 8x per Resource, 13x Seeds.',
+			image: 'https://arcraiders.wiki/w/images/7/73/Scrappy.png',
 			upgradeCosts: [
 				{ itemId: 'mushroom', quantity: 12 },
 				{ itemId: 'apricot', quantity: 12 },

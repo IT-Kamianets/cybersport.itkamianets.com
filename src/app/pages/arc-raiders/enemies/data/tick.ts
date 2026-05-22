@@ -6,27 +6,35 @@ export const tick: Enemy = {
 	threatLevel: 'Fodder / Swarm',
 	mobility: 'Ground-based',
 	damageType: 'Explosive',
-	armorType: 'Light / Unarmored',
+	
+	armor: 'Light / Unarmored',
+	health: 200,
 	primaryAttack: 'Self-Destruct (Small AoE)',
 	secondaryAttack: 'Leap Attack',
-	spawnsIn: 'All Zones (often found in clusters in urban areas)',
-	overview: 'Ticks are small, fast-moving quadrupedal machines designed to overwhelm intruders through sheer numbers. Individually weak, they become a massive threat when a swarm surrounds a distracted Raider.',
-	behavior: [
-		{ mode: 'Dormant', description: 'Clings to walls or ceilings, blending into the environment until disturbed.' },
-		{ mode: 'Swarm Mode', description: 'Rushes the target erratically, attempting to leap and detonate on impact.' }
+	abilities: [
+		'Dormant: Clings to walls or ceilings, blending into the environment until disturbed.',
+		'Swarm Mode: Rushes the target erratically, attempting to leap and detonate on impact.'
 	],
-	weakPoints: [
-		{ point: 'Central Eye', description: 'Shooting the red glowing eye causes immediate detonation, often taking out nearby Ticks.' }
+	weaknesses: [
+		'Central Eye: Shooting the red glowing eye causes immediate detonation, often taking out nearby Ticks.',
+		'EMP / Explosives: Highly vulnerable to EMP and explosive damage.'
 	],
-	tactics: 'Do not let them get close. Use SMGs or Assault Rifles to pick them off at a distance. If swarmed, an EMP Grenade will instantly disable all Ticks in its radius.',
-	lootDrops: {
-		guaranteed: '1x Scrap Metal.',
-		common: 'Synthetic Polymer.',
-		rare: 'Volatile Explosive Compound.'
-	},
+	xpGained: [
+		{ action: 'Kill', xp: 20 }
+	],
+	
+	overview: 'Ticks are small, fast-moving quadrupedal machines designed to overwhelm intruders through sheer numbers. Individually weak, they become a massive threat when a swarm surrounds a distracted Raider. Spawns in All Zones (often found in clusters in urban areas).',
+	tactics: [
+		'Do not let them get close.',
+		'Use SMGs or Assault Rifles to pick them off at a distance.',
+		'If swarmed, an EMP Grenade will instantly disable all Ticks in its radius.'
+	],
+	
+	lootDropIds: ['metal-parts', 'plastic-parts', 'volatile-explosive-compound'],
+	keyDropId: 'volatile-explosive-compound',
+	
 	lore: '"Watch the ceilings. If you hear that clicking sound, you already have three of them above you." - Speranza Scavenger Guide',
-	primaryWeakness: 'EMP / Explosives',
-	keyDrop: 'Explosive Compound',
+	
 	image: 'https://arcraiders.wiki/w/images/1/17/ARC_Tick.png',
 	icon: '💀'
 };

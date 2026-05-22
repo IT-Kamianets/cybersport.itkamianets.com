@@ -4,7 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { LOOT, resolveLootItem } from './loot.data';
 import { WORKSHOP_STATIONS } from '../workshop/workshop.data';
 import { WEAPONS } from '../weapons/weapons.data';
-import { EQUIPMENT } from '../equipment/equipment.data';
+
 import { MAPS } from '../maps/maps.data';
 import { map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
@@ -123,16 +123,16 @@ import { CommonModule } from '@angular/common';
 							</section>
 						}
 						
-						@if (unlocksMapPOIs().length > 0) {
+						@if (unlocksMapResourceLocks().length > 0) {
 							<section>
 								<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-arc-green)] flex items-center gap-2">
 									<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4v-4l5.659-5.659C9.11 10.606 9 10.117 9 9.5A5.5 5.5 0 0114.5 4c1.137 0 2.22.348 3.105.952L15 7z"></path></svg>
-									Unlocks Locations
+									Unlocks Resource Locks
 								</h2>
 								<div class="grid gap-4 sm:grid-cols-2">
-									@for (unlock of unlocksMapPOIs(); track unlock.poi.id) {
+									@for (unlock of unlocksMapResourceLocks(); track unlock.lock.title) {
 										<a [routerLink]="['/arc-raiders/maps', unlock.map.id]" class="group rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-primary)] p-4 shadow-[var(--shadow-sm)] hover:border-[var(--c-arc-green)] transition-colors">
-											<h3 class="mb-1 text-sm font-bold uppercase tracking-wider text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-green)]">{{ unlock.poi.title }}</h3>
+											<h3 class="mb-1 text-sm font-bold uppercase tracking-wider text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-green)]">{{ unlock.lock.title }}</h3>
 											<p class="text-xs text-[var(--c-text-muted)]">{{ unlock.map.name }}</p>
 										</a>
 									}
@@ -140,7 +140,7 @@ import { CommonModule } from '@angular/common';
 							</section>
 						}
 
-						@if (usedToCraftWeapons().length > 0 || usedToCraftEquipment().length > 0) {
+						@if (usedToCraftWeapons().length > 0) {
 							<section>
 								<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-arc-yellow)] flex items-center gap-2">
 									<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -161,19 +161,6 @@ import { CommonModule } from '@angular/common';
 										</a>
 									}
 
-
-									<!-- Equipment -->
-									@for (equip of usedToCraftEquipment(); track equip.equipment.id) {
-										<a [routerLink]="['/arc-raiders/equipment', equip.equipment.id]" class="group rounded-lg border border-[var(--c-border)] bg-[var(--c-bg-primary)] p-4 shadow-[var(--shadow-sm)] hover:border-[var(--c-arc-yellow)] transition-colors flex justify-between items-center">
-											<div>
-												<h3 class="mb-1 text-sm font-bold uppercase tracking-wider text-[var(--c-text-strong)] group-hover:text-[var(--c-arc-yellow)]">{{ equip.equipment.name }}</h3>
-												<p class="text-xs text-[var(--c-text-muted)] capitalize">{{ equip.equipment.type }}</p>
-											</div>
-											<div class="bg-[var(--c-bg-secondary)] border border-[var(--c-border)] rounded px-3 py-1 text-sm font-bold text-[var(--c-text-strong)]">
-												x{{ equip.quantity }}
-											</div>
-										</a>
-									}
 								</div>
 							</section>
 						}
@@ -300,19 +287,7 @@ export class ArcRaidersLootDetailComponent {
 		}, [] as { weapon: any, quantity: number }[]);
 	});
 
-    
 
-	protected readonly usedToCraftEquipment = computed(() => {
-		const id = this.idParam();
-		if (!id) return [];
-		return EQUIPMENT.reduce((acc, equipment) => {
-			const req = equipment.craftingRequirements?.find(r => r.itemId === id);
-			if (req) {
-				acc.push({ equipment, quantity: req.quantity });
-			}
-			return acc;
-		}, [] as { equipment: any, quantity: number }[]);
-	});
 
 	protected readonly recycledFrom = computed(() => {
 		const id = this.idParam();
@@ -326,17 +301,19 @@ export class ArcRaidersLootDetailComponent {
 		}, [] as { item: any, yieldAmount: number }[]);
 	});
 
-	protected readonly unlocksMapPOIs = computed(() => {
+	protected readonly unlocksMapResourceLocks = computed(() => {
 		const id = this.idParam();
 		if (!id) return [];
 		return MAPS.reduce((acc, map) => {
-			map.pois.forEach(poi => {
-				if (poi.requiredKeyId === id) {
-					acc.push({ map, poi });
+			if (!map.resourceLocks) return acc;
+			map.resourceLocks.forEach(lock => {
+				const req = lock.requiredItems.find(r => r.itemIds.includes(id));
+				if (req) {
+					acc.push({ map, lock });
 				}
 			});
 			return acc;
-		}, [] as { map: any, poi: any }[]);
+		}, [] as { map: any, lock: any }[]);
 	});
 
 	protected getRarityColor(rarity?: string): string {
