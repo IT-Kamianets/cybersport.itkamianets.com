@@ -20,7 +20,7 @@ import ua from './i18n/ua.json';
 		PubgWeaponsComponent,
 	],
 	template: `
-		<div class="flex min-h-screen flex-col bg-[var(--c-bg-primary)] text-[var(--c-text)] font-sans">
+		<div class="flex min-h-screen flex-col text-[var(--c-text)] font-sans">
 			<!-- Header -->
 			<header
 				class="sticky top-0 z-50 border-b border-[var(--c-border)] bg-[var(--c-bg-secondary)]/80 backdrop-blur-md transition-all duration-300"
@@ -70,14 +70,13 @@ import ua from './i18n/ua.json';
 			</header>
 
 			<!-- Main Content -->
-			<main class="flex-1 overflow-hidden relative">
+			<main class="flex-1 overflow-hidden relative" (mousemove)="onMouseMove($event)">
 				@if (activeTab() === 'home') {
 					<div class="animate-in fade-in slide-in-from-bottom-4 duration-700">
 						<!-- Hero Welcome Section -->
 						<section class="relative pt-16 pb-20 lg:pt-24 lg:pb-32 overflow-hidden">
-							<div class="absolute inset-0 z-0">
-								<img [translate]="{ src: 'hero_image_url' }" alt="PUBG Hero" class="absolute inset-0 w-full h-full object-cover opacity-20 blur-sm scale-110">
-								<div class="absolute inset-0 bg-gradient-to-b from-[var(--c-bg-primary)] via-transparent to-[var(--c-bg-primary)]"></div>
+							<div class="absolute inset-0 z-0 pointer-events-none">
+								<div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--c-bg-secondary)]/50"></div>
 							</div>
 							
 							<div class="mx-auto max-w-[var(--container)] px-4 relative z-10 text-center">
@@ -126,15 +125,15 @@ import ua from './i18n/ua.json';
 
 									@for (marker of markers(); track marker.name) {
 										<div
-											class="absolute w-7 h-7 -translate-x-1/2 -translate-y-1/2 cursor-pointer z-10 group/marker"
+											class="absolute w-4 h-4 -translate-x-1/2 -translate-y-1/2 cursor-pointer z-10 group/marker"
 											[style.top.%]="marker.y"
 											[style.left.%]="marker.x"
 										>
 											<div class="absolute inset-0 animate-ping rounded-full bg-[#ff4d00] opacity-60"></div>
-											<div class="relative w-full h-full rounded-full border-2 border-white bg-[#ff4d00] shadow-[0_0_20px_rgba(255,77,0,0.6)] transition-all duration-300 group-hover/marker:scale-125 group-hover/marker:bg-white group-hover/marker:border-[#ff4d00]"></div>
-											<div class="absolute bottom-[calc(100%+14px)] left-1/2 -translate-x-1/2 whitespace-nowrap rounded-xl bg-black/95 px-5 py-2.5 text-sm font-black text-white opacity-0 invisible translate-y-2 transition-all duration-300 group-hover/marker:opacity-100 group-hover/marker:visible group-hover/marker:translate-y-0 shadow-2xl border border-white/10 ring-1 ring-white/20">
+											<div class="relative w-full h-full rounded-full border-[1.5px] border-white bg-[#ff4d00] shadow-[0_0_10px_rgba(255,77,0,0.6)] transition-all duration-300 group-hover/marker:scale-125 group-hover/marker:bg-white group-hover/marker:border-[#ff4d00]"></div>
+											<div class="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 whitespace-nowrap rounded-lg bg-black/95 px-3 py-1.5 text-xs font-black text-white opacity-0 invisible translate-y-2 transition-all duration-300 group-hover/marker:opacity-100 group-hover/marker:visible group-hover/marker:translate-y-0 shadow-2xl border border-white/10 ring-1 ring-white/20">
 												<span translate>{{ marker.name }}</span>
-												<div class="absolute top-full left-1/2 -translate-x-1/2 border-[7px] border-transparent border-t-black/95"></div>
+												<div class="absolute top-full left-1/2 -translate-x-1/2 border-[5px] border-transparent border-t-black/95"></div>
 											</div>
 										</div>
 									}
@@ -243,20 +242,20 @@ import ua from './i18n/ua.json';
 			</main>
 
 			<!-- Footer -->
-			<footer class="border-t border-[var(--c-border)] bg-[var(--c-bg-secondary)] py-12 lg:py-16">
+			<footer class="border-t border-[var(--c-border)] bg-[var(--c-bg-secondary)] py-3">
 				<div class="mx-auto max-w-[var(--container)] px-4 text-center">
-					<div class="mb-6 text-2xl font-black tracking-tighter text-[var(--c-primary)]">PUBG WIKI</div>
+					<div class="mb-1 text-lg font-black tracking-tighter text-[var(--c-primary)]">PUBG WIKI</div>
 					<p
-						class="mx-auto max-w-md text-sm font-semibold leading-relaxed text-[var(--c-text-muted)]"
+						class="mx-auto max-w-md text-xs font-semibold leading-relaxed text-[var(--c-text-muted)]"
 						translate
 					>
 						All rights belong to PUBG Corporation
 					</p>
-					<div class="mt-12 flex justify-center space-x-6">
-						<div class="h-1 w-12 bg-[var(--c-border)]/30 rounded-full"></div>
+					<div class="mt-2 flex justify-center space-x-6">
+						<div class="h-1 w-8 bg-[var(--c-border)]/30 rounded-full"></div>
 					</div>
 					<div
-						class="mt-12 text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--c-text-muted)] opacity-30"
+						class="mt-2 text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--c-text-muted)] opacity-30"
 					>
 						&copy; {{ currentYear }} PUBG Wiki &bull; Krafton Inc. &bull; All Rights Reserved
 					</div>
@@ -267,13 +266,15 @@ import ua from './i18n/ua.json';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PubgComponent {
-	private readonly translate = inject(TranslateService);
+	protected readonly translate = inject(TranslateService);
 	private readonly pubgService = inject(PubgService);
 
 	protected readonly currentYear = new Date().getFullYear();
 	protected readonly currentLang = this.translate.language;
 	protected readonly activeTab = signal('home');
 	protected readonly markers = this.pubgService.markers;
+	protected readonly mouseX = signal(0);
+	protected readonly mouseY = signal(0);
 
 	protected readonly tabs = [
 		{ id: 'home', label: 'Home' },
@@ -298,6 +299,15 @@ export class PubgComponent {
 
 	protected setLang(lang: string): void {
 		this.translate.setLanguage(lang);
+	}
+
+	protected onMouseMove(event: MouseEvent): void {
+		const { clientX, clientY } = event;
+		const { innerWidth, innerHeight } = window;
+		
+		// Normalize mouse position to range [-0.5, 0.5]
+		this.mouseX.set((clientX / innerWidth) - 0.5);
+		this.mouseY.set((clientY / innerHeight) - 0.5);
 	}
 }
 
