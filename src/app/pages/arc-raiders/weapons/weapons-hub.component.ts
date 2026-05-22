@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TranslateService } from '@wawjs/ngx-translate';
 import { WEAPONS } from './weapons.data';
 import { CommonModule } from '@angular/common';
 
@@ -10,9 +11,9 @@ import { CommonModule } from '@angular/common';
 		<div class="flex flex-col gap-8 pb-12">
 			
 			<header class="border-b border-[var(--c-border)] pb-6">
-				<h1 class="text-4xl font-bold text-[var(--c-text-strong)] text-[var(--c-arc-yellow)] mb-4">Weapons & Arsenal</h1>
+				<h1 class="text-4xl font-bold text-[var(--c-text-strong)] text-[var(--c-arc-yellow)] mb-4">{{ ts.translate('WEAPONS_HUB.TITLE')() }}</h1>
 				<p class="text-lg text-[var(--c-text)]">
-					Browse the arsenal available to Raiders. Filter by class, rarity, or ammo type to find the perfect gear for your next extraction.
+					{{ ts.translate('WEAPONS_HUB.SUBTITLE')() }}
 				</p>
 			</header>
 
@@ -22,7 +23,7 @@ import { CommonModule } from '@angular/common';
 					
 					<!-- Class Filter -->
 					<div class="flex flex-col gap-2">
-						<span class="text-sm font-semibold uppercase tracking-wider text-[var(--c-text-muted)]">By Class</span>
+						<span class="text-sm font-semibold uppercase tracking-wider text-[var(--c-text-muted)]">{{ ts.translate('WEAPONS_HUB.FILTER_CLASS')() }}</span>
 						<div class="flex flex-wrap gap-2">
 							@for (cls of classes; track cls) {
 								<button 
@@ -32,7 +33,7 @@ import { CommonModule } from '@angular/common';
 									[class.bg-[var(--c-bg-primary)]]="selectedClass() !== cls"
 									[class.text-[var(--c-text-strong)]]="selectedClass() !== cls"
 									class="rounded-md px-3 py-1.5 text-sm font-medium transition-colors hover:bg-[var(--c-arc-yellow)] hover:text-black">
-									{{ cls }}
+									{{ ts.translate('COMMON.' + formatKey(cls))() || cls }}
 								</button>
 							}
 						</div>
@@ -40,7 +41,7 @@ import { CommonModule } from '@angular/common';
 
 					<!-- Rarity Filter -->
 					<div class="flex flex-col gap-2">
-						<span class="text-sm font-semibold uppercase tracking-wider text-[var(--c-text-muted)]">By Rarity</span>
+						<span class="text-sm font-semibold uppercase tracking-wider text-[var(--c-text-muted)]">{{ ts.translate('WEAPONS_HUB.FILTER_RARITY')() }}</span>
 						<div class="flex flex-wrap gap-2">
 							@for (rarity of rarities; track rarity) {
 								<button 
@@ -50,7 +51,7 @@ import { CommonModule } from '@angular/common';
 									[class.bg-[var(--c-bg-primary)]]="selectedRarity() !== rarity"
 									[class.text-[var(--c-text-strong)]]="selectedRarity() !== rarity"
 									class="rounded-md px-3 py-1.5 text-sm font-medium transition-colors hover:bg-[var(--c-arc-yellow)] hover:text-black">
-									{{ rarity }}
+									{{ ts.translate('COMMON.' + formatKey(rarity))() || rarity }}
 								</button>
 							}
 						</div>
@@ -58,7 +59,7 @@ import { CommonModule } from '@angular/common';
 
 					<!-- Ammo Filter -->
 					<div class="flex flex-col gap-2">
-						<span class="text-sm font-semibold uppercase tracking-wider text-[var(--c-text-muted)]">By Ammo Type</span>
+						<span class="text-sm font-semibold uppercase tracking-wider text-[var(--c-text-muted)]">{{ ts.translate('WEAPONS_HUB.FILTER_AMMO')() }}</span>
 						<div class="flex flex-wrap gap-2">
 							@for (ammo of ammoTypes; track ammo) {
 								<button 
@@ -68,7 +69,7 @@ import { CommonModule } from '@angular/common';
 									[class.bg-[var(--c-bg-primary)]]="selectedAmmo() !== ammo"
 									[class.text-[var(--c-text-strong)]]="selectedAmmo() !== ammo"
 									class="rounded-md px-3 py-1.5 text-sm font-medium transition-colors hover:bg-[var(--c-arc-yellow)] hover:text-black">
-									{{ ammo }}
+									{{ ts.translate('COMMON.' + formatKey(ammo))() || ammo }}
 								</button>
 							}
 						</div>
@@ -77,21 +78,21 @@ import { CommonModule } from '@angular/common';
 
 				<!-- View Toggle -->
 				<div class="mt-6 flex items-center justify-between border-t border-[var(--c-border)] pt-4">
-					<span class="text-sm text-[var(--c-text-muted)]">Showing {{ filteredWeapons().length }} weapon(s)</span>
+					<span class="text-sm text-[var(--c-text-muted)]">{{ ts.translate('WEAPONS_HUB.SHOWING_COUNT')().replace('{{count}}', filteredWeapons().length.toString()) }}</span>
 					<div class="flex items-center gap-2 rounded-lg bg-[var(--c-bg-primary)] p-1">
 						<button 
 							(click)="viewMode.set('grid')"
 							[class.bg-[var(--c-bg-secondary)]]="viewMode() === 'grid'"
 							[class.shadow-sm]="viewMode() === 'grid'"
 							class="rounded-md px-3 py-1.5 text-sm font-medium text-[var(--c-text-strong)] transition-all">
-							Grid View
+							{{ ts.translate('WEAPONS_HUB.GRID_VIEW')() }}
 						</button>
 						<button 
 							(click)="viewMode.set('table')"
 							[class.bg-[var(--c-bg-secondary)]]="viewMode() === 'table'"
 							[class.shadow-sm]="viewMode() === 'table'"
 							class="rounded-md px-3 py-1.5 text-sm font-medium text-[var(--c-text-strong)] transition-all">
-							Table View
+							{{ ts.translate('WEAPONS_HUB.TABLE_VIEW')() }}
 						</button>
 					</div>
 				</div>
@@ -119,7 +120,7 @@ import { CommonModule } from '@angular/common';
 								<!-- Top Left Badge -->
 								<div class="absolute left-3 top-3 z-30 flex items-center gap-1.5 rounded-full bg-black/70 px-2.5 py-1 text-xs font-bold text-white backdrop-blur-sm border"
 								     style="border-color: var(--rarity-color)">
-									<span>{{ weapon.icon }}</span> {{ weapon.class }}
+									<span>{{ weapon.icon }}</span> {{ ts.translate('COMMON.' + formatKey(weapon.class))() || weapon.class }}
 								</div>
 
 								<!-- Hover Stats Overlay -->
@@ -127,11 +128,11 @@ import { CommonModule } from '@angular/common';
 									<div class="flex gap-6 text-white">
 										<div class="text-center">
 											<span class="block text-2xl font-black" style="color: var(--rarity-color)">{{ weapon.baseDamage || weapon.advancedStats?.damage }}</span>
-											<span class="text-xs uppercase tracking-wider text-gray-300">Damage</span>
+											<span class="text-xs uppercase tracking-wider text-gray-300">{{ ts.translate('WEAPONS_HUB.LBL_DAMAGE')() }}</span>
 										</div>
 										<div class="text-center">
 											<span class="block text-2xl font-black" style="color: var(--rarity-color)">{{ weapon.magSize.toString().split(' ')[0] }}</span>
-											<span class="text-xs uppercase tracking-wider text-gray-300">Mag Size</span>
+											<span class="text-xs uppercase tracking-wider text-gray-300">{{ ts.translate('WEAPONS_HUB.LBL_MAG_SIZE')() }}</span>
 										</div>
 									</div>
 								</div>
@@ -141,15 +142,15 @@ import { CommonModule } from '@angular/common';
 							<div class="relative z-10 border-t border-[var(--c-border)] bg-gradient-to-b from-[var(--c-bg-secondary)] to-[var(--c-bg-primary)] p-4">
 								<h3 class="text-xl font-bold text-[var(--c-text-strong)] transition-colors group-hover:!text-[var(--rarity-color)]">{{ weapon.name }}</h3>
 								<div class="mt-1 flex items-center gap-2 text-xs text-[var(--c-text-muted)]">
-									<span class="rounded bg-[var(--c-bg-primary)] px-2 py-0.5 border border-[var(--c-border)] transition-colors group-hover:border-[var(--rarity-color)] group-hover:text-[var(--rarity-color)]">{{ weapon.rarity }}</span>
-									<span class="rounded bg-[var(--c-bg-primary)] px-2 py-0.5 border border-[var(--c-border)]">{{ weapon.ammoType }}</span>
+									<span class="rounded bg-[var(--c-bg-primary)] px-2 py-0.5 border border-[var(--c-border)] transition-colors group-hover:border-[var(--rarity-color)] group-hover:text-[var(--rarity-color)]">{{ ts.translate('COMMON.' + formatKey(weapon.rarity))() || weapon.rarity }}</span>
+									<span class="rounded bg-[var(--c-bg-primary)] px-2 py-0.5 border border-[var(--c-border)]">{{ ts.translate('COMMON.' + formatKey(weapon.ammoType))() || weapon.ammoType }}</span>
 								</div>
 							</div>
 						</a>
 					}
 					@if (filteredWeapons().length === 0) {
 						<div class="col-span-full py-12 text-center text-[var(--c-text-muted)]">
-							No weapons match your selected filters.
+							{{ ts.translate('WEAPONS_HUB.NO_WEAPONS')() }}
 						</div>
 					}
 				</section>
@@ -162,11 +163,11 @@ import { CommonModule } from '@angular/common';
 						<table class="w-full text-left text-sm text-[var(--c-text)]">
 							<thead class="bg-[var(--c-bg-primary)] text-xs uppercase text-[var(--c-text-strong)] border-b border-[var(--c-border)]">
 								<tr>
-									<th class="px-6 py-4 font-semibold">Weapon</th>
-									<th class="px-6 py-4 font-semibold">Class</th>
-									<th class="px-6 py-4 font-semibold">Ammo</th>
-									<th class="px-6 py-4 font-semibold text-right">Base Dmg</th>
-									<th class="px-6 py-4 font-semibold text-right">Mag Size</th>
+									<th class="px-6 py-4 font-semibold">{{ ts.translate('WEAPONS_HUB.TH_WEAPON')() }}</th>
+									<th class="px-6 py-4 font-semibold">{{ ts.translate('WEAPONS_HUB.TH_CLASS')() }}</th>
+									<th class="px-6 py-4 font-semibold">{{ ts.translate('WEAPONS_HUB.TH_AMMO')() }}</th>
+									<th class="px-6 py-4 font-semibold text-right">{{ ts.translate('WEAPONS_HUB.TH_BASE_DMG')() }}</th>
+									<th class="px-6 py-4 font-semibold text-right">{{ ts.translate('WEAPONS_HUB.TH_MAG_SIZE')() }}</th>
 								</tr>
 							</thead>
 							<tbody class="divide-y divide-[var(--c-border)]">
@@ -181,8 +182,8 @@ import { CommonModule } from '@angular/common';
 												{{ weapon.name }}
 											</a>
 										</td>
-										<td class="px-6 py-4">{{ weapon.class }}</td>
-										<td class="px-6 py-4">{{ weapon.ammoType }}</td>
+										<td class="px-6 py-4">{{ ts.translate('COMMON.' + formatKey(weapon.class))() || weapon.class }}</td>
+										<td class="px-6 py-4">{{ ts.translate('COMMON.' + formatKey(weapon.ammoType))() || weapon.ammoType }}</td>
 										<td class="px-6 py-4 text-right font-mono font-medium">{{ weapon.baseDamage || weapon.advancedStats?.damage }}</td>
 										<td class="px-6 py-4 text-right font-mono">{{ weapon.magSize }}</td>
 									</tr>
@@ -190,7 +191,7 @@ import { CommonModule } from '@angular/common';
 								@if (filteredWeapons().length === 0) {
 									<tr>
 										<td colspan="5" class="px-6 py-8 text-center text-[var(--c-text-muted)]">
-											No weapons match your selected filters.
+											{{ ts.translate('WEAPONS_HUB.NO_WEAPONS')() }}
 										</td>
 									</tr>
 								}
@@ -204,6 +205,8 @@ import { CommonModule } from '@angular/common';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArcRaidersWeaponsComponent {
+	protected readonly ts = inject(TranslateService);
+
 	protected readonly weapons = WEAPONS;
 
 	// View Mode
@@ -238,5 +241,9 @@ export class ArcRaidersWeaponsComponent {
 			case 'Legendary': return '#f59e0b';
 			default: return '#eceef5';
 		}
+	}
+
+	protected formatKey(str: string): string {
+		return str.trim().toUpperCase().replace(/[^A-Z0-9]+/g, '_').replace(/^_+|_+$/g, '');
 	}
 }

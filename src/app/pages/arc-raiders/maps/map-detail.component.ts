@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { TranslateService } from '@wawjs/ngx-translate';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MAPS } from './maps.data';
@@ -14,9 +15,9 @@ import { CommonModule } from '@angular/common';
 			
 			<!-- Breadcrumb -->
 			<nav class="mb-6 flex items-center gap-2 text-sm text-[var(--c-text-muted)]">
-				<a routerLink="/arc-raiders/maps" class="hover:text-[var(--c-arc-green)] transition-colors">Maps</a>
+				<a routerLink="/arc-raiders/maps" class="hover:text-[var(--c-arc-green)] transition-colors">{{ ts.translate('MAP_DETAIL.BREADCRUMB_MAPS')() }}</a>
 				<span>/</span>
-				<span class="text-[var(--c-text-strong)]">{{ gameMap()?.name || 'Not Found' }}</span>
+				<span class="text-[var(--c-text-strong)]">{{ gameMap() ? gameMap()!.name : ts.translate('MAP_DETAIL.NOT_FOUND')() }}</span>
 			</nav>
 
 			@if (gameMap(); as m) {
@@ -25,7 +26,7 @@ import { CommonModule } from '@angular/common';
 					<!-- Header -->
 					<header>
 						<h1 class="text-4xl font-black tracking-wide text-[var(--c-text-strong)]">{{ m.name }}</h1>
-						<p class="mt-2 text-lg text-[var(--c-arc-green)] font-medium uppercase tracking-widest">{{ m.environment }}</p>
+						<p class="mt-2 text-lg text-[var(--c-arc-green)] font-medium uppercase tracking-widest">{{ ts.translate('COMMON.' + formatKey(m.environment))() || m.environment }}</p>
 					</header>
 
 					<!-- The Map View (Top Section) -->
@@ -41,7 +42,7 @@ import { CommonModule } from '@angular/common';
 							
 							<!-- Overview -->
 							<section>
-								<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-text-strong)]">Overview</h2>
+								<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-text-strong)]">{{ ts.translate('MAP_DETAIL.OVERVIEW')() }}</h2>
 								<p class="text-lg leading-relaxed text-[var(--c-text)]">{{ m.overview }}</p>
 							</section>
 
@@ -50,12 +51,12 @@ import { CommonModule } from '@angular/common';
 								<section>
 									<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-text-strong)] flex items-center gap-2">
 										<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
-										Conditions
+										{{ ts.translate('MAP_DETAIL.CONDITIONS')() }}
 									</h2>
 									<div class="flex flex-wrap gap-2">
 										@for (condition of m.conditions; track condition) {
 											<span class="rounded border border-[var(--c-border)] bg-[var(--c-bg-secondary)] px-3 py-1 text-sm font-semibold text-[var(--c-text-strong)] shadow-sm">
-												{{ condition }}
+												{{ ts.translate('CONDITIONS.' + formatKey(condition))() || condition }}
 											</span>
 										}
 									</div>
@@ -67,7 +68,7 @@ import { CommonModule } from '@angular/common';
 								<section>
 									<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-arc-cyan)] flex items-center gap-2">
 										<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-										Puzzles
+										{{ ts.translate('MAP_DETAIL.PUZZLES')() }}
 									</h2>
 									<div class="space-y-4">
 										@for (puzzle of m.puzzles; track puzzle.title) {
@@ -80,7 +81,7 @@ import { CommonModule } from '@angular/common';
 												</ol>
 												@if (puzzle.requiredGadgets && puzzle.requiredGadgets.length > 0) {
 													<div class="mt-4 pt-3 border-t border-[var(--c-border)]">
-														<span class="text-xs font-bold uppercase tracking-wider text-[var(--c-text-muted)] block mb-2">Required Gadgets</span>
+														<span class="text-xs font-bold uppercase tracking-wider text-[var(--c-text-muted)] block mb-2">{{ ts.translate('MAP_DETAIL.REQUIRED_GADGETS')() }}</span>
 														<div class="flex flex-wrap gap-2">
 															@for (gadget of puzzle.requiredGadgets; track gadget) {
 																<span class="rounded bg-[var(--c-bg-secondary)] border border-[var(--c-border)] px-2.5 py-1 text-xs font-semibold text-[var(--c-arc-yellow)]">{{ gadget }}</span>
@@ -99,7 +100,7 @@ import { CommonModule } from '@angular/common';
 								<section>
 									<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-arc-yellow)] flex items-center gap-2">
 										<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-										Resource Locks
+										{{ ts.translate('MAP_DETAIL.RESOURCE_LOCKS')() }}
 									</h2>
 									<div class="space-y-6">
 										@for (lock of m.resourceLocks; track lock.title) {
@@ -112,7 +113,7 @@ import { CommonModule } from '@angular/common';
 													@for (req of lock.requiredItems; track req.category + req.quantity) {
 														<div>
 															<div class="text-xs font-bold uppercase tracking-wider text-[var(--c-text-muted)] mb-3">
-																{{ req.category }} Item (Requires {{ req.quantity }})
+																{{ req.category }} {{ ts.translate('MAP_DETAIL.ITEM_REQUIRES')().replace('{{count}}', req.quantity.toString()) }}
 															</div>
 															<div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
 																@for (itemId of req.itemIds; track itemId) {
@@ -140,7 +141,7 @@ import { CommonModule } from '@angular/common';
 								<section>
 									<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-arc-green)] flex items-center gap-2">
 										<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11l7-7 7 7M5 19l7-7 7 7"></path></svg>
-										Extractions
+										{{ ts.translate('MAP_DETAIL.EXTRACTIONS')() }}
 									</h2>
 									<div class="grid gap-4 sm:grid-cols-2">
 										@for (ext of m.extractions; track ext.title) {
@@ -157,8 +158,8 @@ import { CommonModule } from '@angular/common';
 							@if (m.lore) {
 								<section>
 									<div class="rounded-lg bg-black/80 p-6 font-mono text-sm text-[var(--c-arc-cyan)] border border-[var(--c-arc-cyan)]/30 shadow-[0_0_15px_rgba(0,255,255,0.1)]">
-										<p class="mb-2 text-xs uppercase tracking-widest text-gray-500">>> DECRYPTED DATAPAD ENTRY</p>
-										<p class="leading-loose">{{ m.lore }}</p>
+										<p class="mb-2 text-xs uppercase tracking-widest text-gray-500">{{ ts.translate('MAP_DETAIL.DECRYPTED_DATAPAD')() }}</p>
+										<p class="leading-loose whitespace-pre-wrap">{{ m.lore }}</p>
 									</div>
 								</section>
 							}
@@ -166,7 +167,7 @@ import { CommonModule } from '@angular/common';
 							<!-- Patch History -->
 							@if (m.patchHistory && m.patchHistory.length > 0) {
 								<section>
-									<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-text-strong)]">Patch History</h2>
+									<h2 class="mb-4 border-b border-[var(--c-border)] pb-2 text-2xl font-bold text-[var(--c-text-strong)]">{{ ts.translate('MAP_DETAIL.PATCH_HISTORY')() }}</h2>
 									<div class="relative pl-4 border-l-2 border-[var(--c-border)] space-y-6">
 										@for (patch of m.patchHistory; track patch.version) {
 											<div class="relative">
@@ -186,22 +187,22 @@ import { CommonModule } from '@angular/common';
 							<div class="sticky top-6 overflow-hidden rounded-xl border border-[var(--c-border)] bg-[var(--c-bg-secondary)] shadow-[var(--shadow-md)]">
 								
 								<div class="bg-[var(--c-bg-primary)] p-4 text-center border-b border-[var(--c-border)]">
-									<h2 class="text-xl font-black tracking-wider text-[var(--c-text-strong)] uppercase">Map Intel</h2>
+									<h2 class="text-xl font-black tracking-wider text-[var(--c-text-strong)] uppercase">{{ ts.translate('MAP_DETAIL.MAP_INTEL')() }}</h2>
 								</div>
 								
 								<div class="p-5 text-sm">
 									<dl class="space-y-4">
 										<div class="flex justify-between border-b border-[var(--c-border)] pb-2">
-											<dt class="font-semibold text-[var(--c-text-muted)]">Size</dt>
-											<dd class="font-medium text-[var(--c-text-strong)] text-right">{{ m.size }}</dd>
+											<dt class="font-semibold text-[var(--c-text-muted)]">{{ ts.translate('MAP_DETAIL.SIZE')() }}</dt>
+											<dd class="font-medium text-[var(--c-text-strong)] text-right">{{ ts.translate('COMMON.' + m.size.toUpperCase())() || m.size }}</dd>
 										</div>
 										<div class="flex justify-between border-b border-[var(--c-border)] pb-2">
-											<dt class="font-semibold text-[var(--c-text-muted)]">Environment</dt>
-											<dd class="font-medium text-[var(--c-text-strong)] text-right text-[var(--c-arc-green)]">{{ m.environment }}</dd>
+											<dt class="font-semibold text-[var(--c-text-muted)]">{{ ts.translate('MAP_DETAIL.ENVIRONMENT')() }}</dt>
+											<dd class="font-medium text-[var(--c-text-strong)] text-right text-[var(--c-arc-green)]">{{ ts.translate('COMMON.' + formatKey(m.environment))() || m.environment }}</dd>
 										</div>
 										<div class="flex justify-between pb-2">
-											<dt class="font-semibold text-[var(--c-text-muted)]">Max Squads</dt>
-											<dd class="font-medium text-[var(--c-text-strong)] text-right">{{ m.maxSquads }} ({{ m.maxSquads * 3 }} Raiders)</dd>
+											<dt class="font-semibold text-[var(--c-text-muted)]">{{ ts.translate('MAP_DETAIL.MAX_SQUADS')() }}</dt>
+											<dd class="font-medium text-[var(--c-text-strong)] text-right">{{ m.maxSquads }} ({{ m.maxSquads * 3 }} {{ ts.translate('MAP_DETAIL.RAIDERS')() }})</dd>
 										</div>
 									</dl>
 								</div>
@@ -216,10 +217,10 @@ import { CommonModule } from '@angular/common';
 					<div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--c-bg-primary)] text-3xl">
 						🗺️
 					</div>
-					<h2 class="text-2xl font-bold text-[var(--c-text-strong)]">Map Data Corrupted</h2>
-					<p class="mt-2 text-[var(--c-text)]">The sector you are looking for does not exist in our database.</p>
+					<h2 class="text-2xl font-bold text-[var(--c-text-strong)]">{{ ts.translate('MAP_DETAIL.ERROR_TITLE')() }}</h2>
+					<p class="mt-2 text-[var(--c-text)]">{{ ts.translate('MAP_DETAIL.ERROR_DESC')() }}</p>
 					<a routerLink="/arc-raiders/maps" class="mt-6 inline-block rounded-lg bg-[var(--c-arc-green)] px-6 py-2 font-bold text-black hover:opacity-90 transition-opacity">
-						Return to Map Terminal
+						{{ ts.translate('MAP_DETAIL.ERROR_BTN')() }}
 					</a>
 				</div>
 			}
@@ -228,6 +229,8 @@ import { CommonModule } from '@angular/common';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArcRaidersMapDetailComponent {
+	protected readonly ts = inject(TranslateService);
+
 	private readonly route = inject(ActivatedRoute);
 
 	private readonly idParam = toSignal(this.route.paramMap.pipe(map(params => params.get('id'))));
@@ -238,4 +241,8 @@ export class ArcRaidersMapDetailComponent {
 	});
 
 	protected readonly resolveLootItem = resolveLootItem;
+
+	protected formatKey(str: string): string {
+		return str.trim().toUpperCase().replace(/[^A-Z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+	}
 }

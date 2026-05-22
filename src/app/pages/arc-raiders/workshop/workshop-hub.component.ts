@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TranslateService } from '@wawjs/ngx-translate';
 import { WORKSHOP_STATIONS } from './workshop.data';
 import { CommonModule } from '@angular/common';
 
@@ -10,9 +11,9 @@ import { CommonModule } from '@angular/common';
 		<div class="pb-12">
 			
 			<header class="mb-10 text-center">
-				<h1 class="text-5xl font-black tracking-widest text-[var(--c-text-strong)] drop-shadow-md">WORKSHOP STATIONS</h1>
+				<h1 class="text-5xl font-black tracking-widest text-[var(--c-text-strong)] drop-shadow-md">{{ ts.translate('WORKSHOP_HUB.TITLE')() }}</h1>
 				<p class="mx-auto mt-4 max-w-2xl text-lg text-[var(--c-text)]">
-					Manage and upgrade your specialized crafting stations in Speranza to unlock advanced weaponry, gear, and supplies.
+					{{ ts.translate('WORKSHOP_HUB.SUBTITLE')() }}
 				</p>
 			</header>
 
@@ -32,7 +33,7 @@ import { CommonModule } from '@angular/common';
 								{{ station.icon }}
 							</div>
 							<div class="absolute right-4 top-4 rounded bg-black/60 backdrop-blur-sm px-2.5 py-1 text-xs font-bold text-[var(--c-arc-cyan)] border border-[var(--c-border)] shadow-sm">
-								{{ station.tiers.length }} Tiers
+								{{ ts.translate('WORKSHOP_HUB.LBL_TIERS')().replace('{{count}}', station.tiers.length.toString()) }}
 							</div>
 						</div>
 
@@ -49,5 +50,7 @@ import { CommonModule } from '@angular/common';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArcRaidersWorkshopHubComponent {
+	protected readonly ts = inject(TranslateService);
+
 	protected readonly stations = WORKSHOP_STATIONS;
 }

@@ -55,6 +55,11 @@
 								"glob": "**/*.json",
 								"input": "src/i18n",
 								"output": "/i18n/"
+							},
+							{
+								"glob": "*.json",
+								"input": "src/i18n/arc-raiders",
+								"output": "/i18n/arc-raiders/"
 							}
 						],
 						"styles": ["src/styles.scss"],

@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TranslateService } from '@wawjs/ngx-translate';
 import { LOOT } from './loot.data';
 import { CommonModule } from '@angular/common';
 
@@ -38,9 +39,9 @@ const categoryOrder: Record<string, number> = {
 		<div class="flex flex-col gap-8 pb-12">
 			
 			<header class="border-b border-[var(--c-border)] pb-6">
-				<h1 class="text-4xl font-bold text-[var(--c-arc-cyan)] mb-4">Loot & Materials</h1>
+				<h1 class="text-4xl font-bold text-[var(--c-arc-cyan)] mb-4">{{ ts.translate('LOOT_HUB.TITLE')() }}</h1>
 				<p class="text-lg text-[var(--c-text)]">
-					A comprehensive database of all scavengable items in the Rust Belt. Track crafting materials, high-value trade goods, keys, and rare boss drops.
+					{{ ts.translate('LOOT_HUB.SUBTITLE')() }}
 				</p>
 			</header>
 
@@ -50,7 +51,7 @@ const categoryOrder: Record<string, number> = {
 					
 					<!-- Category Filter -->
 					<div class="flex flex-col gap-2">
-						<span class="text-sm font-semibold uppercase tracking-wider text-[var(--c-text-muted)]">By Category</span>
+						<span class="text-sm font-semibold uppercase tracking-wider text-[var(--c-text-muted)]">{{ ts.translate('LOOT_HUB.FILTER_CATEGORY')() }}</span>
 						<div class="flex flex-wrap gap-2">
 							@for (cat of categories; track cat) {
 								<button 
@@ -60,7 +61,7 @@ const categoryOrder: Record<string, number> = {
 									[class.bg-[var(--c-bg-primary)]]="selectedCategory() !== cat"
 									[class.text-[var(--c-text-strong)]]="selectedCategory() !== cat"
 									class="rounded-md px-3 py-1.5 text-sm font-medium transition-colors hover:bg-[var(--c-arc-cyan)] hover:text-black">
-									{{ cat }}
+									{{ ts.translate('COMMON.' + formatKey(cat))() || cat }}
 								</button>
 							}
 						</div>
@@ -68,7 +69,7 @@ const categoryOrder: Record<string, number> = {
 
 					<!-- Rarity Filter -->
 					<div class="flex flex-col gap-2">
-						<span class="text-sm font-semibold uppercase tracking-wider text-[var(--c-text-muted)]">By Rarity</span>
+						<span class="text-sm font-semibold uppercase tracking-wider text-[var(--c-text-muted)]">{{ ts.translate('LOOT_HUB.FILTER_RARITY')() }}</span>
 						<div class="flex flex-wrap gap-2">
 							@for (rarity of rarities; track rarity) {
 								<button 
@@ -78,7 +79,7 @@ const categoryOrder: Record<string, number> = {
 									[class.bg-[var(--c-bg-primary)]]="selectedRarity() !== rarity"
 									[class.text-[var(--c-text-strong)]]="selectedRarity() !== rarity"
 									class="rounded-md px-3 py-1.5 text-sm font-medium transition-colors hover:bg-[var(--c-arc-cyan)] hover:text-black">
-									{{ rarity }}
+									{{ ts.translate('COMMON.' + formatKey(rarity))() || rarity }}
 								</button>
 							}
 						</div>
@@ -87,7 +88,7 @@ const categoryOrder: Record<string, number> = {
 				</div>
 
 				<div class="mt-6 border-t border-[var(--c-border)] pt-4 text-sm text-[var(--c-text-muted)]">
-					Showing {{ visibleLoot().length }} item(s).
+					{{ ts.translate('LOOT_HUB.SHOWING_COUNT')().replace('{{count}}', visibleLoot().length.toString()) }}
 				</div>
 			</section>
 
@@ -99,31 +100,31 @@ const categoryOrder: Record<string, number> = {
 							<tr>
 								<th class="px-6 py-4 font-semibold w-[40%]">
 									<button type="button" (click)="toggleSort('name')" class="flex w-full items-center gap-2 text-left transition-colors hover:text-[var(--c-arc-cyan)]">
-										<span>Item Name</span>
+										<span>{{ ts.translate('LOOT_HUB.TH_ITEM_NAME')() }}</span>
 										<span class="text-[10px] tracking-[0.3em] text-[var(--c-text-muted)]">{{ sortIndicator('name') }}</span>
 									</button>
 								</th>
 								<th class="px-6 py-4 font-semibold">
 									<button type="button" (click)="toggleSort('category')" class="flex w-full items-center gap-2 text-left transition-colors hover:text-[var(--c-arc-cyan)]">
-										<span>Category</span>
+										<span>{{ ts.translate('LOOT_HUB.TH_CATEGORY')() }}</span>
 										<span class="text-[10px] tracking-[0.3em] text-[var(--c-text-muted)]">{{ sortIndicator('category') }}</span>
 									</button>
 								</th>
 								<th class="px-6 py-4 font-semibold">
 									<button type="button" (click)="toggleSort('rarity')" class="flex w-full items-center gap-2 text-left transition-colors hover:text-[var(--c-arc-cyan)]">
-										<span>Rarity</span>
+										<span>{{ ts.translate('LOOT_HUB.TH_RARITY')() }}</span>
 										<span class="text-[10px] tracking-[0.3em] text-[var(--c-text-muted)]">{{ sortIndicator('rarity') }}</span>
 									</button>
 								</th>
 								<th class="px-6 py-4 font-semibold text-center">
 									<button type="button" (click)="toggleSort('stack')" class="flex w-full items-center justify-center gap-2 transition-colors hover:text-[var(--c-arc-cyan)]">
-										<span>Stack Limit</span>
+										<span>{{ ts.translate('LOOT_HUB.TH_STACK_LIMIT')() }}</span>
 										<span class="text-[10px] tracking-[0.3em] text-[var(--c-text-muted)]">{{ sortIndicator('stack') }}</span>
 									</button>
 								</th>
 								<th class="px-6 py-4 font-semibold text-right">
 									<button type="button" (click)="toggleSort('value')" class="flex w-full items-center justify-end gap-2 text-right transition-colors hover:text-[var(--c-arc-cyan)]">
-										<span>Value (Max Stack)</span>
+										<span>{{ ts.translate('LOOT_HUB.TH_VALUE')() }}</span>
 										<span class="text-[10px] tracking-[0.3em] text-[var(--c-text-muted)]">{{ sortIndicator('value') }}</span>
 									</button>
 								</th>
@@ -141,11 +142,11 @@ const categoryOrder: Record<string, number> = {
 											{{ item.name }}
 										</a>
 									</td>
-									<td class="px-6 py-4">{{ item.category }}</td>
+									<td class="px-6 py-4">{{ ts.translate('COMMON.' + formatKey(item.category))() || item.category }}</td>
 									<td class="px-6 py-4">
 										<span [style.color]="'var(--rarity-color)'"
-											  class="font-bold">
-											{{ item.rarity }}
+										      class="font-bold">
+											{{ ts.translate('COMMON.' + formatKey(item.rarity))() || item.rarity }}
 										</span>
 									</td>
 									<td class="px-6 py-4 text-center">
@@ -153,14 +154,14 @@ const categoryOrder: Record<string, number> = {
 									</td>
 									<td class="px-6 py-4 text-right">
 										<div class="font-mono font-bold text-[var(--c-arc-cyan)] group-hover:text-[var(--rarity-color)] transition-colors">{{ item.sellValue }}</div>
-										<div class="text-xs text-[var(--c-text-muted)]">({{ item.maxStackValue }} max)</div>
+										<div class="text-xs text-[var(--c-text-muted)]">{{ ts.translate('LOOT_HUB.LBL_MAX')().replace('{{max}}', item.maxStackValue.toString()) }}</div>
 									</td>
 								</tr>
 							}
 							@if (visibleLoot().length === 0) {
 								<tr>
 									<td colspan="5" class="px-6 py-12 text-center text-[var(--c-text-muted)]">
-										No loot items match your selected filters.
+										{{ ts.translate('LOOT_HUB.NO_LOOT')() }}
 									</td>
 								</tr>
 							}
@@ -174,6 +175,8 @@ const categoryOrder: Record<string, number> = {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArcRaidersLootHubComponent {
+	protected readonly ts = inject(TranslateService);
+
 	protected readonly loot = LOOT.map(item => ({
 		...item,
 		maxStackValue: item.sellValue * item.stackLimit
@@ -259,5 +262,9 @@ export class ArcRaidersLootHubComponent {
 			case 'Legendary': return '#f59e0b';
 			default: return '#eceef5';
 		}
+	}
+
+	protected formatKey(str: string): string {
+		return str.trim().toUpperCase().replace(/[^A-Z0-9]+/g, '_').replace(/^_+|_+$/g, '');
 	}
 }

@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TranslateService } from '@wawjs/ngx-translate';
 import { ENEMIES } from './enemies.data';
 import { CommonModule } from '@angular/common';
 
@@ -10,9 +11,9 @@ import { CommonModule } from '@angular/common';
 		<div class="flex flex-col gap-8 pb-12">
 			
 			<header class="border-b border-[var(--c-border)] pb-6">
-				<h1 class="text-4xl font-bold text-[var(--c-arc-red)] mb-4">The ARC Threat</h1>
+				<h1 class="text-4xl font-bold text-[var(--c-arc-red)] mb-4">{{ ts.translate('ENEMIES_HUB.TITLE')() }}</h1>
 				<p class="text-lg text-[var(--c-text)]">
-					Browse the bestiary of known ARC machines. Learn their weaknesses, attack patterns, and valuable loot drops to survive your next extraction.
+					{{ ts.translate('ENEMIES_HUB.SUBTITLE')() }}
 				</p>
 			</header>
 
@@ -22,7 +23,7 @@ import { CommonModule } from '@angular/common';
 					
 					<!-- Threat Filter -->
 					<div class="flex flex-col gap-2">
-						<span class="text-sm font-semibold uppercase tracking-wider text-[var(--c-text-muted)]">By Threat Level</span>
+						<span class="text-sm font-semibold uppercase tracking-wider text-[var(--c-text-muted)]">{{ ts.translate('ENEMIES_HUB.FILTER_THREAT')() }}</span>
 						<div class="flex flex-wrap gap-2">
 							@for (threat of threatLevels; track threat) {
 								<button 
@@ -32,7 +33,7 @@ import { CommonModule } from '@angular/common';
 									[class.bg-[var(--c-bg-primary)]]="selectedThreat() !== threat"
 									[class.text-[var(--c-text-strong)]]="selectedThreat() !== threat"
 									class="rounded-md px-3 py-1.5 text-sm font-medium transition-colors hover:bg-[var(--c-arc-red)] hover:text-white">
-									{{ threat }}
+									{{ ts.translate('COMMON.' + formatKey(threat))() || threat }}
 								</button>
 							}
 						</div>
@@ -40,7 +41,7 @@ import { CommonModule } from '@angular/common';
 
 					<!-- Mobility Filter -->
 					<div class="flex flex-col gap-2">
-						<span class="text-sm font-semibold uppercase tracking-wider text-[var(--c-text-muted)]">By Mobility</span>
+						<span class="text-sm font-semibold uppercase tracking-wider text-[var(--c-text-muted)]">{{ ts.translate('ENEMIES_HUB.FILTER_MOBILITY')() }}</span>
 						<div class="flex flex-wrap gap-2">
 							@for (mob of mobilities; track mob) {
 								<button 
@@ -50,7 +51,7 @@ import { CommonModule } from '@angular/common';
 									[class.bg-[var(--c-bg-primary)]]="selectedMobility() !== mob"
 									[class.text-[var(--c-text-strong)]]="selectedMobility() !== mob"
 									class="rounded-md px-3 py-1.5 text-sm font-medium transition-colors hover:bg-[var(--c-arc-red)] hover:text-white">
-									{{ mob }}
+									{{ ts.translate('COMMON.' + formatKey(mob))() || mob }}
 								</button>
 							}
 						</div>
@@ -58,7 +59,7 @@ import { CommonModule } from '@angular/common';
 
 					<!-- Damage Type Filter -->
 					<div class="flex flex-col gap-2">
-						<span class="text-sm font-semibold uppercase tracking-wider text-[var(--c-text-muted)]">By Damage Type</span>
+						<span class="text-sm font-semibold uppercase tracking-wider text-[var(--c-text-muted)]">{{ ts.translate('ENEMIES_HUB.FILTER_DAMAGE')() }}</span>
 						<div class="flex flex-wrap gap-2">
 							@for (dmg of damageTypes; track dmg) {
 								<button 
@@ -68,7 +69,7 @@ import { CommonModule } from '@angular/common';
 									[class.bg-[var(--c-bg-primary)]]="selectedDamage() !== dmg"
 									[class.text-[var(--c-text-strong)]]="selectedDamage() !== dmg"
 									class="rounded-md px-3 py-1.5 text-sm font-medium transition-colors hover:bg-[var(--c-arc-red)] hover:text-white">
-									{{ dmg }}
+									{{ ts.translate('COMMON.' + formatKey(dmg))() || dmg }}
 								</button>
 							}
 						</div>
@@ -76,7 +77,7 @@ import { CommonModule } from '@angular/common';
 				</div>
 
 				<div class="mt-6 border-t border-[var(--c-border)] pt-4 text-sm text-[var(--c-text-muted)]">
-					Showing {{ filteredEnemies().length }} known ARC variants.
+					{{ ts.translate('ENEMIES_HUB.SHOWING_COUNT')().replace('{{count}}', filteredEnemies().length.toString()) }}
 				</div>
 			</section>
 
@@ -91,18 +92,18 @@ import { CommonModule } from '@angular/common';
 							
 							<!-- Top Left Badge -->
 							<div class="absolute left-3 top-3 flex items-center gap-1.5 rounded-full bg-black/70 px-2.5 py-1 text-xs font-bold text-white backdrop-blur-sm border border-white/10">
-								<span>{{ enemy.icon }}</span> {{ enemy.threatLevel }}
+								<span>{{ enemy.icon }}</span> {{ ts.translate('COMMON.' + formatKey(enemy.threatLevel))() || enemy.threatLevel }}
 							</div>
 
 							<!-- Hover Overlay (Weakness & Drops) -->
 							<div class="absolute inset-0 flex flex-col items-center justify-center bg-black/80 opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100 p-6 text-center">
 								<div class="mb-4">
-									<span class="block text-xs uppercase tracking-wider text-[var(--c-text-muted)]">Primary Weakness</span>
-									<span class="text-lg font-bold text-[var(--c-arc-yellow)]">{{ enemy.weaknesses && enemy.weaknesses.length > 0 ? (enemy.weaknesses[0].split(':')[0] || 'Unknown') : 'Unknown' }}</span>
+									<span class="block text-xs uppercase tracking-wider text-[var(--c-text-muted)]">{{ ts.translate('ENEMIES_HUB.PRIMARY_WEAKNESS')() }}</span>
+									<span class="text-lg font-bold text-[var(--c-arc-yellow)]">{{ enemy.weaknesses && enemy.weaknesses.length > 0 ? (enemy.weaknesses[0].split(':')[0] || ts.translate('ENEMIES_HUB.UNKNOWN')()) : ts.translate('ENEMIES_HUB.UNKNOWN')() }}</span>
 								</div>
 								<div>
-									<span class="block text-xs uppercase tracking-wider text-[var(--c-text-muted)]">Key Drop</span>
-									<span class="text-lg font-bold text-[var(--c-arc-cyan)]">{{ enemy.keyDropId || 'None' }}</span>
+									<span class="block text-xs uppercase tracking-wider text-[var(--c-text-muted)]">{{ ts.translate('ENEMIES_HUB.KEY_DROP')() }}</span>
+									<span class="text-lg font-bold text-[var(--c-arc-cyan)]">{{ enemy.keyDropId || ts.translate('ENEMIES_HUB.NONE')() }}</span>
 								</div>
 							</div>
 						</div>
@@ -115,7 +116,7 @@ import { CommonModule } from '@angular/common';
 				}
 				@if (filteredEnemies().length === 0) {
 					<div class="col-span-full py-12 text-center text-[var(--c-text-muted)]">
-						No ARC machines match your selected filters.
+						{{ ts.translate('ENEMIES_HUB.NO_ENEMIES')() }}
 					</div>
 				}
 			</section>
@@ -125,6 +126,8 @@ import { CommonModule } from '@angular/common';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArcRaidersEnemiesComponent {
+	protected readonly ts = inject(TranslateService);
+
 	protected readonly enemies = ENEMIES;
 
 	// Filter Options
@@ -146,4 +149,8 @@ export class ArcRaidersEnemiesComponent {
 			return threatMatch && mobMatch && dmgMatch;
 		});
 	});
+
+	protected formatKey(str: string): string {
+		return str.trim().toUpperCase().replace(/[^A-Z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+	}
 }
