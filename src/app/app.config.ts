@@ -42,7 +42,7 @@ export const appConfig: ApplicationConfig = {
 			defaultLanguage: environment.defaultLanguage,
 			languages: environment.languages,
 			folder: '/i18n/',
-			folders: ['/assets/dota2/i18n/'],
+			folders: ['/assets/dota2/i18n/', '/i18n/arc-raiders/'],
 		}),
 		{
 			provide: APP_INITIALIZER,

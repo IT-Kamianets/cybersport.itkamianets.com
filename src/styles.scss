@@ -1,13 +1,11 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
 @use 'tailwindcss';
 @use './styles/theme';
 
-/* Base typography and color tokens */
-html, body {
+html,
+body {
 	background: var(--c-bg-primary);
 	color: var(--c-text);
-	font-family: 'Cinzel', var(--ff-base);
+	font-family: var(--ff-base);
 	font-size: var(--fs);
 	letter-spacing: var(--letter-spacing);
 }
@@ -15,122 +13,7 @@ html, body {
 body {
 	min-height: 100vh;
 	margin: 0;
-	position: relative;
-	overflow-x: hidden;
-	/* Layered background: image + gradient */
-	background-image:
-		linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)),
-		url('/assets/dota2/dota2-bg.jpg');
-	background-size: cover;
-	background-position: center;
-	background-attachment: fixed;
 }
-
-/* Animated atmospheric layers: fog, particles, lava, smoke */
-body::before,
-body::after {
-	content: '';
-	position: fixed;
-	inset: 0;
-	pointer-events: none;
-	z-index: 0;
-}
-
-/* soft fog */
-body::before {
-	background: radial-gradient(ellipse at 20% 10%, rgba(255,61,0,0.04), transparent 15%),
-							radial-gradient(ellipse at 80% 90%, rgba(139,0,0,0.04), transparent 20%);
-	opacity: 0.9;
-	animation: fogShift 18s linear infinite alternate;
-	mix-blend-mode: screen;
-}
-
-@keyframes fogShift {
-	from { transform: translateY(0px) scale(1); }
-	to { transform: translateY(-30px) scale(1.02); }
-}
-
-/* particles / subtle moving dots */
-body::after {
-	background-image:
-		radial-gradient(circle at 10% 20%, rgba(255,255,255,0.03) 0px, transparent 2px),
-		radial-gradient(circle at 40% 80%, rgba(255,255,255,0.02) 0px, transparent 2px),
-		radial-gradient(circle at 70% 40%, rgba(255,255,255,0.02) 0px, transparent 2px);
-	background-size: 400% 400%;
-	opacity: 0.28;
-	animation: particlesMove 40s linear infinite;
-}
-
-@keyframes particlesMove { from { background-position: 0% 0%; } to { background-position: 100% 100%; } }
-
-/* lava glow at bottom */
-.bg-lava {
-	position: fixed;
-	left: 0;
-	right: 0;
-	bottom: -20%;
-	height: 50%;
-	z-index: 0;
-	background: linear-gradient(180deg, rgba(183,28,28,0.12), rgba(255,61,0,0.06));
-	filter: blur(40px) saturate(1.1);
-	animation: lavaFlow 6s ease-in-out infinite alternate;
-	pointer-events: none;
-}
-
-@keyframes lavaFlow { from { transform: translateX(-10%) scale(1); } to { transform: translateX(10%) scale(1.05); } }
-
-/* animated smoke overlay */
-.bg-smoke {
-	position: fixed; inset: 0; z-index: 0; pointer-events: none;
-	background-image: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
-	/* If a dedicated smoke PNG exists, it will layer on top via the same selector */
-	background-size: cover; opacity: 0.06; mix-blend-mode: screen;
-	animation: smokeDrift 60s linear infinite;
-}
-
-@keyframes smokeDrift { from { transform: translateX(0) translateY(0); } to { transform: translateX(-6%) translateY(-4%); } }
-
-/* Buttons */
-button {
-	background: linear-gradient(45deg, var(--atmo-red), var(--atmo-hover-red));
-	border: none;
-	color: var(--atmo-text);
-	padding: 14px 28px;
-	border-radius: 12px;
-	cursor: pointer;
-	font-weight: 700;
-	transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.2s ease;
-}
-
-button:hover {
-	transform: scale(1.05);
-	box-shadow: 0 0 20px var(--atmo-red);
-}
-
-/* Glass effect */
-.glass {
-	background: rgba(20,20,20,0.65);
-	backdrop-filter: blur(12px);
-	border: 1px solid rgba(255,255,255,0.06);
-}
-
-/* Animated header */
-header {
-	position: sticky;
-	top: 0;
-	z-index: 1000;
-	background: rgba(0,0,0,0.85);
-	backdrop-filter: blur(10px);
-	border-bottom: 1px solid var(--atmo-red);
-}
-
-/* Image hover */
-img { transition: transform 0.4s ease, filter 0.4s ease; }
-img:hover { transform: scale(1.05); }
-
-/* Utility: ensure animated layers sit behind content */
-.page, .dota2-page, .dota2-map, .hero-grid { position: relative; z-index: 2; }
-
 
 .theme-interactive {
 	transition-duration: var(--motion-fast);

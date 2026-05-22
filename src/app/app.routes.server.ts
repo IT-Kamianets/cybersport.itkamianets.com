@@ -4,6 +4,7 @@ import { WEAPONS } from './pages/arc-raiders/weapons/weapons.data';
 import { MAPS } from './pages/arc-raiders/maps/maps.data';
 import { LOOT } from './pages/arc-raiders/loot/loot.data';
 import { WORKSHOP_STATIONS } from './pages/arc-raiders/workshop/workshop.data';
+import { HEROES } from './pages/dota2/heroes.data';
 
 export const serverRoutes: ServerRoute[] = [
 	{
@@ -39,6 +40,13 @@ export const serverRoutes: ServerRoute[] = [
 		renderMode: RenderMode.Prerender,
 		async getPrerenderParams() {
 			return WORKSHOP_STATIONS.map(w => ({ id: w.id }));
+		}
+	},
+	{
+		path: 'dota2/guide/:id',
+		renderMode: RenderMode.Prerender,
+		async getPrerenderParams() {
+			return HEROES.map(h => ({ id: h.id }));
 		}
 	},
 	{

@@ -1,7 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+
 .dota2-page {
+  font-family: 'Cinzel', var(--ff-base);
   scroll-behavior: smooth;
+  min-height: 100vh;
+  /* Layered background: image + gradient */
+  background-image:
+    linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)),
+    url('/assets/dota2/dota2-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
+/* soft fog */
+.dota2-page::before {
+	content: '';
+	position: fixed;
+	inset: 0;
+	pointer-events: none;
+	z-index: 0;
+	background: radial-gradient(ellipse at 20% 10%, rgba(255,61,0,0.04), transparent 15%),
+							radial-gradient(ellipse at 80% 90%, rgba(139,0,0,0.04), transparent 20%);
+	opacity: 0.9;
+	animation: fogShift 18s linear infinite alternate;
+	mix-blend-mode: screen;
+}
+
+@keyframes fogShift {
+	from { transform: translateY(0px) scale(1); }
+	to { transform: translateY(-30px) scale(1.02); }
+}
+
+/* particles / subtle moving dots */
+.dota2-page::after {
+	content: '';
+	position: fixed;
+	inset: 0;
+	pointer-events: none;
+	z-index: 0;
+	background-image:
+		radial-gradient(circle at 10% 20%, rgba(255,255,255,0.03) 0px, transparent 2px),
+		radial-gradient(circle at 40% 80%, rgba(255,255,255,0.02) 0px, transparent 2px),
+		radial-gradient(circle at 70% 40%, rgba(255,255,255,0.02) 0px, transparent 2px);
+	background-size: 400% 400%;
+	opacity: 0.28;
+	animation: particlesMove 40s linear infinite;
+}
+
+@keyframes particlesMove { from { background-position: 0% 0%; } to { background-position: 100% 100%; } }
+
+.bg-lava {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: -20%;
+	height: 50%;
+	z-index: 0;
+	background: linear-gradient(180deg, rgba(183,28,28,0.12), rgba(255,61,0,0.06));
+	filter: blur(40px) saturate(1.1);
+	animation: lavaFlow 6s ease-in-out infinite alternate;
+	pointer-events: none;
+}
+
+@keyframes lavaFlow { from { transform: translateX(-10%) scale(1); } to { transform: translateX(10%) scale(1.05); } }
+
+.bg-smoke {
+	position: fixed; inset: 0; z-index: 0; pointer-events: none;
+	background-image: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+	background-size: cover; opacity: 0.06; mix-blend-mode: screen;
+	animation: smokeDrift 60s linear infinite;
+}
+
+@keyframes smokeDrift { from { transform: translateX(0) translateY(0); } to { transform: translateX(-6%) translateY(-4%); } }
 .dota2-hero-banner {
   position: relative;
   overflow: hidden;

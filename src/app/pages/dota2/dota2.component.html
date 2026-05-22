@@ -81,13 +81,13 @@
 			<h1>Items / Предмети</h1>
 			<p>Ключові предмети, які можна купити в Dota 2 на момент патчу 7.41c.</p>
 
+			<div class="hero-grid">
 				<div class="hero-card" *ngFor="let hero of heroes">
 					<img [src]="hero.image" [alt]="hero.name" />
 					<h3>{{ hero.name }} <span class="difficulty-pill" [class.easy]="difficultyFor(hero)==='Easy'" [class.medium]="difficultyFor(hero)==='Medium'" [class.hard]="difficultyFor(hero)==='Hard'">{{ difficultyFor(hero) }}</span></h3>
 					<p>Attribute: {{ hero.attribute }}</p>
 					<p>Оптимальний білд, предмети та стратегія гри.</p>
 					<a [routerLink]="['/dota2/guide', hero.id]" [state]="{ hero: hero }" class="mt-4 inline-block rounded-full bg-[#9b1c1c] px-5 py-2 text-white transition hover:bg-[#d32f2f]">Відкрити гайд</a>
-				</div>
 				</div>
 			</div>
 		</section>

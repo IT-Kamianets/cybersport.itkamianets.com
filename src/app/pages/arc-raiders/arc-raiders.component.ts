@@ -54,12 +54,5 @@ export class ArcRaidersComponent {
 	private readonly _languageService = inject(LanguageService);
 
 	constructor() {
-		// Re-load arc-raiders translations whenever the active language changes.
-		// The library caches per language, so switching from EN→UA triggers a fresh fetch.
-		effect(() => {
-			// Reactively track the current language via ts.language signal
-			const currentLang = this._languageService.language();
-			void this.ts.loadExtraTranslations(['/i18n/arc-raiders/{language}.json']);
-		});
 	}
 }

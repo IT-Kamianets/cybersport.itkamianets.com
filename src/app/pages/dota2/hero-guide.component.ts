@@ -47,8 +47,8 @@ export class HeroGuideComponent {
 
     public usePlaceholder(event: Event) {
         const img = event.target as HTMLImageElement;
-        if (img && img.src && !img.dataset.fallback) {
-            img.dataset.fallback = '1';
+        if (img && img.src && !img.dataset['fallback']) {
+            img.dataset['fallback'] = '1';
             img.src = '/assets/dota2/placeholder-icon.svg';
         }
     }
