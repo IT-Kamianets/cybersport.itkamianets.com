@@ -38,9 +38,9 @@ export interface GameWeapon {
 })
 export class PubgService {
 	readonly markers = signal<MapMarker[]>([
-		{ name: 'Pochinki', x: 48.5, y: 50.2 },
-		{ name: 'School', x: 53.2, y: 44.5 },
-		{ name: 'Sosnovka Military Base', x: 51.5, y: 82.3 },
+		{ name: 'Pochinki', x: 43.5, y: 50 },
+		{ name: 'School', x: 53.5, y: 40.5 },
+		{ name: 'Sosnovka Military Base', x: 55, y: 82 },
 	]);
 
 	readonly roles = signal<GameRole[]>([
