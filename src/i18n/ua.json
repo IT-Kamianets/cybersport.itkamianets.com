@@ -6,7 +6,7 @@
 	"Switch language to": "Перемкнути мову на",
 	"Bootstrap, company, language": "Bootstrap, компанія, мова",
 	"Company profile is ready for bootstrap data.": "Профіль компанії готовий до bootstrap-даних.",
-	"This starter now keeps only the core runtime pieces: app bootstrap, company state, and multilingual switching. The rest of the demo feature surface has been removed.": "Цей стартер тепер містить лише основні runtime-частини: bootstrap застосунку, стан компанії та перемикання мов. Решту демонстраційних функцій видалено.",
+	"This starter now keeps only the core runtime pieces: app bootstrap, company state, and multilingual switching. The rest of the demo feature surface has been removed.": "Цей стартер тепер містить лише основні runtime-частини: bootstrap застонку, стан компанії та перемикання мов. Решту демонстраційних функцій видалено.",
 	"SSR-safe bootstrap": "SSR-сумісний bootstrap",
 	"Company signal state": "Стан компанії на signals",
 	"Language switching": "Перемикання мов",

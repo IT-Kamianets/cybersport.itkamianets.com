@@ -1,0 +1,28 @@
+{
+	"ENEMIES_HUB": {
+		"TITLE": "The ARC Threat",
+		"SUBTITLE": "Browse the bestiary of known ARC machines. Learn their weaknesses, attack patterns, and valuable loot drops to survive your next extraction.",
+		"FILTER_THREAT": "By Threat Level",
+		"FILTER_MOBILITY": "By Mobility",
+		"FILTER_DAMAGE": "By Damage Type",
+		"SHOWING_COUNT": "Showing {{count}} known ARC variants.",
+		"PRIMARY_WEAKNESS": "Primary Weakness",
+		"UNKNOWN": "Unknown",
+		"KEY_DROP": "Key Drop",
+		"NONE": "None",
+		"NO_ENEMIES": "No ARC machines match your selected filters."
+	},
+	"COMMON": {
+		"ALL": "All",
+		"FODDER_SWARM": "Fodder / Swarm",
+		"STANDARD": "Standard",
+		"HEAVY_ELITE": "Heavy / Elite",
+		"WORLD_BOSS": "World Boss",
+		"GROUND_BASED": "Ground-based",
+		"AERIAL": "Aerial",
+		"TURRETS_STATIONARY": "Turrets/Stationary",
+		"BALLISTIC": "Ballistic",
+		"EXPLOSIVE": "Explosive",
+		"ENERGY_LASER": "Energy/Laser"
+	}
+}
