@@ -26,31 +26,32 @@ import { PubgService, GameMap } from './pubg.service';
 
 				<!-- Selected Map Highlight (only if a map is selected) -->
 				@if (selectedMap(); as map) {
-					<div class="mb-16 animate-in zoom-in-95 duration-500">
-						<div class="relative overflow-hidden rounded-[3rem] border-4 border-[var(--c-primary)] bg-[var(--c-bg-secondary)] p-8 lg:p-12 shadow-2xl">
-							<div class="absolute top-0 right-0 w-96 h-96 bg-[var(--c-primary)]/10 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2"></div>
-							<div class="flex flex-col lg:flex-row gap-12 relative z-10">
-								<div class="w-full lg:w-1/2 aspect-video rounded-2xl overflow-hidden shadow-lg border border-white/10">
+					<div id="selected-map-details" class="mb-8 animate-in zoom-in-95 duration-500 scroll-mt-24">
+						<div class="relative overflow-hidden rounded-2xl border border-[var(--c-primary)] bg-[var(--c-bg-secondary)] p-4 lg:p-6 shadow-xl">
+							<div class="absolute top-0 right-0 w-48 h-48 bg-[var(--c-primary)]/5 blur-[60px] rounded-full -translate-y-1/2 translate-x-1/2"></div>
+							<div class="flex flex-col sm:flex-row gap-6 relative z-10">
+								<div class="w-full sm:w-[35%] aspect-video rounded-lg overflow-hidden shadow-md border border-white/5">
 									<img [src]="map.image" [alt]="map.name" class="w-full h-full object-cover">
 								</div>
-								<div class="flex-1 space-y-6">
-									<div class="inline-flex px-4 py-1 rounded-full bg-[var(--c-primary)] text-white text-[10px] font-black uppercase tracking-[0.2em]" translate>Selected Map</div>
-									<h3 class="text-5xl font-black text-[var(--c-text-strong)] uppercase tracking-tighter" translate>{{ map.name }}</h3>
-									<div class="flex gap-6">
-										<div class="text-sm font-bold text-[var(--c-text-muted)] flex items-center gap-2">
+								<div class="flex-1 flex flex-col justify-center">
+									<div class="flex items-center justify-between mb-2">
+										<div class="inline-flex px-2 py-0.5 rounded-md bg-[var(--c-primary)] text-white text-[8px] font-black uppercase tracking-widest" translate>Selected Map</div>
+										<button (click)="selectedMap.set(null)" class="text-[10px] font-black uppercase tracking-widest text-[var(--c-text-muted)] hover:text-[var(--c-primary)] transition-colors flex items-center gap-1.5">
+											<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/></svg>
+											<span translate>Close Details</span>
+										</button>
+									</div>
+									<h3 class="text-3xl font-black text-[var(--c-text-strong)] uppercase tracking-tighter leading-tight mb-2" translate>{{ map.name }}</h3>
+									<div class="flex gap-4 mb-3">
+										<div class="text-[10px] font-bold text-[var(--c-text-muted)] flex items-center gap-1.5">
 											<span class="text-[var(--c-primary)]">📏</span> {{ map.size }}
 										</div>
-										<div class="text-sm font-bold text-[var(--c-text-muted)] flex items-center gap-2">
+										<div class="text-[10px] font-bold text-[var(--c-text-muted)] flex items-center gap-1.5">
 											<span class="text-[var(--c-primary)]">🌍</span> <span translate>Standard</span>
 										</div>
 									</div>
-									<p class="text-xl text-[var(--c-text)] leading-relaxed italic border-l-4 border-[var(--c-primary)] pl-6" translate>
-										{{ map.description }}
+									<p class="text-base text-[var(--c-text)] leading-snug italic border-l-2 border-[var(--c-primary)] pl-4 py-1" [translate]="map.description">
 									</p>
-									<button (click)="selectedMap.set(null)" class="text-sm font-black uppercase tracking-widest text-[var(--c-text-muted)] hover:text-[var(--c-primary)] transition-colors flex items-center gap-2">
-										<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/></svg>
-										<span translate>Close Details</span>
-									</button>
 								</div>
 							</div>
 						</div>
@@ -60,7 +61,7 @@ import { PubgService, GameMap } from './pubg.service';
 				<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
 					@for (map of maps(); track map.name) {
 						<div 
-							(click)="selectedMap.set(map)"
+							(click)="onMapClick(map)"
 							[class.border-[var(--c-primary)]]="selectedMap()?.name === map.name"
 							class="group relative overflow-hidden rounded-[2rem] border-2 border-[var(--c-border)] bg-[var(--c-bg-secondary)] shadow-xl aspect-[16/10] transition-all hover:border-[var(--c-primary)] cursor-pointer hover:-translate-y-2"
 						>
@@ -113,7 +114,7 @@ import { PubgService, GameMap } from './pubg.service';
 					</div>
 					<div class="relative aspect-video rounded-2xl overflow-hidden border-2 border-[var(--c-border)] shadow-2xl">
 						<div class="absolute inset-0 bg-[#1a2a3a] animate-pulse"></div>
-						<img src="https://web-assets.pubg.com/pubg-world/assets/images/map/map-vikendi.jpg" class="absolute inset-0 w-full h-full object-cover">
+						<img src="https://wstatic-prod.pubg.com/web/live/main_fa53437/img/d1080a6.webp" class="absolute inset-0 w-full h-full object-cover">
 					</div>
 				</div>
 			</div>
@@ -124,4 +125,24 @@ import { PubgService, GameMap } from './pubg.service';
 export class PubgMapsComponent {
 	protected readonly maps = inject(PubgService).maps;
 	protected readonly selectedMap = signal<GameMap | null>(null);
+
+	protected onMapClick(map: GameMap): void {
+		if (this.selectedMap()?.name === map.name) {
+			this.selectedMap.set(null);
+			return;
+		}
+
+		// Briefly clear to trigger "animate-in" again for the new map
+		this.selectedMap.set(null);
+
+		setTimeout(() => {
+			this.selectedMap.set(map);
+			
+			// Smooth scroll to the details section
+			setTimeout(() => {
+				const element = document.getElementById('selected-map-details');
+				element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			}, 50);
+		}, 0);
+	}
 }
