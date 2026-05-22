@@ -7,7 +7,7 @@ import { PubgService } from './pubg.service';
 	standalone: true,
 	imports: [TranslateDirective],
 	template: `
-		<div class="bg-[var(--c-bg-primary)] py-12 lg:py-20 animate-in fade-in slide-in-from-right-8 duration-500">
+		<div class="py-12 lg:py-20 animate-in fade-in slide-in-from-right-8 duration-500 relative">
 			<div class="mx-auto max-w-[var(--container)] px-4">
 				<div class="text-center mb-16">
 					<h2 class="text-4xl font-black uppercase tracking-tight text-[var(--c-text-strong)] sm:text-6xl mb-6" translate>
